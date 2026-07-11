@@ -12,7 +12,7 @@ let
   hostname = "Humanix";
   theme = "hackthebox";
   desktop = "gnome";
-  dmanager = "sddm";
+  dmanager = "greetd"; # login console Humanix (tuigreet). Repli : "sddm"
   sddmtheme = "post-apocalyptic_hacker";
   mainShell = "zsh";
   terminal = "wezterm";
@@ -80,4 +80,7 @@ in
     sdr.gui.enable = false;
     embedded.enable = true;
   };
+
+  # Splash de boot Humanix (cf modules/design/plymouth.nix).
+  humanix.aesthetic.plymouth.enable = true;
 }

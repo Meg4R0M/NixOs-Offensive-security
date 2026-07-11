@@ -19,7 +19,7 @@
     services = {
       hardware.bolt.enable = true;
       printing.enable = false;
-      timesyncd.enable = true;
+      timesyncd.enable = lib.mkDefault true;
       libinput.enable = true;
       # Gestion d'énergie dynamique (intègre le curseur perf/équilibré/éco
       # de GNOME). Remplace le cpuFreqGovernor=performance forcé.
