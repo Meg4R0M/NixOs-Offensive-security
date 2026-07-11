@@ -10,8 +10,8 @@
 #   - des règles udev centralisées (accès sans root aux devices)
 #   - les toolchains de flash/série et les outils SDR
 #
-# 1er jalon du namespace `humanix.*` (le rename humanix.* -> humanix.* viendra
-# dans la vague flake dédiée ; le code NEUF est déjà en humanix.*).
+# Namespace `humanix.*` (le rename athena.* -> humanix.* et la migration flake
+# sont désormais faits).
 { lib, pkgs, config, ... }:
 let
   cfg = config.humanix.hardware;
