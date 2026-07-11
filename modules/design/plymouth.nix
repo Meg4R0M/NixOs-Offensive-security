@@ -21,10 +21,12 @@ in {
   options.humanix.aesthetic.plymouth.enable = lib.mkEnableOption
     "le splash de boot Plymouth Humanix (phosphore vert). Échec = boot texte, jamais bloquant.";
 
-  config = lib.mkIf cfg.enable {
-    # Stylix themise aussi plymouth (theme "stylix") -> on lui cède la place.
-    stylix.targets.plymouth.enable = false;
+  config = lib.mkMerge [
+    # Humanix pilote la politique plymouth : JAMAIS celui de Stylix. (Sinon,
+    # toggle off => Stylix réactive SON plymouth => prompt LUKS re-masqué.)
+    { stylix.targets.plymouth.enable = false; }
 
+    (lib.mkIf cfg.enable {
     boot.plymouth = {
       enable = true;
       theme = "humanix";
@@ -42,5 +44,6 @@ in {
     # brief. "splash" garde Plymouth actif s'il rend bien (logo HUMANIX).
     boot.kernelParams = [ "splash" ];
     boot.consoleLogLevel = 4;
-  };
+    })
+  ];
 }

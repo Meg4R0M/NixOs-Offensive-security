@@ -81,9 +81,12 @@ in
     embedded.enable = true;
   };
 
-  # Splash de boot Humanix (cf modules/design/plymouth.nix).
-  humanix.aesthetic.plymouth.enable = true;
+  # Splash Plymouth DÉSACTIVÉ : sur ce combo AMD+LUKS il n'affichait pas le prompt
+  # de passphrase (ESC requis). Sans splash => prompt LUKS en texte vert (vconsole
+  # Stylix), fiable et sans ESC. Le graphique pourra être retenté plus tard.
+  humanix.aesthetic.plymouth.enable = false;
 
-  # Kernel CachyOS hardened (cf modules/hardware/kernel-cachyos.nix).
-  humanix.kernel.cachyos.enable = true;
+  # Kernel CachyOS hardened DÉSACTIVÉ : kernel panic au boot (rollback). Repli LTS
+  # en attendant le message de panic pour diagnostiquer (ou variante non-hardened).
+  humanix.kernel.cachyos.enable = false;
 }
