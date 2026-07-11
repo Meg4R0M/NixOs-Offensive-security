@@ -1,5 +1,6 @@
 { lib, pkgs, config, ... }: {
   imports = [
+    ./arsenal.nix
     ./bluetooth
     ./kernel
     ./network

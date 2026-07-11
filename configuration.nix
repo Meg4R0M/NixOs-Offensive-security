@@ -71,4 +71,13 @@ in
     enable = true;
     role = "cracker";
   };
+
+  # Arsenal RF/embarqué (cf modules/hardware/arsenal.nix). GUI SDR lourdes
+  # (gqrx/gnuradio/urh) laissées opt-in le temps de valider le 1er build.
+  humanix.hardware = {
+    arsenal.enable = true;
+    sdr.enable = true;
+    sdr.gui.enable = false;
+    embedded.enable = true;
+  };
 }
