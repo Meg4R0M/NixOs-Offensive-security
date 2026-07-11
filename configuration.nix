@@ -15,7 +15,11 @@ let
   mainShell = "zsh";
   terminal = "wezterm";
   browser = "firefox";
-  bootloader = if builtins.pathExists "/sys/firmware/efi" then "systemd" else "grub";
+  # ⚠️ En éval flake PURE, builtins.pathExists "/sys/firmware/efi" renvoie false
+  # (accès hors-flake interdit) => la détection basculait à tort sur GRUB-BIOS,
+  # qui échoue sur ce disque GPT-EFI (« refus de continuer avec les listes de
+  # blocs »). Cette machine est EFI et boote systemd-boot (ESP /efi) => on fige.
+  bootloader = "systemd";
   # home-manager n'est plus fetchTarball ici : il vient du flake
   # (inputs.home-manager.nixosModules.home-manager, cf flake.nix).
 in
