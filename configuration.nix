@@ -89,6 +89,10 @@ in
   # Stylix), fiable et sans ESC. Le graphique pourra être retenté plus tard.
   humanix.aesthetic.plymouth.enable = false;
 
+  # Profil d'ambiance (cf modules/design/aesthetic.nix) : showtime | work | client.
+  # showtime = wallpaper animé + bannière MOTD. Passe en "client" en clientèle.
+  humanix.aesthetic.profile = "showtime";
+
   # Kernel CachyOS variante LTS/BORE (base 6.18.38 = base actuelle qui boote +
   # patchs perf). Le hardened bleeding-edge (7.0.12) paniquait sur cet APU.
   humanix.kernel.cachyos.enable = true;
