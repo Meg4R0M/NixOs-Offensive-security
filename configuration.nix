@@ -86,7 +86,8 @@ in
   # Stylix), fiable et sans ESC. Le graphique pourra être retenté plus tard.
   humanix.aesthetic.plymouth.enable = false;
 
-  # Kernel CachyOS hardened DÉSACTIVÉ : kernel panic au boot (rollback). Repli LTS
-  # en attendant le message de panic pour diagnostiquer (ou variante non-hardened).
-  humanix.kernel.cachyos.enable = false;
+  # Kernel CachyOS variante LTS/BORE (base 6.18.38 = base actuelle qui boote +
+  # patchs perf). Le hardened bleeding-edge (7.0.12) paniquait sur cet APU.
+  humanix.kernel.cachyos.enable = true;
+  # humanix.kernel.cachyos.variant = "lts"; # défaut ; "hardened" = bleeding-edge
 }

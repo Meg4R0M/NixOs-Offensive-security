@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Humanix · Kernel CachyOS — variante HARDENED
+# Humanix · Kernel CachyOS — variante configurable (défaut : lts/BORE)
 # ─────────────────────────────────────────────────────────────────────────────
 # Via xddxdd/nix-cachyos-kernel (overlay "pinned" = derivations alignées sur le
 # cache binaire Attic "lantian", pour éviter la compilation locale = des heures).
@@ -25,8 +25,21 @@ let
   };
   cachyos = import cachyosSrc; # flake-compat -> expose .overlays.pinned
 in {
-  options.humanix.kernel.cachyos.enable = lib.mkEnableOption
-    "le kernel CachyOS (variante hardened) via xddxdd/nix-cachyos-kernel + cache Attic lantian";
+  options.humanix.kernel.cachyos = {
+    enable = lib.mkEnableOption
+      "le kernel CachyOS via xddxdd/nix-cachyos-kernel + cache Attic lantian";
+    variant = lib.mkOption {
+      type = lib.types.enum [ "lts" "hardened" ];
+      default = "lts";
+      description = ''
+        Variante CachyOS :
+        - "lts"      : base LTS 6.18.x (= base actuelle qui boote) + patchs perf
+                       (scheduler BORE). Recommandé sur ce matériel.
+        - "hardened" : durci sécurité MAIS base bleeding-edge (a paniqué au boot
+                       sur ce Ryzen AI 300). À ne réessayer qu'en connaissance.
+      '';
+    };
+  };
 
   config = lib.mkMerge [
     # L'overlay est toujours présent (il n'évalue le kernel que s'il est
@@ -35,7 +48,7 @@ in {
     { nixpkgs.overlays = [ cachyos.overlays.pinned ]; }
 
     (lib.mkIf cfg.enable {
-      boot.kernelPackages = pkgs.cachyosKernels."linuxPackages-cachyos-hardened";
+      boot.kernelPackages = pkgs.cachyosKernels."linuxPackages-cachyos-${cfg.variant}";
 
       # Le module out-of-tree VMware (kernel/default.nix) casse fréquemment sur
       # un kernel hardened récent ET compilerait en local (hors cache Attic).
