@@ -1,0 +1,17 @@
+# Secrets locaux (hashes mot de passe, clés) — jamais dans git
+secrets.nix
+
+# Artefacts de build Nix
+result
+result-*
+
+# direnv
+.direnv/
+
+# Sauvegardes home-manager (backupFileExtension = "hmbak")
+*.hmbak
+
+# Éditeurs / divers
+*.swp
+*~
+.DS_Store

@@ -1,0 +1,47 @@
+$1   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMMMMMMMMssssssssssssssssssssssssssMMMMMMMMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMMMss'''                          '''ssMMMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMyy''                                    ''yyMMMMMMMMMMMM
+$1   MMMMMMMMyy''                                            ''yyMMMMMMMM
+$1   MMMMMy''                                                    ''yMMMMM
+$1   MMMy'                                                          'yMMM
+$1   Mh'                                                              'hM
+$1   -                                                                  -
+$1
+$1   ::                                                                ::
+$1   MMhh.        ..hhhhhh..                      ..hhhhhh..        .hhMM
+$1   MMMMMh   ..hhMMMMMMMMMMhh.                .hhMMMMMMMMMMhh..   hMMMMM
+$1   ---MMM .hMMMMdd:::dMMMMMMMhh..        ..hhMMMMMMMd:::ddMMMMh. MMM---
+$1   MMMMMM MMmm''      'mmMMMMMMMMyy.  .yyMMMMMMMMmm'      ''mmMM MMMMMM
+$1   ---mMM ''             'mmMMMMMMMM  MMMMMMMMmm'             '' MMm---
+$1   yyyym'    .              'mMMMMm'  'mMMMMm'              .    'myyyy
+$1   mm''    .y'     ..yyyyy..  ''''      ''''  ..yyyyy..     'y.    ''mm
+$1           MN    .sMMMMMMMMMss.   .    .   .ssMMMMMMMMMs.    NM
+$1           N`    MMMMMMMMMMMMMN   M    M   NMMMMMMMMMMMMM    `N
+$1            +  .sMNNNNNMMMMMN+   `N    N`   +NMMMMMNNNNNMs.  +
+$1              o+++     ++++Mo    M      M    oM++++     +++o
+$1                                oo      oo
+$1           oM                 oo          oo                 Mo
+$1         oMMo                M              M                oMMo
+$1       +MMMM                 s              s                 MMMM+
+$1      +MMMMM+            +++NNNN+        +NNNN+++            +MMMMM+
+$1     +MMMMMMM+       ++NNMMMMMMMMN+    +NMMMMMMMMNN++       +MMMMMMM+
+$1     MMMMMMMMMNN+++NNMMMMMMMMMMMMMMNNNNMMMMMMMMMMMMMMNN+++NNMMMMMMMMM
+$1     yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy
+$1   m  yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy  m
+$1   MMm yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy mMM
+$1   MMMm .yyMMMMMMMMMMMMMMMM     MMMMMMMMMM     MMMMMMMMMMMMMMMMyy. mMMM
+$1   MMMMd   ''''hhhhh       odddo          obbbo        hhhh''''   dMMMM
+$1   MMMMMd             'hMMMMMMMMMMddddddMMMMMMMMMMh'             dMMMMM
+$1   MMMMMMd              'hMMMMMMMMMMMMMMMMMMMMMMh'              dMMMMMM
+$1   MMMMMMM-               ''ddMMMMMMMMMMMMMMdd''               -MMMMMMM
+$1   MMMMMMMM                   '::dddddddd::'                   MMMMMMMM
+$1   MMMMMMMM-                                                  -MMMMMMMM
+$1   MMMMMMMMM                                                  MMMMMMMMM
+$1   MMMMMMMMMy                                                yMMMMMMMMM
+$1   MMMMMMMMMMy.                                            .yMMMMMMMMMM
+$1   MMMMMMMMMMMMy.                                        .yMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMy.                                    .yMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMMMs.                                .sMMMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMMMMMss.           ....           .ssMMMMMMMMMMMMMMMMMM
+$1   MMMMMMMMMMMMMMMMMMMMNo         oNNNNo         oNMMMMMMMMMMMMMMMMMMMM
