@@ -36,10 +36,11 @@ in {
     # figé, ESC requis). L'initrd systemd lance plymouthd tôt et branche
     # systemd-ask-password sur Plymouth. C'est LA recette fiable plymouth+LUKS.
     boot.initrd.systemd.enable = true;
-    # Boot silencieux pour laisser la scène au splash (l'utilisateur peut
-    # retirer "quiet" pour retrouver le dmesg brut s'il préfère).
-    boot.kernelParams = [ "quiet" "splash" ];
-    boot.consoleLogLevel = 3;
-    boot.initrd.verbose = false;
+    # PAS de "quiet" : sur ce combo AMD+LUKS, si Plymouth n'arrive pas à rendre,
+    # on veut que le prompt de passphrase reste VISIBLE en texte (fini l'ESC).
+    # Bonus : le défilement des logs noyau colle à l'esthétique "faux dmesg" du
+    # brief. "splash" garde Plymouth actif s'il rend bien (logo HUMANIX).
+    boot.kernelParams = [ "splash" ];
+    boot.consoleLogLevel = 4;
   };
 }
