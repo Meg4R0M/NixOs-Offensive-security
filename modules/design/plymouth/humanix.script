@@ -49,3 +49,35 @@ fun message_cb(text) {
   msg.sprite.SetY(sh - 45);
 }
 Plymouth.SetDisplayMessageFunction(message_cb);
+
+# ── Saisie mot de passe (déchiffrement LUKS au boot) ─────────────────────────
+# CRITIQUE : sans ces callbacks, le prompt de passphrase ne s'affiche pas et le
+# boot paraît figé (il faut presser ESC pour voir le prompt texte). On rend le
+# prompt + les puces (astérisques) en vert phosphore, au centre.
+prompt.sprite = Sprite();
+bullets.sprite = Sprite();
+
+fun display_password_cb(prompt_text, bullets_count) {
+  prompt.image = Image.Text(prompt_text, 0.0, 1.0, 0.25, 1.0, "Monospace 14");
+  prompt.sprite.SetImage(prompt.image);
+  prompt.sprite.SetX(sw / 2 - prompt.image.GetWidth() / 2);
+  prompt.sprite.SetY(sh / 2 + 100);
+  prompt.sprite.SetOpacity(1);
+
+  stars = "";
+  for (i = 0; i < bullets_count; i++) {
+    stars = stars + "*";
+  }
+  bullets.image = Image.Text("[ " + stars + " ]", 0.0, 1.0, 0.25, 1.0, "Monospace 18");
+  bullets.sprite.SetImage(bullets.image);
+  bullets.sprite.SetX(sw / 2 - bullets.image.GetWidth() / 2);
+  bullets.sprite.SetY(sh / 2 + 132);
+  bullets.sprite.SetOpacity(1);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_cb);
+
+fun display_normal_cb() {
+  prompt.sprite.SetOpacity(0);
+  bullets.sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(display_normal_cb);
