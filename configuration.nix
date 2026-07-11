@@ -7,8 +7,6 @@ let
   # These variable names are used by Aegis backend
   version = "unstable"; #unstable or 25.05
   username = "fdurano";
-  # Hashes mot de passe sortis du repo -> ./secrets.nix (gitignoré, cf secrets.nix.example)
-  secrets = import ./secrets.nix;
   hostname = "Humanix";
   theme = "hackthebox";
   desktop = "gnome";
@@ -18,8 +16,8 @@ let
   terminal = "wezterm";
   browser = "firefox";
   bootloader = if builtins.pathExists "/sys/firmware/efi" then "systemd" else "grub";
-  hm-version = if version == "unstable" then "master" else "release-" + version; # Correspond to home-manager GitHub branches
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/${hm-version}.tar.gz";
+  # home-manager n'est plus fetchTarball ici : il vient du flake
+  # (inputs.home-manager.nixosModules.home-manager, cf flake.nix).
 in
 {
   imports = [ # Include the results of the hardware scan.
@@ -39,7 +37,6 @@ in
         useStylix = true;
       };
     }
-    (import "${home-manager}/nixos")
     ./hardware-configuration.nix
     ./.
     ./modules/claude-desktop.nix
@@ -47,11 +44,12 @@ in
 
   users = lib.mkIf config.athena.enable {
     mutableUsers = false;
-    extraUsers.root.hashedPassword = secrets.hashedRoot;
+    # Lus à l'activation (hors flake, cf secrets/ gitignoré).
+    extraUsers.root.hashedPasswordFile = "/home/fdurano/nixos/secrets/root.hash";
     users.${config.athena.homeManagerUser} = {
       shell = pkgs.${config.athena.mainShell};
       isNormalUser = true;
-      hashedPassword = secrets.hashed;
+      hashedPasswordFile = "/home/fdurano/nixos/secrets/user.hash";
       extraGroups = [ "docker" "wheel" ];
     };
   };
@@ -66,6 +64,9 @@ in
   };
 
   services.flatpak.enable = true;
+
+  # Flakes activés (nécessaire pour `nixos-rebuild switch --flake`).
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   cyber = {
     enable = true;

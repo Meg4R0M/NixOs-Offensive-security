@@ -15,15 +15,11 @@
 #   sudo nixos-rebuild switch -I nixos-config=$HOME/nixos/configuration.nix \
 #     --option extra-substituters "https://attic.xuyh0120.win/lantian" \
 #     --option extra-trusted-public-keys "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, inputs, ... }:
 let
   cfg = config.humanix.kernel.cachyos;
 
-  cachyosSrc = builtins.fetchTarball {
-    url = "https://github.com/xddxdd/nix-cachyos-kernel/archive/4673c8f6d48baf2ec3f14b6a9f8c4ecfb0810d6f.tar.gz";
-    sha256 = "1qphbxgp24n5lysrzg6ivf97db6yx0as0qf5whd7585rbl7hp463";
-  };
-  cachyos = import cachyosSrc; # flake-compat -> expose .overlays.pinned
+  cachyos = inputs.cachyos; # du flake (expose .overlays.pinned)
 in {
   options.humanix.kernel.cachyos = {
     enable = lib.mkEnableOption

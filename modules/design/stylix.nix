@@ -1,15 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, inputs, ... }:
 let
   cfg = config.athena;
 
-  # Stylix importé en non-flake (cf. doc "Without flakes"). Pin = commit master
-  # compatible nixpkgs 26.11. On utilise builtins.fetchTarball (et NON
-  # pkgs.fetchFromGitHub) car `imports` ne doit pas dépendre de `pkgs`
-  # (sinon récursion infinie).
-  stylixSrc = builtins.fetchTarball {
-    url = "https://github.com/nix-community/stylix/archive/a378e4c09031fb15a4d65da88aa628f71fc52f6b.tar.gz";
-    sha256 = "0in6xasb0x8lcgb0s60jn4yzd7kp08fgij1nq6gxmsc28qhhdrqb";
-  };
+  # Stylix vient du flake : inputs.stylix (cf flake.nix + imports ci-dessous).
 
   # Wallpaper local (dans le repo). La palette est figée ci-dessous
   # (base16Scheme) donc l'image ne sert QUE de fond d'écran, pas de source
@@ -20,7 +13,7 @@ let
   iconColour = "yellow";
 in
 {
-  imports = [ (import stylixSrc).nixosModules.stylix ];
+  imports = [ inputs.stylix.nixosModules.stylix ];
 
   options.athena.useStylix =
     lib.mkEnableOption "Theming global via Stylix (palette auto générée depuis le wallpaper, façon Nix-Relic)";

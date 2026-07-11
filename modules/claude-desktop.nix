@@ -1,9 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
-  # rev PINNÉ obligatoire (l'éval channels est pure, pas de ref mutable)
-  claude = (builtins.getFlake
-    "github:Reginleif88/claude-cowork-nix/5018f7912405c1559314f56bc587ee6318d60132"
-  ).packages.${pkgs.stdenv.hostPlatform.system}.default;
+  # Vient du flake (inputs.claude), plus de getFlake impur.
+  claude = inputs.claude.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
   claudeDesktop = pkgs.makeDesktopItem {
     name = "claude-desktop";
