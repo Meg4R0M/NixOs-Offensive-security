@@ -22,7 +22,7 @@ with pkgs;
   dalfox
   dirb
   dirstalk
-  # dontgo403 # retiré de nixpkgs (Humanix)
+  nomore403 # ex-dontgo403 (renommé dans nixpkgs) — réactivé (Humanix)
   doona
   feroxbuster
   ffuf

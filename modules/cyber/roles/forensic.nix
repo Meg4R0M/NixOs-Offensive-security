@@ -3,7 +3,7 @@
 with pkgs;
 
 [
-  # acquire # tire dissect-target incompat python3.14 (Humanix)
+  python312Packages.acquire # pin py3.12 (top-level KO en py3.14) — réactivé (Humanix)
   aesfix
   aeskeyfind
   afflib
