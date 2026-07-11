@@ -89,5 +89,5 @@ in
   # Kernel CachyOS variante LTS/BORE (base 6.18.38 = base actuelle qui boote +
   # patchs perf). Le hardened bleeding-edge (7.0.12) paniquait sur cet APU.
   humanix.kernel.cachyos.enable = true;
-  # humanix.kernel.cachyos.variant = "lts"; # défaut ; "hardened" = bleeding-edge
+  humanix.kernel.cachyos.variant = "bore"; # test 7.1.3 BORE ; repli "lts" (6.18) si panic
 }

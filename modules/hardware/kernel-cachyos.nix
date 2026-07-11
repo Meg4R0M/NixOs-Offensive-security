@@ -29,14 +29,17 @@ in {
     enable = lib.mkEnableOption
       "le kernel CachyOS via xddxdd/nix-cachyos-kernel + cache Attic lantian";
     variant = lib.mkOption {
-      type = lib.types.enum [ "lts" "hardened" ];
+      type = lib.types.enum [ "lts" "bore" "eevdf" "hardened" ];
       default = "lts";
       description = ''
-        Variante CachyOS :
-        - "lts"      : base LTS 6.18.x (= base actuelle qui boote) + patchs perf
-                       (scheduler BORE). Recommandé sur ce matériel.
-        - "hardened" : durci sécurité MAIS base bleeding-edge (a paniqué au boot
-                       sur ce Ryzen AI 300). À ne réessayer qu'en connaissance.
+        Variante CachyOS (attr = linuxPackages-cachyos-<variant>) :
+        - "lts"      : base LTS 6.18.x (= base qui boote) + BORE. Le plus sûr.
+        - "bore"     : base récente 7.1.x + BORE (même scheduler que lts).
+        - "eevdf"    : base récente 7.1.x + EEVDF.
+        - "hardened" : durci sécurité, base bleeding-edge 7.0.x (a PANIQUÉ au boot
+                       sur ce Ryzen AI 300). À éviter pour l'instant.
+        Les variantes 7.x sont plus récentes (support matériel frais) mais plus
+        risquées sur un APU neuf ; rollback dispo via systemd-boot.
       '';
     };
   };
