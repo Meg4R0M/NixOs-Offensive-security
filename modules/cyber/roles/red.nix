@@ -68,7 +68,7 @@ with pkgs;
   gowitness
   # https://github.com/NixOS/nixpkgs/issues/425346
   # gpredict
-  graphinder
+  # graphinder # build KO (Humanix)
   graphqlmap
   graphw00f
   hashcat
@@ -167,7 +167,7 @@ with pkgs;
   rizinPlugins.rz-ghidra
   # https://github.com/NixOS/nixpkgs/issues/425369
   # routersploit
-  sherlock
+  # sherlock # build KO (Humanix)
   smbmap
   snmpcheck
   snort
@@ -200,7 +200,7 @@ with pkgs;
   # qtwebengine deps is insecure
   # vivisect
   wafw00f
-  wfuzz
+  # wfuzz # build KO py3.14 (Humanix)
   whatweb
   wifite2
   wireshark

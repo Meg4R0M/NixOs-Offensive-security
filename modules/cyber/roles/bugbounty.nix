@@ -54,7 +54,7 @@ with pkgs;
   trufflehog
   wafw00f
   webanalyze
-  wfuzz
+  # wfuzz # build KO py3.14 (Humanix)
   whatweb
   whispers
   wpscan

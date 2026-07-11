@@ -32,7 +32,7 @@ with pkgs;
   gobuster
   gospider
   gowitness
-  graphinder
+  # graphinder # build KO (Humanix)
   graphqlmap
   graphw00f
   hakrawler
@@ -83,7 +83,7 @@ with pkgs;
   wapiti
   webanalyze
   websploit
-  wfuzz
+  # wfuzz # build KO py3.14 (Humanix)
   whatweb
   wpscan
   wuzz

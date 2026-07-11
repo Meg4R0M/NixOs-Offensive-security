@@ -41,7 +41,7 @@ with pkgs;
   thc-hydra
   theharvester
   wafw00f
-  wfuzz
+  # wfuzz # build KO py3.14 (Humanix)
   wifite2
   wireshark
   wpscan

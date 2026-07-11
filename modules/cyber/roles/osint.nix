@@ -37,7 +37,7 @@ with pkgs;
   gitleaks
   gomapenum
   gowitness
-  graphinder
+  # graphinder # build KO (Humanix)
   holehe
   httping
   katana
@@ -66,7 +66,7 @@ with pkgs;
   # python312Packages.scrapy-splash
   python313Packages.spyse-python
   rita
-  sherlock
+  # sherlock # build KO (Humanix)
   sleuthkit
   smbmap
   sn0int
