@@ -30,6 +30,12 @@ in {
       theme = "humanix";
       themePackages = [ theme ];
     };
+
+    # CRITIQUE (disque LUKS) : sans initrd systemd, Plymouth ne tourne pas en
+    # stage 1 -> le splash + le prompt de passphrase ne s'affichent pas (boot
+    # figé, ESC requis). L'initrd systemd lance plymouthd tôt et branche
+    # systemd-ask-password sur Plymouth. C'est LA recette fiable plymouth+LUKS.
+    boot.initrd.systemd.enable = true;
     # Boot silencieux pour laisser la scène au splash (l'utilisateur peut
     # retirer "quiet" pour retrouver le dmesg brut s'il préfère).
     boot.kernelParams = [ "quiet" "splash" ];
