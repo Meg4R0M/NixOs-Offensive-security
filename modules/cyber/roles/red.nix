@@ -22,7 +22,7 @@ with pkgs;
   cewl
   cfr
   checksec
-  clairvoyance
+  # clairvoyance # incompat py3.14 (Humanix)
   coercer
   commix
   dirb

@@ -15,7 +15,7 @@ with pkgs;
   certgraph
   chaos
   checkpwn
-  clairvoyance
+  # clairvoyance # incompat py3.14 (Humanix)
   cloudlist
   dnsenum
   dnsrecon

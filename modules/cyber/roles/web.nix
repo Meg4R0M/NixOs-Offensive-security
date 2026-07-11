@@ -15,14 +15,14 @@ with pkgs;
   caido
   cantoolz
   chipsec
-  clairvoyance
+  # clairvoyance # incompat py3.14 (Humanix)
   commix
   crackql
   crlfuzz
   dalfox
   dirb
   dirstalk
-  dontgo403
+  # dontgo403 # retiré de nixpkgs (Humanix)
   doona
   feroxbuster
   ffuf

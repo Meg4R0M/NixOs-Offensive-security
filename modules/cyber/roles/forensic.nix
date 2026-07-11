@@ -3,7 +3,7 @@
 with pkgs;
 
 [
-  acquire
+  # acquire # tire dissect-target incompat python3.14 (Humanix)
   aesfix
   aeskeyfind
   afflib

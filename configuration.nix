@@ -70,6 +70,8 @@ in
   cyber = {
     enable = true;
     role = "cracker";
+    # Humanix : arsenal cyber COMPLET (union des 12 rôles, ~430 paquets).
+    roles = [ "blue" "bugbounty" "dos" "forensic" "malware" "mobile" "network" "osint" "red" "student" "web" ];
   };
 
   # Arsenal RF/embarqué (cf modules/hardware/arsenal.nix). GUI SDR lourdes

@@ -132,7 +132,7 @@ with pkgs;
   sslh
   sslscan
   sslsplit
-  stacs
+  # stacs # incompat python3.14 (Humanix)
   stunnel
   suricata
   swaks
