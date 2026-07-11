@@ -83,4 +83,7 @@ in
 
   # Splash de boot Humanix (cf modules/design/plymouth.nix).
   humanix.aesthetic.plymouth.enable = true;
+
+  # Kernel CachyOS hardened (cf modules/hardware/kernel-cachyos.nix).
+  humanix.kernel.cachyos.enable = true;
 }

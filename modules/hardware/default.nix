@@ -1,6 +1,7 @@
 { lib, pkgs, config, ... }: {
   imports = [
     ./arsenal.nix
+    ./kernel-cachyos.nix
     ./bluetooth
     ./kernel
     ./network
