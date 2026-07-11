@@ -1,6 +1,6 @@
 { lib, pkgs, config, inputs, ... }:
 let
-  cfg = config.athena;
+  cfg = config.humanix;
 
   # Stylix vient du flake : inputs.stylix (cf flake.nix + imports ci-dessous).
 
@@ -15,7 +15,7 @@ in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
 
-  options.athena.useStylix =
+  options.humanix.useStylix =
     lib.mkEnableOption "Theming global via Stylix (palette auto générée depuis le wallpaper, façon Nix-Relic)";
 
   config = lib.mkIf cfg.useStylix {

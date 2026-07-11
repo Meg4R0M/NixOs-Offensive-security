@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.displayManager == "gdm") {
+  config = lib.mkIf (config.humanix.displayManager == "gdm") {
     services.displayManager.gdm = {
       enable = true;
       wayland = true;

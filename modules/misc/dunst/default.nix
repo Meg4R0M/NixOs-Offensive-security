@@ -1,8 +1,8 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, config, osConfig, ... }:
+  config = lib.mkIf config.humanix.baseConfiguration {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, osConfig, ... }:
     let
-      useStylix = osConfig.athena.useStylix or false;
+      useStylix = osConfig.humanix.useStylix or false;
       c = config.lib.stylix.colors or null;
       fonts = config.stylix.fonts or null;
       fontStr = if fonts != null

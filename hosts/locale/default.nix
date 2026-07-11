@@ -1,5 +1,5 @@
 { lib, config, pkgs, ... }: {
-  config = lib.mkIf config.athena.baseLocale {
+  config = lib.mkIf config.humanix.baseLocale {
     # Set your time zone.
     time.timeZone = "Europe/Paris";
 

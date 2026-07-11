@@ -1,5 +1,5 @@
 { lib, config, pkgs, ... }: {
-  config = lib.mkIf (config.athena.displayManager == "sddm") {
+  config = lib.mkIf (config.humanix.displayManager == "sddm") {
     services.displayManager.sddm = {
       package = pkgs.kdePackages.sddm;
       enable = true;
@@ -13,7 +13,7 @@
     };
     environment.systemPackages = with pkgs; [
       (sddm-astronaut.override {
-        embeddedTheme = config.athena.sddmTheme;
+        embeddedTheme = config.humanix.sddmTheme;
       })
     ];
   };

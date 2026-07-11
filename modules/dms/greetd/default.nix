@@ -5,7 +5,7 @@
 # ambiance CONSOLE 100 % terminal (pas un DM graphique générique) : phosphore
 # vert, sessions listées comme un menu d'intrusion, greeting « accès restreint ».
 #
-# Débrayable : activé quand `athena.displayManager == "greetd"`. Repli SDDM =
+# Débrayable : activé quand `humanix.displayManager == "greetd"`. Repli SDDM =
 # remettre `dmanager = "sddm"` dans configuration.nix (1 ligne).
 #
 # tuigreet lance la session choisie parmi les .desktop enregistrés par
@@ -47,7 +47,7 @@ let
     "--greeting '${greeting}'"
   ];
 in {
-  config = lib.mkIf (config.athena.displayManager == "greetd") {
+  config = lib.mkIf (config.humanix.displayManager == "greetd") {
     services.greetd = {
       enable = true;
       settings = {

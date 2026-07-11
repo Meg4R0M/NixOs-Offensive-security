@@ -11,13 +11,13 @@ let
   gtkIconTheme = "${theme-components.icon-theme}";
   gtkCursorTheme = "${theme-components.cursor-theme}";
 in {
-  config = lib.mkIf (config.athena.theme == "redmoon") {
-    athena.theme-components = theme-components;
+  config = lib.mkIf (config.humanix.theme == "redmoon") {
+    humanix.theme-components = theme-components;
     environment.systemPackages = with pkgs; [
       (callPackage ../../../pkgs/themes/athena-red-base/package.nix { })
     ];
 
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       # Needed to apply the theme on GTK4 windows (like Nautilus)
       home.sessionVariables.GTK_THEME = gtkTheme;
 

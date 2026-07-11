@@ -5,7 +5,7 @@ let
   fonts = config.stylix.fonts or null;
   fontName = if fonts != null then fonts.monospace.name else "JetBrainsMono Nerd Font Mono";
 in
-lib.mkIf (osConfig.athena.useStylix or false) {
+lib.mkIf (osConfig.humanix.useStylix or false) {
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;

@@ -20,12 +20,12 @@
     nerd-fonts.symbols-only
   ];
 
-  gtkTheme = "${config.athena.theme-components.gtk-theme}";
-  gtkIconTheme = "${config.athena.theme-components.icon-theme}";
-  gtkCursorTheme = "${config.athena.theme-components.cursor-theme}";
-  backgroundTheme = "${config.athena.theme-components.background}";
+  gtkTheme = "${config.humanix.theme-components.gtk-theme}";
+  gtkIconTheme = "${config.humanix.theme-components.icon-theme}";
+  gtkCursorTheme = "${config.humanix.theme-components.cursor-theme}";
+  backgroundTheme = "${config.humanix.theme-components.background}";
 in {
-  config = lib.mkIf (config.athena.desktopManager == "mate") {
+  config = lib.mkIf (config.humanix.desktopManager == "mate") {
     # ---- System Configuration ----
     services.xserver = {
       enable = true;
@@ -41,7 +41,7 @@ in {
     };
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       home.packages = fontList;
       xdg.mimeApps = {
         enable = true;
@@ -78,7 +78,7 @@ in {
 
         # /desktop/applications/terminal
         "org/gnome/desktop/applications/terminal" = {
-          exec = "${config.athena.terminal}";
+          exec = "${config.humanix.terminal}";
         };
 
         # /panel

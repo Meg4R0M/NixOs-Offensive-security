@@ -14,12 +14,12 @@ let
     nerd-fonts.symbols-only
   ];
 
-  gtkTheme = "${config.athena.theme-components.gtk-theme}";
-  gtkIconTheme = "${config.athena.theme-components.icon-theme}";
-  gtkCursorTheme = "${config.athena.theme-components.cursor-theme}";
-  backgroundTheme = "${config.athena.theme-components.background}";
+  gtkTheme = "${config.humanix.theme-components.gtk-theme}";
+  gtkIconTheme = "${config.humanix.theme-components.icon-theme}";
+  gtkCursorTheme = "${config.humanix.theme-components.cursor-theme}";
+  backgroundTheme = "${config.humanix.theme-components.background}";
 in {
-  config = lib.mkIf (config.athena.desktopManager == "cinnamon") {
+  config = lib.mkIf (config.humanix.desktopManager == "cinnamon") {
     # ---- System Configuration ----
     services = {
       cinnamon.apps.enable = true;
@@ -40,7 +40,7 @@ in {
     fonts.packages = fontList;
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       dconf.settings = {
         "org/cinnamon/desktop/background" = {
           picture-uri = "file:///run/current-system/sw/share/backgrounds/athena/${backgroundTheme}";

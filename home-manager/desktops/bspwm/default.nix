@@ -29,7 +29,7 @@ let
      lxappearance
   ];
 in {
-  config = lib.mkIf (config.athena.desktopManager == "bspwm") {
+  config = lib.mkIf (config.humanix.desktopManager == "bspwm") {
     # ---- System Configuration ----
     services = {
       mpd.enable = true;
@@ -48,7 +48,7 @@ in {
     };
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       programs.alacritty = {
           enable = true;
           settings = import ./alacritty;

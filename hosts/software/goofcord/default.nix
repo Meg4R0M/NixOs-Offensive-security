@@ -1,5 +1,5 @@
 { lib, config, pkgs, ... }: {
-  config = lib.mkIf config.athena.baseSoftware {
+  config = lib.mkIf config.humanix.baseSoftware {
     # For discord wayland pipewire screensharing
     nixpkgs.config.ungoogled-chromium.commandLineArgs = "
       --ozone-platform=auto

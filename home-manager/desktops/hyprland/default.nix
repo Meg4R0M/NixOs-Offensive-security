@@ -1,6 +1,6 @@
 { lib, pkgs, config, ... }:
 let
-  term = config.athena.terminal; # "kitty" ou "alacritty"
+  term = config.humanix.terminal; # "kitty" ou "alacritty"
 
   # Fond d'écran statique = l'image Stylix (athena-linus-richard), affichée
   # avec swaybg (mode fill).
@@ -41,15 +41,15 @@ let
     };
   };
 in {
-  options.athena.animatedWallpaper =
+  options.humanix.animatedWallpaper =
     (lib.mkEnableOption "Wallpaper animé (mpvpaper, vidéo Cyberpunk de Nix-Relic) sous Hyprland") // {
       default = true;
     };
 
   # Session Hyprland additionnelle, activable en parallèle du desktopManager
-  # principal via `athena.enableHyprland = true`. SDDM (wayland.enable) la
+  # principal via `humanix.enableHyprland = true`. SDDM (wayland.enable) la
   # proposera automatiquement dans la liste des sessions au login.
-  config = lib.mkIf config.athena.enableHyprland {
+  config = lib.mkIf config.humanix.enableHyprland {
 
     # ---- System Configuration ----
     programs.hyprland = {
@@ -80,7 +80,7 @@ in {
     ];
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, config, ... }:
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, ... }:
     let
       # Couleurs base16 générées par Stylix (look Nix-Relic). Fallback si Stylix off.
       c = config.lib.stylix.colors or null;

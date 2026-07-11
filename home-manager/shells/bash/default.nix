@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.mainShell == "bash") {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+  config = lib.mkIf (config.humanix.mainShell == "bash") {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       home = {
         file = {
           ".bashrc".source = ./bashrc;

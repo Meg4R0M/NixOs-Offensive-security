@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     programs.virt-manager.enable = lib.mkDefault false;
     virtualisation = {
       /* QEMU - Virt Manager */

@@ -9,7 +9,7 @@
     ./virtualization
   ];
 
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     # KDE complains if power management is disabled (to be precise, if
     # there is no power management backend such as upower).
     # On laisse l'infra activée mais SANS forcer un governor : amd_pstate

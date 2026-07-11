@@ -10,16 +10,16 @@ let
   gtkIconTheme = "${theme-components.icon-theme}";
   gtkCursorTheme = "${theme-components.cursor-theme}";
 in {
-  config = lib.mkIf (config.athena.theme == "hackthebox") {
-    athena.theme-components = theme-components;
+  config = lib.mkIf (config.humanix.theme == "hackthebox") {
+    humanix.theme-components = theme-components;
     environment.systemPackages = with pkgs; [
       (callPackage ../../../pkgs/themes/athena-green-base/package.nix { })
     ];
 
     # Si Stylix gère le theming global, on ne pose PAS le GTK/kitty/vscode
     # d'Athena (sinon double définition de gtk.theme.name = conflit).
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, lib, osConfig, ...}:
-      lib.mkIf (!osConfig.athena.useStylix) {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, lib, osConfig, ...}:
+      lib.mkIf (!osConfig.humanix.useStylix) {
       # Needed to apply the theme on GTK4 windows (like Nautilus)
       home.sessionVariables.GTK_THEME = gtkTheme;
 

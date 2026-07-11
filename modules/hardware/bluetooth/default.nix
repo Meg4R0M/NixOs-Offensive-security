@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     # Bluetooth
     services.blueman.enable = true;
     hardware.bluetooth = {

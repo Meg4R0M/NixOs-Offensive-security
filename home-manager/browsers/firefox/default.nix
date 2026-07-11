@@ -1,8 +1,8 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.browser == "firefox") {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+  config = lib.mkIf (config.humanix.browser == "firefox") {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       # Renseigne le profil pour la target Stylix firefox (silence le warning).
-      stylix.targets.firefox.profileNames = [ config.athena.homeManagerUser ];
+      stylix.targets.firefox.profileNames = [ config.humanix.homeManagerUser ];
 
       programs.firefox = {
         enable = true;
@@ -13,9 +13,9 @@
         package = pkgs.firefox;
 
         profiles = {
-          "${config.athena.homeManagerUser}" = {
+          "${config.humanix.homeManagerUser}" = {
             id = 0;
-            name = "${config.athena.homeManagerUser}";
+            name = "${config.humanix.homeManagerUser}";
             bookmarks = {
               force = true;
               settings = import ../bookmarks.nix;

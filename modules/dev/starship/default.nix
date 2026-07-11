@@ -1,6 +1,6 @@
 { lib, config, ...}: {
-  config = lib.mkIf config.athena.baseConfiguration {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+  config = lib.mkIf config.humanix.baseConfiguration {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       programs.starship = {
         enable = false;
         enableZshIntegration = false;

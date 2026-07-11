@@ -8,10 +8,10 @@
     samurai = "sky";
     sweet = "violet";
     temple = "sky";
-  }."${config.athena.theme}";
+  }."${config.humanix.theme}";
 in {
-  config = lib.mkIf config.athena.baseConfiguration {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ... }: {
+  config = lib.mkIf config.humanix.baseConfiguration {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ... }: {
       programs.tmux = {
         enable = true;
         plugins = with pkgs.tmuxPlugins; [

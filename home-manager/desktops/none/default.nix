@@ -1,6 +1,6 @@
 { lib, pkgs, config, ... }:
 {
-  config = lib.mkIf (config.athena.desktopManager == "none") {
+  config = lib.mkIf (config.humanix.desktopManager == "none") {
     services.xserver.enable = lib.mkForce false;
     services.displayManager.enable = lib.mkForce false;
     services.flatpak.enable = lib.mkForce false;

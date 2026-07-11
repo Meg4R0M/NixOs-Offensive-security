@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+  config = lib.mkIf config.humanix.baseConfiguration {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       #home.packages = with pkgs; [
       #  gcc # during nixos-install on Arch seems to produce an error. To delete.
       #  gnumake

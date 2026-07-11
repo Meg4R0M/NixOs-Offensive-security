@@ -34,7 +34,7 @@ let
     nerd-fonts.symbols-only
   ];
 in {
-  config = lib.mkIf (config.athena.desktopManager == "kde") {
+  config = lib.mkIf (config.humanix.desktopManager == "kde") {
     # ---- System Configuration ----
     services.xserver = {
       enable = true;
@@ -74,7 +74,7 @@ in {
     };
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       home.packages = fontList;
 
       # It copies "./config/menus/gnome-applications.menu" source file to the nix store, and then symlinks it to the location.

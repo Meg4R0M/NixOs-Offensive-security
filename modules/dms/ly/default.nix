@@ -1,5 +1,5 @@
 { lib, config, pkgs, ... }: {
-  config = lib.mkIf (config.athena.displayManager == "ly") {
+  config = lib.mkIf (config.humanix.displayManager == "ly") {
     services.displayManager.ly = {
       enable = true;
       settings = {

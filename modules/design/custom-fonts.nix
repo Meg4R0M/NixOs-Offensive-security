@@ -17,7 +17,7 @@ let
   };
 in
 {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     fonts.packages = [ customFonts ];
   };
 }

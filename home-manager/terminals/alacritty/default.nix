@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.terminal == "alacritty") {
-    home-manager.users.${config.athena.homeManagerUser}.programs.alacritty = {
+  config = lib.mkIf (config.humanix.terminal == "alacritty") {
+    home-manager.users.${config.humanix.homeManagerUser}.programs.alacritty = {
       enable = true;
       settings = {
         window = {

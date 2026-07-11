@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.bootloader == "grub") {
+  config = lib.mkIf (config.humanix.bootloader == "grub") {
     # Bootloader
     boot.loader = {
       grub = {

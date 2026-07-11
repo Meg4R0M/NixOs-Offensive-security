@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.mainShell == "fish") {
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+  config = lib.mkIf (config.humanix.mainShell == "fish") {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       home.packages = with pkgs; [
         fastfetch
         zoxide

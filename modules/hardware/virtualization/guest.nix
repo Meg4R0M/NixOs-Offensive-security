@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     # To not change upstream! It is managed by the installer
     services = {
       spice-vdagentd.enable = lib.mkDefault false;

@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.terminal == "wezterm") {
-    home-manager.users.${config.athena.homeManagerUser}.programs.wezterm = {
+  config = lib.mkIf (config.humanix.terminal == "wezterm") {
+    home-manager.users.${config.humanix.homeManagerUser}.programs.wezterm = {
       enable = true;
       # Session-aware : sous Niri (NIRI_SOCKET défini) -> thème Mr Robot vert CRT ;
       # ailleurs (GNOME/Hyprland) -> color scheme "stylix" (généré par Stylix).

@@ -1,6 +1,6 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.terminal == "kitty") {
-    home-manager.users.${config.athena.homeManagerUser}.programs.kitty = {
+  config = lib.mkIf (config.humanix.terminal == "kitty") {
+    home-manager.users.${config.humanix.homeManagerUser}.programs.kitty = {
       enable = true;
       settings = {
         font_family = "JetBrainsMono NF Medium";

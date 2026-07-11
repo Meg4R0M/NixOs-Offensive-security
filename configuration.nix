@@ -22,7 +22,7 @@ in
 {
   imports = [ # Include the results of the hardware scan.
     {
-      athena = {
+      humanix = {
         inherit bootloader terminal theme mainShell browser;
         enable = true;
         homeManagerUser = username;
@@ -42,12 +42,12 @@ in
     ./modules/claude-desktop.nix
   ];
 
-  users = lib.mkIf config.athena.enable {
+  users = lib.mkIf config.humanix.enable {
     mutableUsers = false;
     # Lus à l'activation (hors flake, cf secrets/ gitignoré).
     extraUsers.root.hashedPasswordFile = "/home/fdurano/nixos/secrets/root.hash";
-    users.${config.athena.homeManagerUser} = {
-      shell = pkgs.${config.athena.mainShell};
+    users.${config.humanix.homeManagerUser} = {
+      shell = pkgs.${config.humanix.mainShell};
       isNormalUser = true;
       hashedPasswordFile = "/home/fdurano/nixos/secrets/user.hash";
       extraGroups = [ "docker" "wheel" ];

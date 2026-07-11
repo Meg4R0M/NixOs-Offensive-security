@@ -3,8 +3,8 @@
 # Themée Stylix, réutilise les modules rice, et intègre les shaders GLSL
 # d'animation open/close (liixini/shaders).
 let
-  animatedWp = config.athena.animatedWallpaper;
-  term = config.athena.terminal;
+  animatedWp = config.humanix.animatedWallpaper;
+  term = config.humanix.terminal;
 
   cyberpunkMp4 = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/Immelancholy/Nix-Relic/main/backgrounds/Cyberpunk.mp4";
@@ -30,7 +30,7 @@ let
     in
     body + (lib.concatStrings (lib.genList (_: "}") (if missing > 0 then missing else 0)));
 
-  shaderName = config.athena.niriShader;
+  shaderName = config.humanix.niriShader;
   openShader = mkShader "${shadersSrc}/${shaderName}/open.glsl";
   closeShader = mkShader "${shadersSrc}/${shaderName}/close.glsl";
 
@@ -48,16 +48,16 @@ let
   '';
 in
 {
-  options.athena.enableNiri =
+  options.humanix.enableNiri =
     lib.mkEnableOption "Session Niri (scrollable-tiling) avec shaders GLSL, en plus de GNOME/Hyprland";
 
-  options.athena.niriShader = lib.mkOption {
+  options.humanix.niriShader = lib.mkOption {
     type = lib.types.str;
     default = "glass-warp";
     description = "Nom du shader liixini/shaders pour les animations open/close (ex: glass-warp, dissolve, ripple).";
   };
 
-  config = lib.mkIf config.athena.enableNiri {
+  config = lib.mkIf config.humanix.enableNiri {
     # Active Niri : paquet + session Wayland (SDDM la proposera) + portails.
     programs.niri.enable = true;
 
@@ -67,7 +67,7 @@ in
       brightnessctl
     ];
 
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, config, ... }:
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, ... }:
     let
       # ===== Palette Mr Robot / CRT phosphore (vert sur noir), propre à Niri =====
       g = {

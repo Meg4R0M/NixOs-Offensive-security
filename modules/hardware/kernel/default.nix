@@ -1,5 +1,5 @@
 { lib, pkgs, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     # If change kernel, remember to run 'sudo nixos-rebuild boot' and 'sudo reboot'
     boot = {
       kernelPackages = lib.mkDefault pkgs.linuxPackages; # LTS Kernel

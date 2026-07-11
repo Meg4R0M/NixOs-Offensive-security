@@ -13,15 +13,15 @@ let
     window-title-is-back
   ];
 
-  gnomeshellTheme = "${config.athena.theme-components.gtk-theme}";
-  backgroundTheme = "${config.athena.theme-components.background}";
+  gnomeshellTheme = "${config.humanix.theme-components.gtk-theme}";
+  backgroundTheme = "${config.humanix.theme-components.background}";
 
   fontList = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
   ];
 in {
-  config = lib.mkIf (config.athena.desktopManager == "gnome") {
+  config = lib.mkIf (config.humanix.desktopManager == "gnome") {
     # ---- System Configuration ----
     services = {
       udev.packages = with pkgs; [ gnome-settings-daemon ];
@@ -61,7 +61,7 @@ in {
 
     # ---- Home Configuration ----
 
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, lib, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, lib, ...}: {
       home.packages = gnomeExtensionsList;
       # mkDefault : si Stylix gère le theming global, ses définitions (priorité
       # normale) l'emportent sur ces valeurs ; sinon Athena s'applique.
@@ -106,7 +106,7 @@ in {
 
         # /desktop/applications/terminal
         "org/gnome/desktop/applications/terminal" = {
-          exec = "${config.athena.terminal}";
+          exec = "${config.humanix.terminal}";
         };
 
         # /desktop/interface — mkDefault pour céder à Stylix (polices/couleurs)

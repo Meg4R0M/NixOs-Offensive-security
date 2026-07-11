@@ -68,7 +68,7 @@ let
     zsh-powerlevel10k
   ];
 in {
-  config = lib.mkIf (config.athena.desktopManager == "bspwm-critical") {
+  config = lib.mkIf (config.humanix.desktopManager == "bspwm-critical") {
     # ---- System Configuration ----
     programs.zsh.ohMyZsh.enable = true;
     security.polkit.enable = true;
@@ -89,7 +89,7 @@ in {
     };
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       programs.eww.enable = true;
 
       # It copies "./config/menus/gnome-applications.menu" source file to the nix store, and then symlinks it to the location.

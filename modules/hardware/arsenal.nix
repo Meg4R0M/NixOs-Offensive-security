@@ -10,12 +10,12 @@
 #   - des règles udev centralisées (accès sans root aux devices)
 #   - les toolchains de flash/série et les outils SDR
 #
-# 1er jalon du namespace `humanix.*` (le rename athena.* -> humanix.* viendra
+# 1er jalon du namespace `humanix.*` (le rename humanix.* -> humanix.* viendra
 # dans la vague flake dédiée ; le code NEUF est déjà en humanix.*).
 { lib, pkgs, config, ... }:
 let
   cfg = config.humanix.hardware;
-  user = config.athena.homeManagerUser;
+  user = config.humanix.homeManagerUser;
 in {
   options.humanix.hardware = {
     arsenal.enable = lib.mkEnableOption

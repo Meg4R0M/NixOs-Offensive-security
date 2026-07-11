@@ -1,8 +1,8 @@
 { lib, config, ... }@inputs: let 
-  cfg = config.athena;
+  cfg = config.humanix;
 in {
   options = {
-    athena = {
+    humanix = {
       enable = lib.mkEnableOption "Enable Athena";
       baseConfiguration = lib.mkEnableOption "Enable base configuration";
       baseSoftware = lib.mkEnableOption "Enable base software";

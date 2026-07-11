@@ -74,7 +74,7 @@ let
     zsh-powerlevel10k
   ];
 in {
-  config = lib.mkIf (config.athena.desktopManager == "axyl") {
+  config = lib.mkIf (config.humanix.desktopManager == "axyl") {
     # ---- System Configuration ----
     environment.systemPackages = bspwm-packages ++ fontList;
     services = {
@@ -92,7 +92,7 @@ in {
     };
 
     # ---- Home Configuration ----
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ...}: {
       programs.alacritty = {
         enable = true;
         settings = import ./alacritty.nix;

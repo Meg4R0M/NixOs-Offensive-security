@@ -29,7 +29,7 @@ in {
     ./software
   ];
 
-  config = mkIf (config.athena.baseConfiguration || config.athena.baseHosts) {
+  config = mkIf (config.humanix.baseConfiguration || config.humanix.baseHosts) {
     programs = {
       git.enable = true;
       nano.enable = true;
@@ -37,11 +37,11 @@ in {
     };
 
     # It is needed to enable the used shell also at system level because NixOS cannot see home-manager modules. Note: bash does not need to be enabled
-    programs.${config.athena.mainShell} = mkIf ("${config.athena.mainShell}" != "bash") {
+    programs.${config.humanix.mainShell} = mkIf ("${config.humanix.mainShell}" != "bash") {
       enable = true;
     };
 
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, ... }: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, ... }: {
       /* The home.stateVersion option does not have a default and must be set */
       home.stateVersion = "25.11";
       nixpkgs.config.allowUnfree = true;
@@ -50,9 +50,9 @@ in {
     environment = {
       sessionVariables = {
         EDITOR = "nano";
-        BROWSER = "${config.athena.browser}";
-        SHELL = "/run/current-system/sw/bin/${config.athena.mainShell}";
-        TERMINAL = "${config.athena.terminal}";
+        BROWSER = "${config.humanix.browser}";
+        SHELL = "/run/current-system/sw/bin/${config.humanix.mainShell}";
+        TERMINAL = "${config.humanix.terminal}";
         TERM = "xterm-256color";
         NIXPKGS_ALLOW_UNFREE = "1"; # To allow nix-shell to use unfree packages
       };

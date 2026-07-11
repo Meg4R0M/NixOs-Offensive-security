@@ -1,8 +1,8 @@
 { lib, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
+  config = lib.mkIf config.humanix.baseConfiguration {
     networking.networkmanager.enable = true;
     services.vnstat.enable = true;
-    users.users.${config.athena.homeManagerUser} = {
+    users.users.${config.humanix.homeManagerUser} = {
       extraGroups = [ "networkmanager" ];
     };
   };

@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.displayManager == "lightdm") {
+  config = lib.mkIf (config.humanix.displayManager == "lightdm") {
     services.xserver.displayManager.lightdm = {
       enable = true;
       greeters.slick.enable = true;

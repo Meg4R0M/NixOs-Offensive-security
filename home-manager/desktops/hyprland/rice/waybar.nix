@@ -19,7 +19,7 @@ let
     esac
   '';
 in
-lib.mkIf (osConfig.athena.useStylix or false) {
+lib.mkIf (osConfig.humanix.useStylix or false) {
   programs.waybar = {
     enable = true;
     settings.mainBar = {

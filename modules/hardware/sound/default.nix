@@ -1,6 +1,6 @@
 { lib, pkgs, config, ... }: {
-  config = lib.mkIf config.athena.baseConfiguration {
-    users.users.${config.athena.homeManagerUser} = { extraGroups = [ "audio" ]; };
+  config = lib.mkIf config.humanix.baseConfiguration {
+    users.users.${config.humanix.homeManagerUser} = { extraGroups = [ "audio" ]; };
 
     # Sound settings
     security.rtkit.enable = true;

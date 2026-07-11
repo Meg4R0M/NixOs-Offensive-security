@@ -3,7 +3,7 @@ with lib;
 let
   shopt = pkgs.writeShellScriptBin "shopt" (builtins.readFile ./shopt);
 in {
-  config = mkIf (config.athena.mainShell == "zsh") {
+  config = mkIf (config.humanix.mainShell == "zsh") {
     # System-level packages so their .zsh files are available
     environment.systemPackages = with pkgs; [
       nix-zsh-completions
@@ -11,7 +11,7 @@ in {
       zsh-syntax-highlighting
     ];
 
-    home-manager.users.${config.athena.homeManagerUser} = { pkgs, config, ...}: {
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, ...}: {
       home.packages = with pkgs; [
         fastfetch
         shopt

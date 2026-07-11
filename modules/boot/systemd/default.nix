@@ -1,5 +1,5 @@
 { lib, config, ... }: {
-  config = lib.mkIf (config.athena.bootloader == "systemd") {
+  config = lib.mkIf (config.humanix.bootloader == "systemd") {
     # Bootloader
     boot.loader = {
       efi.canTouchEfiVariables = true;

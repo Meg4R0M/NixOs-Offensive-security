@@ -60,7 +60,7 @@ in
   #  ./goofcord
   #];
 
-  config = lib.mkIf config.athena.baseSoftware {
+  config = lib.mkIf config.humanix.baseSoftware {
     environment.systemPackages = devel ++ utilities ++ exploits ++ wordlists;
   };
 }

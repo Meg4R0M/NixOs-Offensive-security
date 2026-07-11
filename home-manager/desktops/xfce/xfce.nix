@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.athena.desktops.xfce;
-  bg-path = "/run/current-system/sw/share/backgrounds/athena/${config.athena.theme.background}"; # TODO: Fix Error
+  cfg = config.humanix.desktops.xfce;
+  bg-path = "/run/current-system/sw/share/backgrounds/athena/${config.humanix.theme.background}"; # TODO: Fix Error
   # pkgs.writeShellScriptBin and builtins.readFile are used to take the specified shell script that can be called and installed below by home-manager. There is no a target dir because home-manager will make them inside $PATH in order to be called
   genmon-cpu = pkgs.writeShellScriptBin "genmon-cpu"
     (builtins.readFile ./bin/genmon-cpu);
@@ -16,7 +16,7 @@ let
     #(builtins.readFile ./bin/xfce-init);
 in
 {
-  options.athena.desktops.xfce = {
+  options.humanix.desktops.xfce = {
     refined = mkEnableOption (mdDoc "Whether to enable AthenaOS's XFCE Refined desktop");
     picom = mkEnableOption (mdDoc "Whether to enable AthenaOS's XFCE Picom desktop");
   };

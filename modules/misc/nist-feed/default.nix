@@ -12,7 +12,7 @@ in {
     };
   };
 
-  config = lib.mkIf (config.athena.baseConfiguration && cfg.enable) {
+  config = lib.mkIf (config.humanix.baseConfiguration && cfg.enable) {
     systemd.user = {
       services.nist-feed = {
         wantedBy = [ "default.target" ];
