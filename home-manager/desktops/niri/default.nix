@@ -102,6 +102,18 @@ in
       greenTerm = "${pkgs.wezterm}/bin/wezterm";
       greenRofi = "${pkgs.rofi}/bin/rofi -theme ${home}/.config/rofi/mrrobot.rasi";
 
+      # ---- Web-apps : services sans client Linux natif, en fenêtre dédiée
+      # (chromium --app) avec un app-id custom (--class) pour le placement par
+      # workspace. On utilise chromium (≠ google-chrome de WS3) pour éviter les
+      # collisions d'app-id. ----
+      webApp = id: url: pkgs.writeShellScriptBin "humanix-${id}" ''
+        exec ${pkgs.chromium}/bin/chromium --app=${url} --class=humanix-${id} "$@"
+      '';
+      waWhatsapp = webApp "whatsapp" "https://web.whatsapp.com";
+      waChatgpt  = webApp "chatgpt"  "https://chatgpt.com";
+      waGemini   = webApp "gemini"   "https://gemini.google.com/app";
+      waGrok     = webApp "grok"     "https://grok.com";
+
       # ---- rofi : thème CRT vert ----
       rofiMrRobot = ''
         * {
@@ -171,7 +183,17 @@ in
         ../hyprland/rice/apps.nix
       ];
 
-      home.packages = (with pkgs; [ waybar rofi wezterm conky ]) ++ [ certFrNews veilleBlogs ];
+      home.packages = (with pkgs; [
+        waybar rofi wezterm conky
+        # ---- Apps épinglées par workspace (Humanix) ----
+        antigravity                       # WS2 : IDE agentique Google
+        google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
+        discord teams-for-linux slack      # WS4 : chat pro/perso (+ WhatsApp web)
+        thunderbird                        # WS6 : mail
+      ]) ++ [
+        certFrNews veilleBlogs
+        waWhatsapp waChatgpt waGemini waGrok   # web-apps (WS4/WS5)
+      ];
       programs.swaylock.enable = true;
 
       xdg.configFile."rofi/mrrobot.rasi".text = rofiMrRobot;
@@ -239,6 +261,29 @@ in
         spawn-at-startup "nm-applet" "--indicator"
         spawn-at-startup "xwayland-satellite"
 
+        // ----- Humanix : workspaces nommés (ordre = index 1..6) -----
+        workspace "term"
+        workspace "ide"
+        workspace "web"
+        workspace "chat"
+        workspace "llm"
+        workspace "mail"
+
+        // ----- Apps épinglées, auto-lancées (commenter une ligne pour la désactiver) -----
+        spawn-sh-at-startup "${greenTerm}"
+        spawn-at-startup "antigravity"
+        spawn-at-startup "firefox"
+        spawn-at-startup "google-chrome-stable"
+        spawn-sh-at-startup "humanix-whatsapp"
+        spawn-at-startup "Discord"
+        spawn-at-startup "teams-for-linux"
+        spawn-at-startup "slack"
+        spawn-at-startup "claude-desktop"
+        spawn-sh-at-startup "humanix-chatgpt"
+        spawn-sh-at-startup "humanix-gemini"
+        spawn-sh-at-startup "humanix-grok"
+        spawn-at-startup "thunderbird"
+
         hotkey-overlay { skip-at-startup; }
 
         // ----- Animations : shaders GLSL (${shaderName}) -----
@@ -262,6 +307,21 @@ in
             geometry-corner-radius 10
             clip-to-geometry true
         }
+
+        // ----- Humanix : placement des apps par workspace (match app-id) -----
+        window-rule { match app-id="org.wezfurlong.wezterm"; open-on-workspace "term"; }
+        window-rule { match app-id="[Aa]ntigravity"; open-on-workspace "ide"; }
+        window-rule { match app-id="firefox"; open-on-workspace "web"; }
+        window-rule { match app-id="google-chrome"; open-on-workspace "web"; }
+        window-rule { match app-id="whatsapp"; open-on-workspace "chat"; }
+        window-rule { match app-id="[Dd]iscord"; open-on-workspace "chat"; }
+        window-rule { match app-id="teams"; open-on-workspace "chat"; }
+        window-rule { match app-id="[Ss]lack"; open-on-workspace "chat"; }
+        window-rule { match app-id="[Cc]laude"; open-on-workspace "llm"; }
+        window-rule { match app-id="chatgpt"; open-on-workspace "llm"; }
+        window-rule { match app-id="gemini"; open-on-workspace "llm"; }
+        window-rule { match app-id="grok"; open-on-workspace "llm"; }
+        window-rule { match app-id="thunderbird"; open-on-workspace "mail"; }
 
         // ----- Raccourcis (Mod = Super) -----
         binds {

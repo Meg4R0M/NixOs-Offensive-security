@@ -50,9 +50,10 @@ python3Packages.buildPythonApplication {
     runHook postInstall
   '';
 
-  postInstall = ''
-    install -Dm644 athena-welcome.desktop $out/etc/xdg/autostart/athena-welcome.desktop
-  '';
+  # Humanix : on NE déploie PAS l'autostart XDG (athena-welcome s'ouvrait à
+  # chaque démarrage, pénible). L'app reste lançable depuis le menu
+  # (share/applications). D'origine : install dans $out/etc/xdg/autostart/.
+
 
   meta = with lib; {
     description = "Athena Welcome application";
