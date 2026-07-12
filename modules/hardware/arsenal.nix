@@ -101,6 +101,14 @@ in {
         esptool avrdude arduino-cli platformio-core picotool openocd dfu-util
         tio minicom picocom
         qFlipper
+        # TFTP : commande classique `tftp` + `in.tftpd` (flash firmware routeurs,
+        # PXE, exfil). Complète `atftp`/`atftpd` déjà fournis par le rôle réseau.
+        tftp-hpa
+        # Sert le dossier courant en TFTP sur :69 (sudo requis ; Ctrl-C pour stopper).
+        (writeShellScriptBin "tftp-here" ''
+          echo "TFTP ▸ sert $PWD sur 0.0.0.0:69 (Ctrl-C pour stopper)"
+          exec sudo ${pkgs.tftp-hpa}/bin/in.tftpd --listen --address 0.0.0.0:69 --secure "$PWD"
+        '')
       ];
       services.udev.packages = with pkgs; [ openocd ];
     })
