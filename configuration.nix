@@ -99,6 +99,11 @@ in
   # showtime = wallpaper animé + bannière MOTD. Passe en "client" en clientèle.
   humanix.aesthetic.profile = "showtime";
 
+  # HexStrike AI : serveur MCP d'outils pentest, piloté par Claude Code (sans API,
+  # sans Docker). Serveur d'outils sur 127.0.0.1:8888. Après switch, lancer une
+  # fois `hexstrike-setup-claude`. (cf modules/cyber/hexstrike.nix)
+  humanix.ai.hexstrike.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";

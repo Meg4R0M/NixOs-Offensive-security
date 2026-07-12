@@ -6,6 +6,7 @@
     ./cyber/pentest-helpers.nix
     ./cyber/lab-container.nix
     ./cyber/jupyter-pentest.nix
+    ./cyber/hexstrike.nix
     ./dev
     ./hardware
     ./misc
