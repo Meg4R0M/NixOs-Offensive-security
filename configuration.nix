@@ -88,6 +88,8 @@ in
     sdr.enable = true;
     sdr.gui.enable = false;
     embedded.enable = true;
+    # 2-en-1 OmniBook Flip : accéléromètre, rotation auto niri, clavier écran, stylet.
+    convertible.enable = true;
   };
 
   # Splash Plymouth DÉSACTIVÉ : sur ce combo AMD+LUKS il n'affichait pas le prompt

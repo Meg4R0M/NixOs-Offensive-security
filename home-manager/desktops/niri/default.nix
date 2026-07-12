@@ -288,6 +288,8 @@ in
         ${wallpaperSpawn}
         spawn-at-startup "nm-applet" "--indicator"
         spawn-at-startup "xwayland-satellite"
+        // 2-en-1 : rotation auto de l'écran via l'accéléromètre (OmniBook Flip)
+        spawn-at-startup "humanix-autorotate"
 
         // ----- Humanix : workspaces nommés (ordre = index 1..6) -----
         workspace "term"
@@ -381,6 +383,10 @@ in
 
             // Largeur de colonne (cycle entre les presets 33/50/66 %)
             Mod+R { switch-preset-column-width; }
+
+            // 2-en-1 (OmniBook Flip) : clavier écran + verrou de rotation
+            Mod+K { spawn-sh "humanix-osk-toggle"; }
+            Mod+Shift+R { spawn-sh "humanix-autorotate-toggle"; }
 
             // Workspaces (keysyms AZERTY = touches physiques 1..0)
             Mod+ampersand   { focus-workspace 1; }
