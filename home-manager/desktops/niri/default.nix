@@ -211,6 +211,12 @@ in
         // Config Niri — générée par Athena (Stylix + shaders liixini)
         prefer-no-csd
 
+        // Écran interne en scale 1.0 : on exploite toute la densité 2880x1800
+        // (au lieu du 1.5 auto). Rend l'UI plus petite mais plus d'espace utile.
+        output "eDP-1" {
+            scale 1.0
+        }
+
         input {
             keyboard {
                 xkb {

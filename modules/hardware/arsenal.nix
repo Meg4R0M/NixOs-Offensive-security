@@ -85,6 +85,9 @@ in {
       ];
       # Ces paquets fournissent leurs propres règles udev.
       services.udev.packages = with pkgs; [ rtl-sdr hackrf ];
+      # Sinon le driver DVB-T (dvb_usb_rtl28xxu) accapare le dongle RTL-SDR et
+      # casse rtl_sdr / GNU Radio. (Astuce reprise de MasterofNull/maxos.)
+      boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
     })
 
     # ── SDR — GUI (lourd, opt-in) ────────────────────────────────────────────
