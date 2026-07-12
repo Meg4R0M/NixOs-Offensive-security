@@ -53,6 +53,15 @@ let
     ln -sf ${pkgs.theharvester}/bin/theHarvester $out/bin/theharvester
     ln -sf ${pkgs.exploitdb}/bin/searchsploit    $out/bin/exploit-db
     ln -sf ${pkgs.zap}/bin/zap                    $out/bin/zaproxy
+    ln -sf ${pkgs.ropgadget}/bin/ROPgadget       $out/bin/ropgadget
+    ln -sf ${pkgs.scoutsuite}/bin/scout          $out/bin/scout-suite
+    ln -sf ${pkgs.one_gadget}/bin/one_gadget     $out/bin/one-gadget
+    ln -sf ${pkgs.bulk_extractor}/bin/bulk_extractor $out/bin/bulk-extractor
+    ln -sf ${pkgs.python3Packages.shodan}/bin/shodan $out/bin/shodan-cli
+    ln -sf ${pkgs.python3Packages.censys}/bin/censys  $out/bin/censys-cli
+    ln -sf ${pkgs.python3Packages.pwntools}/bin/pwn    $out/bin/pwntools
+    ln -sf ${pkgs.samba}/bin/rpcclient           $out/bin/rpcclient
+    ln -sf ${pkgs.sleuthkit}/bin/fls             $out/bin/sleuthkit
   '';
 
   # Outils "false" réellement absents mais dispo dans nixpkgs → on maximise.
