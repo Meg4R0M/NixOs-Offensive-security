@@ -24,17 +24,48 @@
 
     # Claude Desktop.
     claude.url = "github:Reginleif88/claude-cowork-nix/5018f7912405c1559314f56bc587ee6318d60132";
+
+    # agenix — secrets chiffrés versionnables (clés API OSINT, profils WireGuard).
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # RedNix (redcode-labs) — outils offensifs maison hors nixpkgs.
+    # PAS de follows nixpkgs : on réutilise ses builds (cache binaire).
+    rednix.url = "github:redcode-labs/RedNix";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: {
-    nixosConfigurations.Humanix = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, ... }@inputs:
+    let
       system = "x86_64-linux";
-      # `inputs` dispo dans TOUS les modules (stylix/cachyos/claude s'y branchent).
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./configuration.nix
-        inputs.home-manager.nixosModules.home-manager
-      ];
+      pkgs = nixpkgs.legacyPackages.${system};
+      # devShell par catégorie : `nix develop .#cloud` charge un sous-arsenal
+      # ponctuel sans l'installer sur le système (pattern redcode-labs/RedNix).
+      shell = name: pkgList: pkgs.mkShellNoCC {
+        packages = pkgList;
+        shellHook = "echo '── Humanix devShell : ${name} ──'";
+      };
+    in
+    {
+      nixosConfigurations.Humanix = nixpkgs.lib.nixosSystem {
+        inherit system;
+        # `inputs` dispo dans TOUS les modules (stylix/cachyos/claude/rednix).
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./configuration.nix
+          inputs.home-manager.nixosModules.home-manager
+          inputs.agenix.nixosModules.default
+        ];
+      };
+
+      # Sous-arsenaux à la demande : nix develop /home/fdurano/nixos#<catégorie>
+      devShells.${system} = {
+        cloud = shell "cloud" (with pkgs; [ pacu cloudfox trivy grype kubescape kdigger prowler noseyparker ]);
+        ad    = shell "ad"    (with pkgs; [ netexec certipy kerbrute ldeep bloodhound-py responder ]);
+        web   = shell "web"   (with pkgs; [ nuclei httpx katana ffuf feroxbuster dalfox subfinder gowitness ]);
+        rf    = shell "rf"    (with pkgs; [ rtl-sdr hackrf gnuradio killerbee ubertooth gallia can-utils ]);
+        osint = shell "osint" (with pkgs; [ sn0int maigret holehe h8mail theharvester amass ]);
+      };
     };
-  };
 }

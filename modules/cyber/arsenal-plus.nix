@@ -9,7 +9,7 @@
 # Angles neufs vs Athena : Active Directory moderne (ADCS/coercition), offensive
 # CLOUD/K8s/CI-CD (le plus gros différenciateur), DFIR Windows, RF/NFC/CAN bus.
 # Tout est DÉBRAYABLE par catégorie (humanix.arsenal.<cat>.enable).
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, inputs, ... }:
 let
   cfg = config.humanix.arsenal;
   inherit (lib) mkIf mkOption types optionals mkMerge;
@@ -30,6 +30,7 @@ in {
     osint.enable     = cat "OSINT complémentaire.";
     rf.enable        = cat "RF / sans-fil / NFC / CAN bus (bidouille hardware).";
     misc.enable      = cat "Couteaux suisses & prise de notes (cyberchef, navi…).";
+    rcl.enable       = cat "Outils maison redcode-labs (gosh, godspeed, snowcrash, sammler).";
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -98,6 +99,15 @@ in {
           nth ares      # name-that-hash + ares (déchiffrement auto)
           cherrytree    # prise de notes hiérarchique (pentest)
         ]
+        # ── Outils maison redcode-labs (hors nixpkgs, via input flake) ──────
+        ++ optionals cfg.rcl.enable (
+          let p = inputs.rednix.packages.${pkgs.system}; in [
+            p.gosh        # générateur de reverse/bind shells (Go)
+            p.godspeed    # gestionnaire multi-reverse-shells
+            p.snowcrash   # générateur de payloads polyglottes
+            p.sammler     # extraction de données utiles (OSINT/loot)
+          ]
+        )
       );
     }
     # ubertooth fournit ses propres règles udev (accès BLE sans root).
