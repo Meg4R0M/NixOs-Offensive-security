@@ -57,12 +57,37 @@ let
     exec ${pyEnv}/bin/python3 ${patched}/hexstrike_mcp.py "$@"
   '';
 
-  # Helper : enregistre HexStrike auprès de Claude Code (à lancer une fois).
+  # Helper : enregistre HexStrike auprès de Claude Code (CLI) ET Claude Desktop
+  # (app). À lancer une fois. Les deux utilisent l'abonnement (aucune API).
   setup = pkgs.writeShellScriptBin "hexstrike-setup-claude" ''
-    set -e
-    claude mcp add hexstrike-ai -- ${mcpClient}/bin/hexstrike-mcp --server http://127.0.0.1:8888
-    echo "✓ HexStrike ajouté à Claude Code. Démarre le serveur (hexstrike-server ou"
-    echo "  le service systemd user), lance 'claude' et demande un scan."
+    # 1) Claude Code (CLI), si présent
+    if command -v claude >/dev/null 2>&1; then
+      claude mcp add hexstrike-ai -- ${mcpClient}/bin/hexstrike-mcp --server http://127.0.0.1:8888 \
+        && echo "✓ HexStrike ajouté à Claude Code (CLI)" \
+        || echo "· (déjà présent dans Claude Code, ou erreur bénigne)"
+    else
+      echo "· claude CLI absent (sera là après le prochain switch)."
+    fi
+    # 2) Claude Desktop (app) : merge dans claude_desktop_config.json
+    CFG="$HOME/.config/Claude/claude_desktop_config.json"
+    mkdir -p "$(dirname "$CFG")"
+    [ -f "$CFG" ] || echo '{}' > "$CFG"
+    ${pkgs.python3}/bin/python3 - "$CFG" <<'PY'
+import json, sys
+p = sys.argv[1]
+try:
+    d = json.load(open(p))
+except Exception:
+    d = {}
+d.setdefault("mcpServers", {})["hexstrike-ai"] = {
+    "command": "${mcpClient}/bin/hexstrike-mcp",
+    "args": ["--server", "http://127.0.0.1:8888"],
+    "timeout": 300,
+}
+json.dump(d, open(p, "w"), indent=2)
+print("✓ HexStrike ajouté à Claude Desktop:", p)
+PY
+    echo "→ Redémarre Claude Desktop (ou lance 'claude') pour charger HexStrike."
   '';
 in {
   options.humanix.ai.hexstrike = {
@@ -81,7 +106,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ server mcpClient setup ];
+    # claude-code = le CLI `claude` (client MCP idéal, pilote le pentest en
+    # terminal via l'abonnement — aucune API). En plus de Claude Desktop.
+    environment.systemPackages = [ server mcpClient setup pkgs.claude-code ];
 
     systemd.user.services.hexstrike-server = mkIf cfg.autostart {
       description = "HexStrike AI — API d'outils pentest (127.0.0.1:8888)";
