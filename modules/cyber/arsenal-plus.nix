@@ -76,6 +76,8 @@ in {
           yara-x        # nouveau moteur YARA (Rust)
           imhex rehex   # éditeurs hexa pour reversers
           gef           # GDB Enhanced Features (exploit dev)
+          binutils      # strings, objdump, nm, readelf, strip… (base reversing)
+          xxd           # dump hexadécimal (hexdump-like)
         ]
         # ── Pivot / tunneling ───────────────────────────────────────────────
         ++ optionals cfg.pivot.enable [ sish wireproxy ]
