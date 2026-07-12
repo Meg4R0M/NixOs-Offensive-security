@@ -46,6 +46,16 @@ let
     #!${pkgs.python3}/bin/python3
     ${builtins.readFile ./veille-blogs.py}
   '';
+
+  # Dashboard RÉSEAU haxOS (STATISTICS/ROUTING/ACTIVE+UDP/LISTENING/LAN_DISCOVERY),
+  # appelé par conky (haxos-netmon.conf) via execpi. arp-scan via wrapper setcap
+  # (scan LAN complet) sinon repli ip neigh + base OUI d'arp-scan (vendors, sans root).
+  netmon = pkgs.writeShellScriptBin "humanix-netmon" ''
+    export HUMANIX_OUI="${pkgs.arp-scan}/share/arp-scan/ieee-oui.txt"
+    export HUMANIX_ARPSCAN="/run/wrappers/bin/arp-scan"
+    export PATH="${pkgs.lib.makeBinPath [ pkgs.iproute2 pkgs.gnugrep pkgs.gnused pkgs.gawk pkgs.coreutils pkgs.arp-scan ]}:$PATH"
+    ${builtins.readFile ./humanix-netmon.sh}
+  '';
 in
 {
   options.humanix.enableNiri =
@@ -66,6 +76,15 @@ in
       swaybg
       brightnessctl
     ];
+
+    # arp-scan avec CAP_NET_RAW => scan LAN complet du dashboard réseau
+    # (humanix-netmon). Sans ça, repli passif ip neigh + base OUI (vendors OK).
+    security.wrappers.arp-scan = {
+      source = "${pkgs.arp-scan}/bin/arp-scan";
+      capabilities = "cap_net_raw+ep";
+      owner = "root";
+      group = "root";
+    };
 
     home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, ... }:
     let
@@ -95,7 +114,8 @@ in
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-clock.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-cal.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-cyber.conf"
-        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-veille2.conf"'';
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-veille2.conf"
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-netmon.conf"'';
 
       # Terminal + rofi verts (confs dédiées ci-dessous).
       # wezterm est session-aware (vert CRT quand NIRI_SOCKET est défini).
@@ -192,7 +212,7 @@ in
         discord teams-for-linux slack      # WS4 : chat pro/perso (+ WhatsApp web)
         thunderbird                        # WS6 : mail
       ]) ++ [
-        certFrNews veilleBlogs
+        certFrNews veilleBlogs netmon
         waWhatsapp waChatgpt waGemini waGrok   # web-apps (WS4/WS5)
       ];
       programs.swaylock.enable = true;
@@ -204,6 +224,7 @@ in
       xdg.configFile."conky/haxos-cal.conf".source = ./haxos-cal.conf;
       xdg.configFile."conky/haxos-cyber.conf".source = ./haxos-cyber.conf;
       xdg.configFile."conky/haxos-veille2.conf".source = ./haxos-veille2.conf;
+      xdg.configFile."conky/haxos-netmon.conf".source = ./haxos-netmon.conf;
       xdg.configFile."waybar-niri/config".text = waybarNiriConfig;
       xdg.configFile."waybar-niri/style.css".text = waybarNiriCss;
 
