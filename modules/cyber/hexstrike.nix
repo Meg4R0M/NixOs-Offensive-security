@@ -43,9 +43,29 @@ let
     flask requests psutil beautifulsoup4 selenium aiohttp mitmproxy mcp bcrypt
   ] ++ optionals cfg.binaryAnalysis [ pwntools angr ]);
 
-  # PATH runtime : chromedriver (selenium, au lieu de webdriver-manager),
-  # wordlists, + l'arsenal système et les paquets user.
-  runtimePath = lib.makeBinPath [ pkgs.chromium pkgs.chromedriver pkgs.seclists ];
+  # Alias : noms de binaires attendus par HexStrike mais présents sous un autre
+  # nom (outils déjà là) → `which <nom>` de HexStrike les trouve enfin.
+  toolAliases = pkgs.runCommand "hexstrike-aliases" { } ''
+    mkdir -p $out/bin
+    ln -sf ${pkgs.metasploit}/bin/msfconsole     $out/bin/metasploit
+    ln -sf ${pkgs.volatility3}/bin/vol           $out/bin/volatility3
+    ln -sf ${pkgs.volatility3}/bin/vol           $out/bin/volatility
+    ln -sf ${pkgs.theharvester}/bin/theHarvester $out/bin/theharvester
+    ln -sf ${pkgs.exploitdb}/bin/searchsploit    $out/bin/exploit-db
+    ln -sf ${pkgs.zap}/bin/zap                    $out/bin/zaproxy
+  '';
+
+  # Outils "false" réellement absents mais dispo dans nixpkgs → on maximise.
+  extraTools = with pkgs; [
+    binutils bulk_extractor clair hashcat-utils httpie kube-bench
+    nbtscan one_gadget outguess pwninit qsreplace ropgadget scoutsuite steghide
+    terrascan uro xxd zsteg
+    python3Packages.shodan python3Packages.censys
+  ];
+
+  # PATH runtime : chromedriver (selenium), wordlists, alias + outils ajoutés,
+  # + l'arsenal système/paquets user (via le wrapper).
+  runtimePath = lib.makeBinPath ([ pkgs.chromium pkgs.chromedriver pkgs.seclists toolAliases ] ++ extraTools);
 
   server = pkgs.writeShellScriptBin "hexstrike-server" ''
     export PATH="${runtimePath}:/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH"
@@ -106,6 +126,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # ecdsa (dep transitive d'outils cloud/OSINT) marqué insecure (CVE timing
+    # mineur) — autorisé pour ne pas perdre checkov/shodan/censys.
+    nixpkgs.config.permittedInsecurePackages = [ "python3.14-ecdsa-0.19.2" ];
+
     # claude-code = le CLI `claude` (client MCP idéal, pilote le pentest en
     # terminal via l'abonnement — aucune API). En plus de Claude Desktop.
     environment.systemPackages = [ server mcpClient setup pkgs.claude-code ];
