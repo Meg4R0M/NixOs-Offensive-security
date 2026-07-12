@@ -47,13 +47,15 @@ in
   ];
 
   users = lib.mkIf config.humanix.enable {
-    mutableUsers = false;
-    # Lus à l'activation (hors flake, cf secrets/ gitignoré).
-    extraUsers.root.hashedPasswordFile = "/home/fdurano/nixos/secrets/root.hash";
+    # ⚠️ Nix ne gère PLUS AUCUN mot de passe (retour d'expérience : hashedPassword/
+    # hashedPasswordFile a cassé le login → récupération via live USB).
+    # mutableUsers = true => /etc/shadow PERSISTE, mots de passe gérés à la main
+    # (`passwd`). Aucun switch ne peut plus verrouiller le compte, et aucun hash
+    # ne traîne dans le repo git.
+    mutableUsers = true;
     users.${config.humanix.homeManagerUser} = {
       shell = pkgs.${config.humanix.mainShell};
       isNormalUser = true;
-      hashedPasswordFile = "/home/fdurano/nixos/secrets/user.hash";
       extraGroups = [ "docker" "wheel" ];
     };
   };
