@@ -99,6 +99,10 @@ in
   # showtime = wallpaper animé + bannière MOTD. Passe en "client" en clientèle.
   humanix.aesthetic.profile = "showtime";
 
+  # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
+  # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
+  humanix.niriShader = "glitch";
+
   # Kernel CachyOS variante LTS/BORE (base 6.18.38 = base actuelle qui boote +
   # patchs perf). Le hardened bleeding-edge (7.0.12) paniquait sur cet APU.
   humanix.kernel.cachyos.enable = true;
