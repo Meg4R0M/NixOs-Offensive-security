@@ -218,6 +218,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot"; RemainAfterExit = true;
+        # SÉCURITÉ : ne JAMAIS bloquer le switch indéfiniment (leçon apprise).
+        TimeoutStartSec = "600";
         ExecStartPre = "-${pkgs.docker}/bin/docker rm -f defectdojo-initializer";
         ExecStart = ''
           ${pkgs.docker}/bin/docker run --rm --name defectdojo-initializer --network=${ddNet} \

@@ -104,10 +104,10 @@ in
   # fois `hexstrike-setup-claude`. (cf modules/cyber/hexstrike.nix)
   humanix.ai.hexstrike.enable = true;
 
-  # DefectDojo : dashboard bug bounty (7 conteneurs oci-containers docker) +
-  # serveur MCP pour que Claude gère les findings. UI 127.0.0.1:8080.
-  # Après switch : `defectdojo-setup-claude`. (cf modules/cyber/defectdojo.nix)
-  humanix.ai.defectdojo.enable = true;
+  # DefectDojo : DÉSACTIVÉ temporairement — l'init bloquant a gelé un switch 1h25
+  # (NSS/users cassés). Module corrigé (init non-bloquant + timeout) ; réactiver
+  # volontairement quand prêt. (cf modules/cyber/defectdojo.nix)
+  humanix.ai.defectdojo.enable = false;
 
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
