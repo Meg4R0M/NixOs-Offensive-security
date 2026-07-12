@@ -7,6 +7,7 @@
     ./cyber/lab-container.nix
     ./cyber/jupyter-pentest.nix
     ./cyber/hexstrike.nix
+    ./cyber/faraday.nix
     ./dev
     ./hardware
     ./misc

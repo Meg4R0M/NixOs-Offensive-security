@@ -104,6 +104,11 @@ in
   # fois `hexstrike-setup-claude`. (cf modules/cyber/hexstrike.nix)
   humanix.ai.hexstrike.enable = true;
 
+  # Faraday : dashboard bug bounty (historique + visuel des findings), conteneur
+  # docker géré par NixOS (127.0.0.1:5985). Import via faraday-cli. Infos :
+  # `faraday-info`. (cf modules/cyber/faraday.nix)
+  humanix.ai.faraday.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";
