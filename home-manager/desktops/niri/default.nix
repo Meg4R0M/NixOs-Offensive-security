@@ -51,15 +51,55 @@ let
         --replace '@nmcli@' '${pkgs.networkmanager}/bin/nmcli' \
         --replace '@rfkill@' '${pkgs.util-linux}/bin/rfkill' \
         --replace '@brightnessctl@' '${pkgs.brightnessctl}/bin/brightnessctl'
+      # 7) Widgets end-4 réimplémentés natifs cshell (tout vert) :
+      #    média (MPRIS) / presse-papier (cliphist) / centre de notifs / launcher.
+      cp ${./cshell/MediaPlayer.qml} popups/MediaPlayer.qml
+      cp ${./cshell/NotifStore.qml}  popups/NotifStore.qml
+      cp ${./cshell/NotifCenter.qml} popups/NotifCenter.qml
+      cp ${./cshell/GlobalStates.qml} popups/GlobalStates.qml
+      cp ${./cshell/Launcher.qml}    popups/Launcher.qml
+      cp ${./cshell/ClipHist.qml}    popups/ClipHist.qml
+      substituteInPlace popups/ClipHist.qml \
+        --replace '@cliphist@' '${pkgs.cliphist}/bin/cliphist' \
+        --replace '@wlcopy@'   '${pkgs.wl-clipboard}/bin/wl-copy'
+      # Historique notifs : le NotificationServer existant alimente NotifStore.
+      substituteInPlace popups/Notification.qml \
+        --replace 'import qs.components' 'import qs.components
+import qs.popups' \
+        --replace 'loader.active = true' 'loader.active = true
+      NotifStore.add(notification.summary, notification.body, notification.appName)'
+      # Launcher : fenêtre focusable ajoutée à la racine du shell (isolée).
+      substituteInPlace shell.qml --replace 'ShellRoot {' 'ShellRoot {
+  Launcher {}'
+      # Barre : composants + déclencheurs (icônes) + logo = launcher.
       substituteInPlace bar/Bar.qml \
+        --replace 'id: logo' 'id: logo
+    MouseArea { anchors.fill: parent; onClicked: GlobalStates.launcherOpen = true }' \
         --replace 'implicitWidth: Tokens.barSize' 'implicitWidth: Tokens.barSize
 
-  Component { id: ccComp; ControlCenter {} }' \
+  Component { id: ccComp;    ControlCenter {} }
+  Component { id: notifComp; NotifCenter {} }
+  Component { id: mediaComp; MediaPlayer {} }
+  Component { id: clipComp;  ClipHist {} }' \
         --replace 'Clock {' 'Icon {
       Layout.alignment: Qt.AlignHCenter
-      icon: "󰒓"
-      textSize: 22
+      icon: "󰒓"; textSize: 20
       MouseArea { anchors.fill: parent; onClicked: { PopupComm.blComponent = ccComp; PopupComm.showBL(380, 470) } }
+    }
+    Icon {
+      Layout.alignment: Qt.AlignHCenter
+      icon: "󰂚"; textSize: 20
+      MouseArea { anchors.fill: parent; onClicked: { PopupComm.blComponent = notifComp; PopupComm.showBL(400, 500) } }
+    }
+    Icon {
+      Layout.alignment: Qt.AlignHCenter
+      icon: "󰎈"; textSize: 20
+      MouseArea { anchors.fill: parent; onClicked: { PopupComm.blComponent = mediaComp; PopupComm.showBL(340, 300) } }
+    }
+    Icon {
+      Layout.alignment: Qt.AlignHCenter
+      icon: "󰅍"; textSize: 20
+      MouseArea { anchors.fill: parent; onClicked: { PopupComm.blComponent = clipComp; PopupComm.showBL(440, 540) } }
     }
     Clock {'
     '';
