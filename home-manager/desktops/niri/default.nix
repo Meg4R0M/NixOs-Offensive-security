@@ -34,6 +34,39 @@ let
       cp ${./cshell/SysMonitor.qml} popups/SysMonitor.qml
     '';
   });
+
+  # niri-glass : effet verre dépoli SUBTIL. Injecté dans le KDL UNIQUEMENT si le
+  # toggle est ON (sinon niri standard planterait sur le node `liquid-glass`).
+  # xray requis (sinon artefacts aux bords) ; réfraction/distorsion basses +
+  # fringing/lens à 0 pour rester proche du CRT plat ; opacité 0.94 = à peine
+  # translucide (nécessaire pour que l'effet derrière la fenêtre soit visible).
+  glassOn = config.humanix.aesthetic.niriGlass.enable;
+  glassRule = lib.optionalString glassOn ''
+    // ----- niri-glass : verre dépoli subtil (fork zaroutt/Niri-glass) -----
+    window-rule {
+        match app-id=".*"
+        opacity 0.94
+        background-effect {
+            blur true
+            xray true
+            liquid-glass {
+                refraction-strength 0.5
+                power-factor 3
+                refraction-power 0.4
+                glow-weight 0.03
+                edge-lighting 0.35
+                fringing 0
+                lens-distortion 0
+                physical-refraction 0
+                saturation 0.9
+                vibrancy 0.15
+                adaptive-dim 0.2
+                adaptive-boost 0.2
+                edge-thickness 0.1
+            }
+        }
+    }
+  '';
   term = config.humanix.terminal;
 
   cyberpunkMp4 = pkgs.fetchurl {
@@ -100,6 +133,9 @@ in
   config = lib.mkIf config.humanix.enableNiri {
     # Active Niri : paquet + session Wayland (SDDM la proposera) + portails.
     programs.niri.enable = true;
+    # Swap du binaire niri par le fork niri-glass si le toggle est ON (sinon on
+    # laisse le paquet niri par défaut). Réutilise tout le câblage session upstream.
+    programs.niri.package = lib.mkIf glassOn inputs.niri-glass.packages.${pkgs.system}.niri-glass;
 
     environment.systemPackages = with pkgs; [
       xwayland-satellite   # support XWayland pour Niri
@@ -369,7 +405,7 @@ in
             geometry-corner-radius 10
             clip-to-geometry true
         }
-
+        ${glassRule}
         // ----- Humanix : placement des apps par workspace (match app-id) -----
         window-rule {
             match app-id="org.wezfurlong.wezterm"

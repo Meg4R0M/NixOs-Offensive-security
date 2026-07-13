@@ -38,6 +38,11 @@
     # cshell — shell Quickshell (barre + dashboard + OSD) pour niri.
     # Pas de follows : il pinne son nixpkgs pour la compat quickshell/qt6.
     cshell.url = "github:chaeu-srk/cshell/3fdd86a9fb1c29e714570715d683ad9380de4f6d";
+
+    # niri-glass — fork de niri (26.04) avec effet « liquid glass » (réfraction).
+    # Pas de follows : l'overlay remplace des fichiers source niri, il DOIT être
+    # bâti contre sa base pinnée (niri 26.04, rev 49fc611). Swap du binaire niri.
+    niri-glass.url = "github:zaroutt/Niri-glass/5ff51970491486c674ce293e13af9c644c2db514";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

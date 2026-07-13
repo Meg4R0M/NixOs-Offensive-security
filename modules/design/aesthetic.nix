@@ -39,6 +39,17 @@ in
     description = "Utiliser cshell (Quickshell, thémé vert) comme barre niri au lieu de waybar.";
   };
 
+  # niri-glass : remplace le binaire niri par le fork « liquid glass » (fork Rust,
+  # zaroutt/Niri-glass, niri 26.04). Débrayable => repli niri standard. Le bloc de
+  # conf glass n'est injecté dans le KDL QUE si ce toggle est ON (le node liquid-glass
+  # n'existe pas dans niri standard, il ferait planter le parse). Sessions GNOME/
+  # Hyprland en repli au login si le fork pose souci. cf niri/default.nix.
+  options.humanix.aesthetic.niriGlass.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Utiliser le fork niri-glass (effet verre dépoli) à la place de niri standard.";
+  };
+
   config = {
     # Wallpaper animé (niri lit humanix.animatedWallpaper) : ON sauf en client.
     humanix.animatedWallpaper = lib.mkDefault (cfg.profile != "client");
