@@ -119,10 +119,10 @@ in
   humanix.ai.defectdojo.enable = false;
 
   # KittySploit : framework d'exploitation + serveur MCP (piloté par Claude, sans
-  # API). OPT-IN (jeune) : passe à true puis, après switch, lance une fois
-  # `kittysploit` (clone+venv au 1er run) et `kittysploit-setup-claude` pour le
-  # MCP. (cf modules/cyber/kittysploit.nix)
-  humanix.ai.kittysploit.enable = false;
+  # API). ACTIVÉ : après switch, lance une fois `kittysploit` (clone + venv au 1er
+  # run, réseau requis) puis `kittysploit-setup-claude` pour brancher le MCP.
+  # (cf modules/cyber/kittysploit.nix)
+  humanix.ai.kittysploit.enable = true;
 
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
