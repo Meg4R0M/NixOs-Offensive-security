@@ -41,6 +41,27 @@ let
           return ds.length ? ds[0] : null;
         }' \
         --replace 'property bool wifiConnected: nwDevice.connected;' 'property bool wifiConnected: nwDevice ? nwDevice.connected : false;'
+      # 5) Fix backlight : cshell lit /sys/class/backlight/intel_backlight, or ce
+      #    laptop est AMD -> amdgpu_bl1 (sinon brightness = 0).
+      substituteInPlace services/System.qml --replace 'intel_backlight' 'amdgpu_bl1'
+      # 6) Control center (réglages rapides) : dépôt + chemins outils absolus +
+      #    déclencheur (icône) injecté dans la barre (ouvre le BotLeftPopup).
+      cp ${./cshell/ControlCenter.qml} popups/ControlCenter.qml
+      substituteInPlace popups/ControlCenter.qml \
+        --replace '@nmcli@' '${pkgs.networkmanager}/bin/nmcli' \
+        --replace '@rfkill@' '${pkgs.util-linux}/bin/rfkill' \
+        --replace '@brightnessctl@' '${pkgs.brightnessctl}/bin/brightnessctl'
+      substituteInPlace bar/Bar.qml \
+        --replace 'implicitWidth: Tokens.barSize' 'implicitWidth: Tokens.barSize
+
+  Component { id: ccComp; ControlCenter {} }' \
+        --replace 'Clock {' 'Icon {
+      Layout.alignment: Qt.AlignHCenter
+      icon: "󰒓"
+      textSize: 22
+      MouseArea { anchors.fill: parent; onClicked: { PopupComm.blComponent = ccComp; PopupComm.showBL(380, 470) } }
+    }
+    Clock {'
     '';
   });
 
