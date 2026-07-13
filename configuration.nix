@@ -71,6 +71,13 @@ in
 
   services.flatpak.enable = true;
 
+  # LocalSend — partage de fichiers multi-plateforme (alternative AirDrop, P2P LAN).
+  # openFirewall => ouvre 53317 TCP+UDP (réception + découverte multicast).
+  programs.localsend = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Flakes activés (nécessaire pour `nixos-rebuild switch --flake`).
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
