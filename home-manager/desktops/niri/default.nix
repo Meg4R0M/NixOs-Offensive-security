@@ -32,6 +32,15 @@ let
       #    puis dépôt du fichier final APRÈS le sed (couleurs déjà finales).
       sed -i 's/MusicPlayer {id: player}/SysMonitor {id: player}/' popups/DashBoard.qml
       cp ${./cshell/SysMonitor.qml} popups/SysMonitor.qml
+      # 4) Fix wifi : cshell prend Networking.devices.values[0] (souvent PAS le
+      #    wifi -> « Not Connected » à tort). On sélectionne le device DeviceType.Wifi.
+      substituteInPlace services/System.qml \
+        --replace 'property var nwDevice: Networking.devices.values[0];' 'property var nwDevice: {
+          const ds = Networking.devices.values;
+          for (let i = 0; i < ds.length; i++) if (ds[i].type === DeviceType.Wifi) return ds[i];
+          return ds.length ? ds[0] : null;
+        }' \
+        --replace 'property bool wifiConnected: nwDevice.connected;' 'property bool wifiConnected: nwDevice ? nwDevice.connected : false;'
     '';
   });
 
