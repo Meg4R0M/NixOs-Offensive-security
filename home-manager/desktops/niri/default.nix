@@ -5,24 +5,33 @@
 let
   animatedWp = config.humanix.animatedWallpaper;
 
-  # cshell (Quickshell) re-thémé en vert phosphore Mr Robot (Colors/Tokens.qml
-  # patchés). Remplace waybar si humanix.aesthetic.cshell.enable.
+  # cshell (Quickshell) re-thémé « Mr Robot » : fond noir + éléments verts. Les
+  # couleurs Catppuccin sont codées EN DUR dans presque tous les .qml (pas
+  # seulement Colors.qml) → on remappe TOUTE la palette au build (sed global),
+  # + rename identité, + remplacement du lecteur musique par un moniteur système.
   cshellOn = config.humanix.aesthetic.cshell.enable;
   themedCshell = inputs.cshell.packages.${pkgs.system}.default.overrideAttrs (o: {
     postPatch = (o.postPatch or "") + ''
-      substituteInPlace config/Colors.qml \
-        --replace '"#313244"' '"#0a0f0a"' \
-        --replace '"#6c7086"' '"#1f4d1f"' \
-        --replace '"#7f849c"' '"#1f6d2f"' \
-        --replace '"#cdd6f4"' '"#00ff41"' \
-        --replace '"1e1e2e"'  '"#0a0f0a"' \
-        --replace '"#a6e3a1"' '"#00ff41"' \
-        --replace '"#cba6f7"' '"#ff2b2b"' \
-        --replace '"#89b4fa"' '"#00d38a"' \
-        --replace '"#f9e2af"' '"#c8ff00"'
-      substituteInPlace config/Tokens.qml \
-        --replace '"#11111b"' '"#0a0f0a"' \
-        --replace '"#cdd6f4"' '"#00ff41"'
+      # 1) Palette Catppuccin -> Humanix. Fonds -> noir ; textes + accents
+      #    « highlight » (logo/workspace actif/lavande/mauve) -> vert ; rouge
+      #    réservé au bouton poweroff ; lime pour charge/luminosité.
+      find . -name '*.qml' -print0 | xargs -0 sed -i \
+        -e 's/#1e1e2e/#0a0f0a/g' -e 's/#181825/#0a0f0a/g' -e 's/#11111b/#0a0f0a/g' \
+        -e 's/#313244/#123312/g' -e 's/#414559/#123312/g' -e 's/#585b70/#123312/g' \
+        -e 's/#45475a/#1f4d1f/g' -e 's/#626880/#1f6d2f/g' \
+        -e 's/#cdd6f4/#00ff41/g' -e 's/#a6adc8/#00cc33/g' -e 's/#6c7086/#1f8f3f/g' \
+        -e 's/#cba6f7/#00ff41/g' -e 's/#ca9ee6/#00ff41/g' -e 's/#a6d189/#00ff41/g' \
+        -e 's/#a6e3a1/#00ff41/g' -e 's/#f38ba8/#00ff41/g' -e 's/#b4befe/#00cc33/g' \
+        -e 's/#89b4fa/#00d38a/g' -e 's/#8caaee/#00d38a/g' \
+        -e 's/#eba0ac/#ff2b2b/g' -e 's/#e78284/#ff2b2b/g' \
+        -e 's/#f9e2af/#c8ff00/g' -e 's/#e5c890/#c8ff00/g' \
+        -e 's/"1e1e2e"/"#0a0f0a"/g'
+      # 2) Identité : chaeu@nixos -> Meg4R0M@NixOs
+      sed -i 's/chaeu@nixos/Meg4R0M@NixOs/' popups/DashBoard.qml
+      # 3) Lecteur musique -> moniteur système (CPU/MEM/NET/BAT). Swap du composant,
+      #    puis dépôt du fichier final APRÈS le sed (couleurs déjà finales).
+      sed -i 's/MusicPlayer {id: player}/SysMonitor {id: player}/' popups/DashBoard.qml
+      cp ${./cshell/SysMonitor.qml} popups/SysMonitor.qml
     '';
   });
   term = config.humanix.terminal;
