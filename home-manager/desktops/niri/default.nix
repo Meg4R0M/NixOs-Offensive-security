@@ -184,6 +184,10 @@ in
       # Sous Niri : PAS de wallpaper -> conky plein écran (thème haxOS porté
       # en Wayland). Deux surfaces layer-shell de fond : moniteur + horloge.
       wallpaperSpawn = ''
+        // Fond d'écran statique : image 2880x1800 en résolution NATIVE (mode
+        // center = 1:1, aucun étirement/adaptation), fond noir pour tout écart.
+        // Placé en 1er => couche background sous les surfaces conky.
+        spawn-sh-at-startup "${pkgs.swaybg}/bin/swaybg -m center -c '#000000' -i ${home}/Images/wallpappers/black-terminals-with-green-font-colors-quote-6g-2880x1800.jpg"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-monitor.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-host.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-clock.conf"
