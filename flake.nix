@@ -34,6 +34,10 @@
     # RedNix (redcode-labs) — outils offensifs maison hors nixpkgs.
     # PAS de follows nixpkgs : on réutilise ses builds (cache binaire).
     rednix.url = "github:redcode-labs/RedNix";
+
+    # cshell — shell Quickshell (barre + dashboard + OSD) pour niri.
+    # Pas de follows : il pinne son nixpkgs pour la compat quickshell/qt6.
+    cshell.url = "github:chaeu-srk/cshell/3fdd86a9fb1c29e714570715d683ad9380de4f6d";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

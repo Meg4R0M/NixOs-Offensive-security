@@ -30,6 +30,15 @@ in
     '';
   };
 
+  # Barre supérieure niri : cshell (shell Quickshell re-thémé vert phosphore) au
+  # lieu de waybar. Débrayable => repli waybar immédiat en cas de souci (aucun
+  # risque boot, c'est du user-space). cf home-manager/desktops/niri/default.nix.
+  options.humanix.aesthetic.cshell.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Utiliser cshell (Quickshell, thémé vert) comme barre niri au lieu de waybar.";
+  };
+
   config = {
     # Wallpaper animé (niri lit humanix.animatedWallpaper) : ON sauf en client.
     humanix.animatedWallpaper = lib.mkDefault (cfg.profile != "client");

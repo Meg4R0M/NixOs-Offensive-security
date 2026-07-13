@@ -1,9 +1,30 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, inputs, ... }:
 # Session Niri (compositeur Wayland scrollable), en parallèle de GNOME/Hyprland.
 # Themée Stylix, réutilise les modules rice, et intègre les shaders GLSL
 # d'animation open/close (liixini/shaders).
 let
   animatedWp = config.humanix.animatedWallpaper;
+
+  # cshell (Quickshell) re-thémé en vert phosphore Mr Robot (Colors/Tokens.qml
+  # patchés). Remplace waybar si humanix.aesthetic.cshell.enable.
+  cshellOn = config.humanix.aesthetic.cshell.enable;
+  themedCshell = inputs.cshell.packages.${pkgs.system}.default.overrideAttrs (o: {
+    postPatch = (o.postPatch or "") + ''
+      substituteInPlace config/Colors.qml \
+        --replace '"#313244"' '"#0a0f0a"' \
+        --replace '"#6c7086"' '"#1f4d1f"' \
+        --replace '"#7f849c"' '"#1f6d2f"' \
+        --replace '"#cdd6f4"' '"#00ff41"' \
+        --replace '"1e1e2e"'  '"#0a0f0a"' \
+        --replace '"#a6e3a1"' '"#00ff41"' \
+        --replace '"#cba6f7"' '"#ff2b2b"' \
+        --replace '"#89b4fa"' '"#00d38a"' \
+        --replace '"#f9e2af"' '"#c8ff00"'
+      substituteInPlace config/Tokens.qml \
+        --replace '"#11111b"' '"#0a0f0a"' \
+        --replace '"#cdd6f4"' '"#00ff41"'
+    '';
+  });
   term = config.humanix.terminal;
 
   cyberpunkMp4 = pkgs.fetchurl {
@@ -214,7 +235,7 @@ in
       ]) ++ [
         certFrNews veilleBlogs netmon
         waWhatsapp waChatgpt waGemini waGrok   # web-apps (WS4/WS5)
-      ];
+      ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
       programs.swaylock.enable = true;
 
       xdg.configFile."rofi/mrrobot.rasi".text = rofiMrRobot;
@@ -284,7 +305,8 @@ in
         }
 
         // ----- Autostart -----
-        spawn-sh-at-startup "${pkgs.waybar}/bin/waybar -c ${home}/.config/waybar-niri/config -s ${home}/.config/waybar-niri/style.css"
+        // Barre : cshell (thémé vert) si humanix.aesthetic.cshell.enable, sinon waybar.
+        ${if cshellOn then ''spawn-at-startup "${themedCshell}/bin/cshell"'' else ''spawn-sh-at-startup "${pkgs.waybar}/bin/waybar -c ${home}/.config/waybar-niri/config -s ${home}/.config/waybar-niri/style.css"''}
         ${wallpaperSpawn}
         spawn-at-startup "nm-applet" "--indicator"
         spawn-at-startup "xwayland-satellite"

@@ -187,6 +187,26 @@
         "type": "github"
       }
     },
+    "cshell": {
+      "inputs": {
+        "m3shapes-src": "m3shapes-src",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1783604770,
+        "narHash": "sha256-u00MKuz/bgVxx+JLMdWwsRIduY1WP/QxwO6pbSgZFYo=",
+        "owner": "chaeu-srk",
+        "repo": "cshell",
+        "rev": "3fdd86a9fb1c29e714570715d683ad9380de4f6d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chaeu-srk",
+        "repo": "cshell",
+        "rev": "3fdd86a9fb1c29e714570715d683ad9380de4f6d",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -397,6 +417,23 @@
         "type": "github"
       }
     },
+    "m3shapes-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781017666,
+        "narHash": "sha256-kfHyzZaPHgqZML48OA+5JwBOsLdQJ2ci/aGPShvUB4Y=",
+        "owner": "soramanew",
+        "repo": "m3shapes",
+        "rev": "bdc327b29f95394a732baf3c9b19658ba23755b6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "soramanew",
+        "repo": "m3shapes",
+        "rev": "bdc327b29f95394a732baf3c9b19658ba23755b6",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1783693695,
@@ -446,6 +483,22 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1783389287,
+        "narHash": "sha256-0xIy4dVLqq47rA+mRy0hXDfjhQd4E5PoIns/RmB7nR4=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1783522502,
         "narHash": "sha256-iffAls3iaNTyJC2faYcUXSI+Gp02cDjYl+MygxKl2GI=",
         "owner": "NixOS",
@@ -460,7 +513,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1734126203,
         "narHash": "sha256-0XovF7BYP50rTD2v4r55tR5MuBLet7q4xIz6Rgh3BBU=",
@@ -505,7 +558,7 @@
       "inputs": {
         "chainsaw": "chainsaw",
         "hackpkgs": "hackpkgs",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "utils": "utils"
       },
       "locked": {
@@ -527,8 +580,9 @@
         "agenix": "agenix",
         "cachyos": "cachyos",
         "claude": "claude",
+        "cshell": "cshell",
         "home-manager": "home-manager_2",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "rednix": "rednix",
         "stylix": "stylix"
       }
