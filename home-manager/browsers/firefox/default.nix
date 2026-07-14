@@ -4,6 +4,22 @@
       # Renseigne le profil pour la target Stylix firefox (silence le warning).
       stylix.targets.firefox.profileNames = [ config.humanix.homeManagerUser ];
 
+      # Firefox = navigateur PAR DÉFAUT (http/https/html). Corrige au passage le
+      # login Slack : sous Wayland/niri, Chromium ne relance PAS le retour
+      # slack:// (hand-off de protocole externe cassé) alors que Firefox (Gecko)
+      # le fait. Le handler slack:// lui-même reste sur slack.desktop.
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "text/html" = "firefox.desktop";
+          "x-scheme-handler/http" = "firefox.desktop";
+          "x-scheme-handler/https" = "firefox.desktop";
+          "x-scheme-handler/about" = "firefox.desktop";
+          "x-scheme-handler/unknown" = "firefox.desktop";
+          "x-scheme-handler/slack" = "slack.desktop";
+        };
+      };
+
       programs.firefox = {
         enable = true;
         # Verrouillé sur l'ancien chemin (défaut passé à XDG en 26.05) pour ne
