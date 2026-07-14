@@ -78,6 +78,23 @@ in
     openFirewall = true;
   };
 
+  # Deep-links des apps Electron (Slack…) : après login navigateur, l'app renvoie
+  # un lien slack:// pour rendre la main. Chromium BLOQUE la redirection auto vers
+  # les protocoles externes -> le retour de login se perdait (jamais les salons).
+  # Le hand-off single-instance vers l'app marche déjà (SingletonLock OK) ; il
+  # manquait l'autorisation NAVIGATEUR. Cette policy auto-lance slack:// depuis
+  # slack.com sans dialogue. chromium = navigateur par défaut ; on couvre chrome.
+  environment.etc =
+    let deeplinks = builtins.toJSON {
+      AutoLaunchProtocolsFromOrigins = [
+        { protocol = "slack"; allowed_origins = [ "https://app.slack.com" "https://slack.com" ]; }
+      ];
+    };
+    in {
+      "chromium/policies/managed/humanix-deeplinks.json".text = deeplinks;
+      "opt/chrome/policies/managed/humanix-deeplinks.json".text = deeplinks;
+    };
+
   # Flakes activés (nécessaire pour `nixos-rebuild switch --flake`).
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
