@@ -115,7 +115,6 @@ import qs.popups' \
     // ----- niri-glass : verre dépoli subtil (fork zaroutt/Niri-glass) -----
     window-rule {
         match app-id=".*"
-        opacity 0.94
         background-effect {
             blur true
             xray true
@@ -166,6 +165,12 @@ import qs.popups' \
   shaderName = config.humanix.niriShader;
   openShader = mkShader "${shadersSrc}/${shaderName}/open.glsl";
   closeShader = mkShader "${shadersSrc}/${shaderName}/close.glsl";
+  # Durée (ms) des animations glitch open/close. Plus long => plus visible sur les
+  # grandes fenêtres tuilées, pas seulement les popups.
+  shaderDurationMs = config.humanix.niriShaderDuration;
+  # Opacité des fenêtres (transparence "on distingue derrière"). Le flou niri-glass
+  # rend le fond visible joliment. wezterm (~0.92) se cumule pour les terminaux.
+  winOpacity = config.humanix.niriOpacity;
 
   # Script de veille cybersécurité FR (CERT-FR / ANSSI) exposé dans le PATH
   # sous le nom `cert-fr-news` (appelé par conky via execpi).
@@ -198,6 +203,18 @@ in
     type = lib.types.str;
     default = "glass-warp";
     description = "Nom du shader liixini/shaders pour les animations open/close (ex: glass-warp, dissolve, ripple).";
+  };
+
+  options.humanix.niriShaderDuration = lib.mkOption {
+    type = lib.types.int;
+    default = 1000;
+    description = "Durée (ms) des animations glitch open/close. Plus long = glitch plus franc (défaut 1000, était 500).";
+  };
+
+  options.humanix.niriOpacity = lib.mkOption {
+    type = lib.types.float;
+    default = 0.85;
+    description = "Opacité des fenêtres niri (transparence). 1.0 = opaque ; plus bas = on distingue derrière (flou glass).";
   };
 
   config = lib.mkIf config.humanix.enableNiri {
@@ -461,23 +478,24 @@ in
         // ----- Animations : shaders GLSL (${shaderName}) -----
         animations {
             window-open {
-                duration-ms 500
+                duration-ms ${toString shaderDurationMs}
                 custom-shader r#"
         ${openShader}
                 "#
             }
             window-close {
-                duration-ms 500
+                duration-ms ${toString shaderDurationMs}
                 custom-shader r#"
         ${closeShader}
                 "#
             }
         }
 
-        // Coins arrondis
+        // Coins arrondis + transparence (on distingue derrière ; flou via niri-glass)
         window-rule {
             geometry-corner-radius 10
             clip-to-geometry true
+            opacity ${toString winOpacity}
         }
         ${glassRule}
         // ----- Humanix : placement des apps par workspace (match app-id) -----
