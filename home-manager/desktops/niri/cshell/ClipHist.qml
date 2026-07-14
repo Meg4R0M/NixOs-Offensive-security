@@ -52,7 +52,10 @@ Item {
         width: ListView.view.width
         height: 42
         radius: 10
-        color: dma.containsMouse ? "#123312" : "#0a0f0a"
+        // PAS de hoverEnabled : dans le BotLeftPopup (onExited: hideBL), une
+        // MouseArea enfant hoverEnabled vole le survol -> le popup se ferme avant
+        // le clic. Feedback via `pressed` (ne vole pas le survol).
+        color: dma.pressed ? "#1f4d1f" : "#0a0f0a"
         border.width: 1; border.color: "#1f4d1f"
 
         StyledText {
@@ -63,7 +66,7 @@ Item {
         }
         MouseArea {
           id: dma
-          anchors.fill: parent; hoverEnabled: true
+          anchors.fill: parent
           onClicked: {
             copier.command = ["sh", "-c", "printf '%s' \"$1\" | @cliphist@ decode | @wlcopy@", "cliphist-copy", entry]
             copier.running = true
