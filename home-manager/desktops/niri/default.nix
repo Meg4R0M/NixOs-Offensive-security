@@ -171,6 +171,7 @@ import qs.popups' \
   # Opacité des fenêtres (transparence "on distingue derrière"). Le flou niri-glass
   # rend le fond visible joliment. wezterm (~0.92) se cumule pour les terminaux.
   winOpacity = config.humanix.niriOpacity;
+  winOpacityFocused = config.humanix.niriOpacityFocused;
 
   # Script de veille cybersécurité FR (CERT-FR / ANSSI) exposé dans le PATH
   # sous le nom `cert-fr-news` (appelé par conky via execpi).
@@ -211,10 +212,18 @@ in
     description = "Durée (ms) des animations glitch open/close. Plus long = glitch plus franc (défaut 1000, était 500).";
   };
 
+  # Opacité HORS focus (fenêtres inactives) : bien transparent -> elles s'effacent.
   options.humanix.niriOpacity = lib.mkOption {
     type = lib.types.float;
-    default = 0.85;
-    description = "Opacité des fenêtres niri (transparence). 1.0 = opaque ; plus bas = on distingue derrière (flou glass).";
+    default = 0.70;
+    description = "Opacité des fenêtres niri HORS focus (inactives). Plus bas = plus transparent.";
+  };
+
+  # Opacité de la fenêtre ACTIVE : quasi opaque -> nette, sans voile vert du glass.
+  options.humanix.niriOpacityFocused = lib.mkOption {
+    type = lib.types.float;
+    default = 0.96;
+    description = "Opacité de la fenêtre niri ACTIVE (au focus). Monte à 1.0 pour supprimer tout voile.";
   };
 
   config = lib.mkIf config.humanix.enableNiri {
@@ -491,11 +500,16 @@ in
             }
         }
 
-        // Coins arrondis + transparence (on distingue derrière ; flou via niri-glass)
+        // Coins arrondis + transparence HORS focus (les inactives s'effacent).
         window-rule {
             geometry-corner-radius 10
             clip-to-geometry true
             opacity ${toString winOpacity}
+        }
+        // Fenêtre ACTIVE : bien moins transparente -> nette, sans voile vert du glass.
+        window-rule {
+            match is-active=true
+            opacity ${toString winOpacityFocused}
         }
         ${glassRule}
         // ----- Humanix : placement des apps par workspace (match app-id) -----
