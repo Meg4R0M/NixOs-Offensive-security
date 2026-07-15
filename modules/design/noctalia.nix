@@ -62,17 +62,22 @@ in {
         settings = {
           theme = {
             mode = "dark";
-            source = "custom";
-            custom_palette = "humanix";
-            pure_black_dark = true;       # surfaces ancrées au noir pur
+            # Palette générée DEPUIS le wallpaper vert (mécanisme natif Noctalia,
+            # robuste). NB : source="custom" exige le format M3 communautaire
+            # (tokens on_primary/surface_variant… snake_case) -> à revoir si on
+            # veut le #00ff41 pile. "vibrant" = vert le plus saturé.
+            source = "wallpaper";
+            wallpaper_scheme = "vibrant";
+            pure_black_dark = true;
           };
-        };
-
-        # -> ~/.config/noctalia/palettes/humanix.json (sélectionné ci-dessus).
-        # dark ET light fournis (on reste en dark ; light = même vert pour valider).
-        customPalettes.humanix = {
-          dark = green;
-          light = green;
+          # Wallpaper géré par Noctalia (sa couche passait par-dessus swaybg) :
+          # on lui donne TON image, en résolution native (center = 1:1).
+          wallpaper = {
+            enabled = true;
+            fill_mode = "center";
+            default.path =
+              "/home/${user}/Images/wallpappers/black-terminals-with-green-font-colors-quote-6g-2880x1800.jpg";
+          };
         };
       };
     };
