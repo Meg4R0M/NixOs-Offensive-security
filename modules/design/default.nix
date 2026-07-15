@@ -5,6 +5,7 @@
     ./custom-fonts.nix
     ./plymouth.nix
     ./aesthetic.nix
+    ./noctalia.nix
     ./cyborg
     ./frost
     ./graphite

@@ -574,6 +574,19 @@
     },
     "nixpkgs_6": {
       "locked": {
+        "lastModified": 1783522502,
+        "narHash": "sha256-nFgG4gPQueCgP8LidXsdI2lYPrSwTcmDl6afcVn7F/U=",
+        "rev": "0bb7ec54c8483066ec9d7720e780a5caa71f8612",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1031299.0bb7ec54c848/nixexprs.tar.xz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
+      }
+    },
+    "nixpkgs_7": {
+      "locked": {
         "lastModified": 1734126203,
         "narHash": "sha256-0XovF7BYP50rTD2v4r55tR5MuBLet7q4xIz6Rgh3BBU=",
         "owner": "NixOS",
@@ -585,6 +598,25 @@
         "owner": "NixOS",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_6"
+      },
+      "locked": {
+        "lastModified": 1784124956,
+        "narHash": "sha256-UG8ZB/DhXC1QOgD4hXAr2rRXDDrPC44/7kaJnBUWr6U=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "rev": "d6405bb0e3324451a3286482137a1c399e1b259b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "rev": "d6405bb0e3324451a3286482137a1c399e1b259b",
         "type": "github"
       }
     },
@@ -617,7 +649,7 @@
       "inputs": {
         "chainsaw": "chainsaw",
         "hackpkgs": "hackpkgs",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_7",
         "utils": "utils"
       },
       "locked": {
@@ -643,6 +675,7 @@
         "home-manager": "home-manager_2",
         "niri-glass": "niri-glass",
         "nixpkgs": "nixpkgs_5",
+        "noctalia": "noctalia",
         "rednix": "rednix",
         "stylix": "stylix"
       }

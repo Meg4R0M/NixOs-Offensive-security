@@ -43,6 +43,11 @@
     # Pas de follows : l'overlay remplace des fichiers source niri, il DOIT être
     # bâti contre sa base pinnée (niri 26.04, rev 49fc611). Swap du binaire niri.
     niri-glass.url = "github:zaroutt/Niri-glass/5ff51970491486c674ce293e13af9c644c2db514";
+
+    # Noctalia — shell Wayland natif complet (barre/dock/launcher/control center/
+    # notifs/presse-papier/OSD/lock/wallpaper). v5, module HM + thème par palette.
+    # Remplace cshell. Pas de follows (build C++ autonome).
+    noctalia.url = "github:noctalia-dev/noctalia/d6405bb0e3324451a3286482137a1c399e1b259b";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

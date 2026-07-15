@@ -9,7 +9,10 @@ let
   # couleurs Catppuccin sont codées EN DUR dans presque tous les .qml (pas
   # seulement Colors.qml) → on remappe TOUTE la palette au build (sed global),
   # + rename identité, + remplacement du lecteur musique par un moniteur système.
-  cshellOn = config.humanix.aesthetic.cshell.enable;
+  # Shell de barre : Noctalia (prioritaire) > cshell > waybar.
+  noctaliaOn = config.humanix.aesthetic.noctalia.enable;
+  noctaliaBin = "${inputs.noctalia.packages.${pkgs.system}.default.overrideAttrs (o: { mesonFlags = (o.mesonFlags or [ ]) ++ [ "-Dtests=disabled" ]; })}/bin/noctalia";
+  cshellOn = config.humanix.aesthetic.cshell.enable && !noctaliaOn;
   themedCshell = inputs.cshell.packages.${pkgs.system}.default.overrideAttrs (o: {
     postPatch = (o.postPatch or "") + ''
       # 1) Palette Catppuccin -> Humanix. Fonds -> noir ; textes + accents
@@ -450,8 +453,10 @@ in
         }
 
         // ----- Autostart -----
-        // Barre : cshell (thémé vert) si humanix.aesthetic.cshell.enable, sinon waybar.
-        ${if cshellOn then ''spawn-at-startup "${themedCshell}/bin/cshell"'' else ''spawn-sh-at-startup "${pkgs.waybar}/bin/waybar -c ${home}/.config/waybar-niri/config -s ${home}/.config/waybar-niri/style.css"''}
+        // Shell/barre : Noctalia (thémé vert) > cshell > waybar.
+        ${if noctaliaOn then ''spawn-at-startup "${noctaliaBin}"''
+          else if cshellOn then ''spawn-at-startup "${themedCshell}/bin/cshell"''
+          else ''spawn-sh-at-startup "${pkgs.waybar}/bin/waybar -c ${home}/.config/waybar-niri/config -s ${home}/.config/waybar-niri/style.css"''}
         ${wallpaperSpawn}
         spawn-at-startup "nm-applet" "--indicator"
         spawn-at-startup "xwayland-satellite"
