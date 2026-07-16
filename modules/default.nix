@@ -8,6 +8,7 @@
     ./cyber/jupyter-pentest.nix
     ./cyber/hexstrike.nix
     ./cyber/kittysploit.nix
+    ./cyber/exegol.nix
     ./cyber/defectdojo.nix
     ./dev
     ./hardware

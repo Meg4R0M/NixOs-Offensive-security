@@ -2,192 +2,154 @@
 with lib;
 let
   shopt = pkgs.writeShellScriptBin "shopt" (builtins.readFile ./shopt);
+
+  # ── Historique de commandes Exegol ──────────────────────────────────────────
+  # Exegol ne fournit pas un vrai .zsh_history rempli (le skel est vide) : les
+  # commandes utiles sont dans ~161 fichiers d'ALIASES (aliases.d). On extrait le
+  # CORPS des alias (l'invocation réelle) -> un fichier d'historique -> semé une
+  # fois dans ~/.zsh_history pour que zsh-autosuggestions les propose.
+  # ⚠️ ces commandes visent des chemins conteneur (/opt/tools/…) : ce sont des
+  #    patterns de référence, à lancer DANS Exegol.
+  exegolSrc = pkgs.fetchFromGitHub {
+    owner = "ThePorgs";
+    repo = "Exegol-images";
+    rev = "bb448e76d254bc49c4b900e2494c47e00b9f964f";
+    sha256 = "1xfpcm8blzk4366m1ihjspqsmjwm085c3ny01128f5zgcqx9chxq";
+  };
+  exegolHistory = pkgs.runCommand "exegol-commands-history" { } ''
+    cat ${exegolSrc}/sources/assets/shells/aliases.d/* 2>/dev/null \
+      | grep -hE "^alias " \
+      | sed -E "s/^alias [^=]+=//" \
+      | sed -E "s/^'(.*)'$/\1/; s/^\"(.*)\"$/\1/" \
+      | grep -vE '^[[:space:]]*$' \
+      | awk '!seen[$0]++' \
+      > $out
+  '';
+
+  # Plugins zsh (nixpkgs) — chemins de sourcing exacts.
+  plug = name: src: file: { inherit name src file; };
 in {
   config = mkIf (config.humanix.mainShell == "zsh") {
-    # System-level packages so their .zsh files are available
     environment.systemPackages = with pkgs; [
       nix-zsh-completions
       zsh-autosuggestions
-      zsh-syntax-highlighting
     ];
 
-    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, ...}: {
-      home.packages = with pkgs; [
-        fastfetch
-        shopt
-      ];
+    home-manager.users.${config.humanix.homeManagerUser} = { pkgs, config, lib, ...}: {
+      home.packages = with pkgs; [ fastfetch shopt ];
 
-      # Multiplexeur terminal par défaut : zellij démarre automatiquement à
-      # l'ouverture d'un terminal (wezterm) via zsh.
+      # Semage unique de l'historique Exegol dans ~/.zsh_history (idempotent).
+      home.activation.exegolHistory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        FLAG="${config.home.homeDirectory}/.local/state/.exegol-history-seeded"
+        if [ ! -f "$FLAG" ]; then
+          mkdir -p "$(dirname "$FLAG")"
+          cat ${exegolHistory} >> "${config.home.homeDirectory}/.zsh_history" 2>/dev/null || true
+          touch "$FLAG"
+        fi
+      '';
+
+      # Multiplexeur terminal : zellij démarre à l'ouverture du terminal.
       programs.zellij = {
         enable = true;
         enableZshIntegration = true;
         settings = {
           theme = "mrrobot";
-          # Thème vert CRT (Mr Robot) + accents rouge DARK-4RMY.
           themes.mrrobot = {
-            fg      = "#00ff41";
-            bg      = "#0a0f0a";
-            black   = "#0a0f0a";
-            red     = "#ff2b2b";
-            green   = "#00ff41";
-            yellow  = "#ffb000";
-            blue    = "#00b32d";
-            magenta = "#39ff14";
-            cyan    = "#00ff87";
-            white   = "#d4ffd4";
-            orange  = "#ff2b2b";
+            fg = "#00ff41"; bg = "#0a0f0a"; black = "#0a0f0a";
+            red = "#ff2b2b"; green = "#00ff41"; yellow = "#ffb000";
+            blue = "#00b32d"; magenta = "#39ff14"; cyan = "#00ff87";
+            white = "#d4ffd4"; orange = "#ff2b2b";
           };
-          # Barre de statut compacte, sans bordures criardes.
           pane_frames = false;
           simplified_ui = true;
         };
       };
 
+      # fzf (fuzzy finder) : Ctrl-R historique, Ctrl-T fichiers, + moteur de fzf-tab.
+      programs.fzf = {
+        enable = true;
+        enableZshIntegration = true;
+        defaultOptions = [
+          "--height 40%" "--layout=reverse" "--border"
+          "--color=fg:#00cc33,bg:-1,hl:#00ff41,fg+:#00ff41,bg+:#123312,hl+:#39ff14"
+          "--color=info:#00d38a,prompt:#00ff41,pointer:#ff2b2b,marker:#39ff14,spinner:#00d38a"
+        ];
+      };
+
+      # Prompt Starship (informatif + vert) : configuré dans modules/dev/starship.
+
       programs.zsh = {
         enable = true;
 
-        # ---------- History ----------
+        # Historique agrandi (pour cohabiter avec l'historique Exegol semé).
         history = {
           path = "${config.home.homeDirectory}/.zsh_history";
-          size = 10000;   # HISTSIZE
-          save = 1000;    # SAVEHIST
+          size = 100000;
+          save = 100000;
           expireDuplicatesFirst = true;
+          ignoreDups = true;
+          ignoreSpace = true;
+          share = true;
         };
 
-        # ---------- Options ----------
-        setOptions = [
-          "INC_APPEND_HISTORY"
-        ];
+        setOptions = [ "INC_APPEND_HISTORY" "HIST_FCNTL_LOCK" "HIST_IGNORE_ALL_DUPS" ];
 
-        # ---------- Completions & zplug ----------
         enableCompletion = true;
         autosuggestion.enable = true;
-        syntaxHighlighting.enable = true;
+        syntaxHighlighting.enable = false;   # remplacé par fast-syntax-highlighting
 
-        zplug = {
-          enable = true;
-          plugins = [
-            { name = "zsh-users/zsh-autosuggestions"; }
-            { name = "zsh-users/zsh-history-substring-search"; }
-            { name = "zsh-users/zsh-syntax-highlighting"; }
-            # { name = "romkatv/powerlevel10k"; tags = [ as:theme depth:1 ]; } # Uncomment to use powerlevel10k plugin
-          ];
-        };
+        # Plugins « top » (nixpkgs, pas de clone runtime). Ordre : autopair,
+        # fzf-tab (après compinit), you-should-use, fast-syntax-highlighting
+        # (avant-dernier), history-substring-search (dernier, bind touches).
+        plugins = [
+          (plug "zsh-autopair" pkgs.zsh-autopair "share/zsh/zsh-autopair/autopair.zsh")
+          (plug "fzf-tab" pkgs.zsh-fzf-tab "share/fzf-tab/fzf-tab.plugin.zsh")
+          (plug "you-should-use" pkgs.zsh-you-should-use "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh")
+          (plug "fast-syntax-highlighting" pkgs.zsh-fast-syntax-highlighting "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh")
+          (plug "zsh-history-substring-search" pkgs.zsh-history-substring-search "share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh")
+        ];
 
-        # ---------- Aliases ----------
         shellAliases = {
           shopt = "/run/current-system/sw/bin/shopt";
-          # ll = "ls -l";
-          # update = "sudo nixos-rebuild switch";
-          nrs = "sudo nixos-rebuild switch -I nixos-config=$HOME/nixos/configuration.nix";
-          # Test sans appliquer (à lancer avant nrs/nru en cas de doute)
-          nrt = "sudo nixos-rebuild dry-build -I nixos-config=$HOME/nixos/configuration.nix";
-          # Update complet : channel nixpkgs + rebuild switch
-          nru = "sudo nix-channel --update && sudo nixos-rebuild switch -I nixos-config=$HOME/nixos/configuration.nix";
-          # Nettoyage des anciennes générations (>14 jours) + GC
+          nrs = "sudo nixos-rebuild switch --flake $HOME/nixos#Humanix";
+          nrt = "sudo nixos-rebuild dry-build --flake $HOME/nixos#Humanix";
+          nru = "sudo nix flake update --flake $HOME/nixos && sudo nixos-rebuild switch --flake $HOME/nixos#Humanix";
           nrgc = "sudo nix-collect-garbage --delete-older-than 14d && nix-collect-garbage -d";
-          # Relance les 3 conky en daemon (-d = détaché, rend la main au shell)
           conky-reload = "pkill -9 conky 2>/dev/null; sleep 1; for c in monitor host clock cal cyber veille2; do conky -d -c $HOME/.config/conky/haxos-$c.conf; done";
+          # Exegol : raccourcis usuels (image free).
+          exe = "exegol";
+          exe-start = "exegol start free";
         };
 
-        # ---------- What compinit adds (kept from your file) ----------
         completionInit = ''
-          # The following lines were added by compinstall
           zstyle :compinstall filename "$HOME/.zshrc"
           autoload -U +X bashcompinit && bashcompinit
           autoload -U +X compinit && compinit
-          # End of lines added by compinstall
+          # fzf-tab : rendu + preview vert
+          zstyle ':completion:*' menu no
+          zstyle ':fzf-tab:*' fzf-flags --color=fg:#00cc33,hl:#00ff41,fg+:#00ff41,bg+:#123312,hl+:#39ff14
+          zstyle ':fzf-tab:*' use-fzf-default-opts yes
         '';
 
-        # ---------- Content init after completion ----------
         initContent = ''
-          # Emacs-style keymap
           bindkey -e
+          # Recherche d'historique par sous-chaîne (flèches haut/bas).
+          bindkey '^[[A' history-substring-search-up
+          bindkey '^[[B' history-substring-search-down
+          bindkey '^P' history-substring-search-up
+          bindkey '^N' history-substring-search-down
 
-          # Keybindings
+          # Navigation mots (Ctrl+←/→) + Home/End/Suppr.
           bindkey "^[[1;5C" forward-word
           bindkey "^[[1;5D" backward-word
           bindkey "\e[1~" beginning-of-line
           bindkey "\e[4~" end-of-line
-          bindkey "\e[5~" beginning-of-history
-          bindkey "\e[6~" end-of-history
-          bindkey "\e[7~" beginning-of-line
           bindkey "\e[3~" delete-char
-          bindkey "\e[2~" quoted-insert
-          bindkey "\e[5C" forward-word
-          bindkey "\e[5D" backward-word
-          bindkey "\e\e[C" forward-word
-          bindkey "\e\e[D" backward-word
-          bindkey "\e[1;5C" forward-word
-          bindkey "\e[1;5D" backward-word
-          bindkey "\e[8~" end-of-line
-          bindkey "\eOH" beginning-of-line
-          bindkey "\eOF" end-of-line
           bindkey "\e[H" beginning-of-line
           bindkey "\e[F" end-of-line
 
-          # Things you wanted once per interactive shell start
           source ~/.bash_aliases 2>/dev/null || true
-          # fastfetch s'affiche DANS zellij (évite le double flash : le shell
-          # externe exec zellij, l'accueil s'affiche dans le panneau).
           if [[ -n "$ZELLIJ" ]]; then fastfetch || true; fi
-
-        # ---------- Prompt & precmd hook ----------
-          function build_prompt() {
-            local last_status=$?
-            local tty_device=$(tty)
-            local ip=$(ip -4 addr | grep -v '127.0.0.1' | grep -v 'secondary' \
-              | grep -oP '(?<=inet\s)\d+(\.\d+){3}' \
-              | sed -z 's/\n/|/g;s/|\$/\n/' \
-              | rev | cut -c 2- | rev)
-
-            local user="%n"
-            local host="%m"
-            local cwd="%~"
-            local branch=""
-            local hq_prefix=""
-            local flame=""
-            local robot=""
-
-            # Git branch detection
-            if command -v git &>/dev/null; then
-              branch=$(git symbolic-ref --short HEAD 2>/dev/null)
-            fi
-
-            # Emoji mode detection
-            if [[ "$tty_device" == /dev/tty* ]]; then
-              hq_prefix="HQ─"
-              flame=""
-              robot="[>]"
-            else
-              hq_prefix="HQ🚀🌐"
-              flame="🔥"
-              robot="[👾]"
-            fi
-
-            # Color for user@host based on last status
-            local user_host
-            if [[ $last_status -eq 0 ]]; then
-              user_host="%F{blue}($user@$host)%f"
-            else
-              user_host="%F{red}($user@$host)%f"
-            fi
-
-            # First line
-            local line1="%F{46}╭─[$hq_prefix%F{196}$ip%F{46}$flame]─$user_host"
-            if [[ -n "$branch" ]]; then
-              line1+="%F{220}[ $branch]%f"
-            fi
-
-            # Second line
-            local line2="%F{46}╰─>$robot%F{44}$cwd $%f"
-
-            PROMPT="$line1"$'\n'"$line2 "
-          }
-
-          autoload -Uz add-zsh-hook
-          add-zsh-hook precmd build_prompt
         '';
       };
     };

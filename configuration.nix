@@ -141,6 +141,11 @@ in
   # (cf modules/cyber/kittysploit.nix)
   humanix.ai.kittysploit.enable = true;
 
+  # Exegol : environnement pentest Docker (image free). Après switch :
+  # `exegol install free` (tire l'image) puis `exegol start free`.
+  # (cf modules/cyber/exegol.nix)
+  humanix.exegol.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";

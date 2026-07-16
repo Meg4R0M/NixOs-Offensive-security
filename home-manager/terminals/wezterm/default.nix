@@ -23,7 +23,13 @@
           window_padding = { left = 8, right = 8, top = 8, bottom = 8 },
           audible_bell = 'Disabled',
           check_for_updates = false,
+          -- Curseur : bloc vert qui PULSE en douceur (fondu entrée/sortie) au
+          -- lieu d'un clignotement sec -> effet CRT phosphore.
           default_cursor_style = 'BlinkingBlock',
+          cursor_blink_rate = 650,
+          cursor_blink_ease_in = 'EaseIn',
+          cursor_blink_ease_out = 'EaseOut',
+          animation_fps = 60,
         }
 
         if os.getenv('NIRI_SOCKET') then
