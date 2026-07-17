@@ -56,6 +56,15 @@
       url = "github:usrivastava92/widgets.wez";
       flake = false;
     };
+
+    # electric-control-room.wez — thème + fond d'écran animé (sweep APNG + état
+    # dormant idle). flake = false : source Lua + assets APNG recolorés cyan->vert
+    # phosphore dans une dérivation, chargés via dofile + assets_dir (pas de
+    # wezterm.plugin.require -> pas de clone git au runtime).
+    electric-control-room = {
+      url = "github:Tomauskasz/electric-control-room.wez";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

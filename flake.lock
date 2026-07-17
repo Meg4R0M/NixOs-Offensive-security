@@ -229,6 +229,22 @@
         "type": "github"
       }
     },
+    "electric-control-room": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784146073,
+        "narHash": "sha256-6Y0ClU/0m7YNw9ylNbZ+O2cAW/KijwW3GB9vYalafK8=",
+        "owner": "Tomauskasz",
+        "repo": "electric-control-room.wez",
+        "rev": "438d6a828409a2546fae25c841cefea105b03f98",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Tomauskasz",
+        "repo": "electric-control-room.wez",
+        "type": "github"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -672,6 +688,7 @@
         "cachyos": "cachyos",
         "claude": "claude",
         "cshell": "cshell",
+        "electric-control-room": "electric-control-room",
         "home-manager": "home-manager_2",
         "niri-glass": "niri-glass",
         "nixpkgs": "nixpkgs_5",

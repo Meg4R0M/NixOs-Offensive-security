@@ -1,4 +1,33 @@
-{ lib, config, inputs, ... }: {
+{ lib, pkgs, config, inputs, ... }:
+let
+  # electric-control-room.wez recoloré vert phosphore. Deux étapes :
+  #  1. init.lua patché : court-circuit de la valeur par défaut d'assets_dir pour
+  #     ne PAS appeler plugin_root() (qui fait error() hors wezterm.plugin.list(),
+  #     donc casserait le chargement par dofile). On passe assets_dir nous-mêmes.
+  #  2. assets APNG/PNG recolorés cyan -> vert : on écrase les canaux R et B et on
+  #     garde G -> cyan/blanc deviennent phosphore, noir reste noir, alpha préservé.
+  electricGreen = pkgs.runCommand "electric-control-room-green"
+    { nativeBuildInputs = [ pkgs.ffmpeg-headless pkgs.imagemagick ]; }
+    ''
+      mkdir -p $out/assets
+      cp ${inputs.electric-control-room}/plugin/init.lua $out/init.lua
+      chmod +w $out/init.lua
+      substituteInPlace $out/init.lua \
+        --replace-fail 'opt(options, "assets_dir", path_join(plugin_root(), "assets"))' 'options.assets_dir or path_join(plugin_root(), "assets")'
+
+      # Sweep = APNG 720 frames : ffmpeg (seul à gérer l'APNG ; ImageMagick n'en
+      # lit qu'une frame). Recolor lutrgb + downscale 960x540 (glow de fond ténu).
+      ffmpeg -y -loglevel error -i ${inputs.electric-control-room}/assets/control-room-sweep.png \
+        -vf "lutrgb=r=val*0.15:b=val*0.25,scale=960:540:flags=lanczos" \
+        -plays 0 -pred mixed -f apng $out/assets/control-room-sweep.png
+
+      # Dormant = PNG statique : ImageMagick suffit.
+      magick ${inputs.electric-control-room}/assets/control-room-dormant.png \
+        -channel R -evaluate multiply 0.15 +channel \
+        -channel B -evaluate multiply 0.25 +channel \
+        $out/assets/control-room-dormant.png
+    '';
+in {
   config = lib.mkIf (config.humanix.terminal == "wezterm") {
     home-manager.users.${config.humanix.homeManagerUser}.programs.wezterm = {
       enable = true;
@@ -66,6 +95,29 @@
               new_tab_hover      = { bg_color = '#0f160f', fg_color = '#00ff41' },
             },
           }
+
+          -- Electric Control Room : fond animé (sweep APNG orbital) recoloré vert
+          -- phosphore. On garde NOS couleurs (set_colors/set_color_scheme = false)
+          -- et notre curseur bloc ; le plugin ne pose que le background animé + un
+          -- état « dormant » atténué quand la fenêtre est inactive ET idle.
+          -- assets_dir explicite -> pas de dépendance à wezterm.plugin.list().
+          -- dofile sous pcall : si le chargement foire, wezterm démarre quand même.
+          local ecr_ok, electric = pcall(dofile, '${electricGreen}/init.lua')
+          if ecr_ok and type(electric) == 'table' and electric.apply_to_config then
+            electric.apply_to_config(cfg, {
+              assets_dir = '${electricGreen}/assets',
+              set_color_scheme = false,
+              set_colors = false,
+              sweep_opacity = 0.24,
+              dormant_opacity = 0.14,
+              pause_when_idle = true,
+              window_background_opacity = 0.90,
+              cursor_style = 'BlinkingBlock',
+              cursor_blink_rate = 650,
+              cursor_blink_ease_in = 'EaseIn',
+              cursor_blink_ease_out = 'EaseOut',
+            })
+          end
         else
           cfg.color_scheme = 'stylix'
         end
