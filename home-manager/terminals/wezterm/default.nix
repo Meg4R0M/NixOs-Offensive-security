@@ -11,7 +11,7 @@
 
         local cfg = {
           font = wezterm.font_with_fallback {
-            'JetBrainsMono Nerd Font',
+            'VictorMono Nerd Font',
             'Noto Color Emoji',
           },
           font_size = 10.0,

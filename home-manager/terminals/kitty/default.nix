@@ -3,10 +3,10 @@
     home-manager.users.${config.humanix.homeManagerUser}.programs.kitty = {
       enable = true;
       settings = {
-        font_family = "JetBrainsMono NF Medium";
-        bold_font = "JetBrainsMono NF Bold";
-        italic_font = "JetBrainsMono NF Italic";
-        bold_italic_font = "JetBrainsMono NF Bold Italic";
+        font_family = "VictorMono Nerd Font Medium";
+        bold_font = "VictorMono Nerd Font Bold";
+        italic_font = "VictorMono Nerd Font Italic";
+        bold_italic_font = "VictorMono Nerd Font Bold Italic";
 
         font_size = "12.0";
 

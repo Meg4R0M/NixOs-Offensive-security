@@ -112,12 +112,12 @@ in {
         # /desktop/interface — mkDefault pour céder à Stylix (polices/couleurs)
         # quand le theming global est actif.
         "org/gnome/desktop/interface" = lib.mkDefault {
-          document-font-name = "JetBrainsMono Nerd Font Mono 11";
+          document-font-name = "VictorMono Nerd Font Mono 11";
           enable-hot-corners = false;
           font-antialiasing = "grayscale";
           font-hinting = "slight";
-          monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
-          font-name = "JetBrainsMono Nerd Font Mono 11";
+          monospace-font-name = "VictorMono Nerd Font Mono 11";
+          font-name = "VictorMono Nerd Font Mono 11";
           color-scheme = "prefer-dark";
         };
 

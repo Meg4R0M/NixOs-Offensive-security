@@ -57,9 +57,11 @@ in
       };
 
       fonts = {
+        # Victor Mono Nerd Font : équivalent libre de Dank Mono (italique cursive)
+        # + icônes Nerd Font incluses. Monospace SYSTÈME (toutes les apps mono).
         monospace = {
-          package = pkgs.nerd-fonts.jetbrains-mono;
-          name = "JetBrainsMono Nerd Font Mono";
+          package = pkgs.nerd-fonts.victor-mono;
+          name = "VictorMono Nerd Font Mono";
         };
         serif = {
           package = pkgs.nerd-fonts.noto;

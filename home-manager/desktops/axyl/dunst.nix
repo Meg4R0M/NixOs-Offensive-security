@@ -1,6 +1,6 @@
 {
   global = {
-    font = "JetBrainsMono Nerd Font 10";
+    font = "VictorMono Nerd Font 10";
     markup = "full";
     format = "%s\n%b";
     sort = "no";

@@ -312,7 +312,7 @@ in
             accent: #${g.bright};
             background-color: transparent;
             text-color:       @fg;
-            font: "JetBrainsMono Nerd Font Mono 12";
+            font: "VictorMono Nerd Font Mono 12";
         }
         window   { transparency: "real"; location: center; width: 620px;
                    border: 2px solid; border-radius: 10px; border-color: @accent; background-color: @bg; }

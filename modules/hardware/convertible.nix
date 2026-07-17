@@ -34,7 +34,7 @@ let
     if ${pkgs.procps}/bin/pgrep -x wvkbd-mobintl >/dev/null; then
       ${pkgs.procps}/bin/pkill -x wvkbd-mobintl
     else
-      ${pkgs.wvkbd}/bin/wvkbd-mobintl -L 320 --fn "JetBrainsMono Nerd Font 18" &
+      ${pkgs.wvkbd}/bin/wvkbd-mobintl -L 320 --fn "VictorMono Nerd Font 18" &
     fi
   '';
 

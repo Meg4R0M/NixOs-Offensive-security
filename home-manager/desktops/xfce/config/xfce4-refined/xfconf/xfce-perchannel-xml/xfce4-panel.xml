@@ -93,7 +93,7 @@
     </property>
     <property name="plugin-12" type="string" value="clock">
       <property name="digital-layout" type="uint" value="3"/>
-      <property name="digital-time-font" type="string" value="JetBrainsMonoNL Nerd Font Propo Ultra-Bold Italic 11"/>
+      <property name="digital-time-font" type="string" value="VictorMono Nerd Font Propo Ultra-Bold Italic 11"/>
     </property>
     <property name="plugin-13" type="string" value="separator">
       <property name="style" type="uint" value="0"/>

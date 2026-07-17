@@ -3,7 +3,7 @@
 let
   c = config.lib.stylix.colors or null;
   fonts = config.stylix.fonts or null;
-  fontName = if fonts != null then fonts.monospace.name else "JetBrainsMono Nerd Font Mono";
+  fontName = if fonts != null then fonts.monospace.name else "VictorMono Nerd Font Mono";
 in
 lib.mkIf (osConfig.humanix.useStylix or false) {
   programs.rofi = {
