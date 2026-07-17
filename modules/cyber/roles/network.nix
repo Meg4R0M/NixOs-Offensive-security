@@ -5,6 +5,11 @@ with pkgs;
 [
   _3proxy
   aircrack-ng
+  # ── Ajouts audit wifi (Alfa RTL8814AU / mainline rtw88_8814au) ──
+  iw             # config wifi moderne (monitor mode, capacités phy, txpower)
+  wirelesstools  # iwconfig/iwlist (legacy, dépanne parfois)
+  wavemon        # moniteur de signal/canaux ncurses
+  # ───────────────────────────────────────────────────────────────
   airgeddon
   argus
   argus-clients
