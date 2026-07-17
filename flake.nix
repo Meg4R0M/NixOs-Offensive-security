@@ -48,6 +48,14 @@
     # notifs/presse-papier/OSD/lock/wallpaper). v5, module HM + thème par palette.
     # Remplace cshell. Pas de follows (build C++ autonome).
     noctalia.url = "github:noctalia-dev/noctalia/d6405bb0e3324451a3286482137a1c399e1b259b";
+
+    # widgets.wez — widgets de status bar wezterm (CPU/RAM/batterie/réseau/disque).
+    # flake = false : simple arbre source Lua, vendoré dans le store et chargé via
+    # package.path (pas de wezterm.plugin.require -> pas de clone git au runtime).
+    widgets-wez = {
+      url = "github:usrivastava92/widgets.wez";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

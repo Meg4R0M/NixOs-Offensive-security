@@ -677,7 +677,8 @@
         "nixpkgs": "nixpkgs_5",
         "noctalia": "noctalia",
         "rednix": "rednix",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "widgets-wez": "widgets-wez"
       }
     },
     "stylix": {
@@ -853,6 +854,22 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "widgets-wez": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782758605,
+        "narHash": "sha256-E3PaFChFLGLdxcvTJGnKr6adbouFvriagLhFRbhidbk=",
+        "owner": "usrivastava92",
+        "repo": "widgets.wez",
+        "rev": "0eaf01c12abcddc9d0973ed826692754c0b1cb50",
+        "type": "github"
+      },
+      "original": {
+        "owner": "usrivastava92",
+        "repo": "widgets.wez",
         "type": "github"
       }
     }
