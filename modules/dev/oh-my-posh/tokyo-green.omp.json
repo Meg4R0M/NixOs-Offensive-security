@@ -1,0 +1,168 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "leading_diamond": "<#00ff41>\u250f</>",
+      "segments": [
+        {
+          "foreground": "#00ff41",
+          "options": {
+            "time_format": "01/02/2006 @ 3:04:05 PM MST"
+          },
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uf073</> {{ .CurrentDate | date .Format }}]",
+          "type": "time"
+        },
+        {
+          "foreground": "#00ff41",
+          "style": "plain",
+          "template": "[<#d4ffd4>\ueb99</> {{ .UserName }} :: <#d4ffd4>\uf108</> {{ .HostName }}]",
+          "type": "session"
+        },
+        {
+          "foreground": "#00d38a",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\ue266</> RAM: {{ (div ((sub .PhysicalTotalMemory .PhysicalAvailableMemory)|float64) 1073741824.0) }}/{{ (div .PhysicalTotalMemory 1073741824.0) }}GB]",
+          "type": "sysinfo"
+        },
+        {
+          "foreground": "#ffb000",
+          "foreground_templates": [
+            "{{if eq \"Charging\" .State.String}}#00d38a{{end}}",
+            "{{if eq \"Discharging\" .State.String}}#ff2b2b{{end}}",
+            "{{if eq \"Full\" .State.String}}#00ff41{{end}}"
+          ],
+          "options": {
+            "charged_icon": "<#d4ffd4>\ue22f</> ",
+            "charging_icon": "\ueb2d ",
+            "discharging_icon": "<#c8ff00>\uf244</> "
+          },
+          "style": "plain",
+          "template": "[{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }}\uf295]",
+          "type": "battery"
+        },
+        {
+          "foreground": "#00d38a",
+          "options": {
+            "style": "dallas",
+            "threshold": 0
+          },
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uf252</> {{ .FormattedMs }}s]",
+          "type": "executiontime"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "leading_diamond": "<#00ff41>\u2523</>",
+      "segments": [
+        {
+          "foreground": "#00ff41",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uebd8</> Subscription: <#c8ff00>{{ .Name }}</>]",
+          "type": "az"
+        },
+        {
+          "foreground": "#00ff41",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uebd8</> Azure Developer CLI Environment: <#c8ff00>{{ .DefaultEnvironment  }}</> :: <#c8ff00>{{ .Version }}</>]",
+          "type": "azd"
+        },
+        {
+          "foreground": "#00ff41",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uf270</> <#c8ff00>{{ .Profile }}</>{{if .Region}}@<#c8ff00>{{ .Region }}</>{{ end }}]",
+          "type": "aws"
+        },
+        {
+          "foreground": "#00ff41",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uf1a0</> <#c8ff00>{{ .Project }}</> :: <#c8ff00>{{.Account}}</>]",
+          "type": "gcp"
+        },
+        {
+          "foreground": "#00cc33",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\udb84\udcfe</> <#c8ff00>{{.Context}}</>{{if .Namespace}} :: <#c8ff00>{{.Namespace}}</>{{end}}]",
+          "type": "kubectl"
+        },
+        {
+          "foreground": "#00cc33",
+          "style": "diamond",
+          "template": "[{{ if .Error }}{{ .Error }}{{ else }}{{ if .Name }}<#d4ffd4>\uf487</> {{ .Name }}{{ end }}{{ if .Target }} {{ .Target }}{{ end }}{{ end }}]",
+          "type": "project"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "leading_diamond": "<#00ff41>\u2523</>",
+      "segments": [
+        {
+          "foreground": "#00ff41",
+          "options": {
+            "style": "full"
+          },
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uf115</> <#00ff41>{{ .Path }}</>]",
+          "type": "path"
+        },
+        {
+          "foreground": "#00cc33",
+          "options": {
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          },
+          "style": "plain",
+          "template": "[<#d4ffd4>{{ .UpstreamIcon }} </>{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <#d4ffd4>\uf044</> {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} <#d4ffd4>\uf046</> {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} <#d4ffd4>\ueb4b</> {{ .StashCount }}{{ end }}]",
+          "type": "git"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "leading_diamond": "<#00ff41>\u2514\u2500</>",
+      "segments": [
+        {
+          "style": "diamond",
+            "template": "<#c8ff00>[#]</>",
+          "type": "root"
+        },
+        {
+          "foreground": "#00cc33",
+          "style": "diamond",
+          "template": "[<#d4ffd4>\uea6c</> Error, check your command]",
+          "type": "status"
+        },
+        {
+          "style": "diamond",
+          "template": ">",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "secondary_prompt": {
+    "background": "transparent",
+    "template": " "
+  },
+  "valid_line": {
+    "background": "transparent",
+    "template": "> "
+  },
+  "error_line": {
+    "background": "transparent",
+    "template": "<#ff2b2b>\uea87</> "
+  },
+  "version": 4
+}
