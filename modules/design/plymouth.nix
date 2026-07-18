@@ -10,10 +10,33 @@
 let
   cfg = config.humanix.aesthetic.plymouth;
 
-  humanixThemePkg = pkgs.runCommand "humanix-plymouth" { } ''
+  # Thème vert bâti sur le moteur two-step (PROUVÉ au diagnostic spinner) : on
+  # recolore les assets stock du spinner en vert phosphore + un logo HUMANIX en
+  # watermark. Fini le plugin `script` (c'était LUI le bug de rendu, pas le HW).
+  humanixThemePkg = pkgs.runCommand "humanix-plymouth"
+    { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+    sp=${pkgs.plymouth}/share/plymouth/themes/spinner
     d=$out/share/plymouth/themes/humanix
     mkdir -p $d
-    cp ${./plymouth/humanix.script} $d/humanix.script
+
+    # Spinner (throbber + animation) : gris -> vert phosphore, alpha (forme) gardé.
+    for f in "$sp"/throbber-*.png "$sp"/animation-*.png; do
+      magick "$f" -channel RGB -fill '#00ff41' -colorize 100 +channel "$d/$(basename "$f")"
+    done
+    # Prompt passphrase : champ + icônes teintés par luminance (structure gardée).
+    magick "$sp/entry.png"  -fill '#00b32d' -tint 90  "$d/entry.png"
+    magick "$sp/lock.png"   -fill '#00ff41' -tint 100 "$d/lock.png"
+    magick "$sp/bullet.png" -channel RGB -fill '#39ff14' -colorize 100 +channel "$d/bullet.png"
+    for x in capslock keyboard keymap-render; do
+      [ -f "$sp/$x.png" ] && magick "$sp/$x.png" -fill '#00ff41' -tint 100 "$d/$x.png"
+    done
+
+    # Logo HUMANIX vert + glow (Victor Mono Bold) -> watermark.png (two-step).
+    FONT=$(find ${pkgs.nerd-fonts.victor-mono} -name 'VictorMonoNerdFont-Bold.ttf' | head -1)
+    magick -size 900x150 xc:none -font "$FONT" -pointsize 96 -fill '#00ff41' \
+      -gravity center -annotate 0 'HUMANIX' \
+      \( +clone -blur 0x10 \) -compose screen -composite "$d/watermark.png"
+
     cp ${./plymouth/humanix.plymouth} $d/humanix.plymouth
     substituteInPlace $d/humanix.plymouth --replace '@THEMEDIR@' "$d"
   '';

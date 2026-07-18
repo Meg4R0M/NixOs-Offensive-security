@@ -116,15 +116,14 @@ in
     convertible.enable = true;
   };
 
-  # Splash Plymouth — DIAGNOSTIC (2026-07-18) : thème STOCK "spinner" (plugin
-  # two-step C + assets de prompt password) pour ISOLER thème custom vs pipeline
-  # DRM sur ce combo AMD+LUKS+simpledrm. `splash` SANS `quiet` (cf plymouth.nix)
-  # -> si le spinner ne rend pas, le prompt LUKS reste VISIBLE en texte (safe).
-  # Résultats attendus : spinner tourne -> le pipeline est bon, c'était le thème
-  # custom ; toujours du texte -> pipeline DRM (angle suivant : amdgpu en initrd).
-  # Repli immédiat : remettre enable = false. Custom vert = theme = "humanix".
+  # Splash Plymouth : thème vert HUMANIX (logo phosphore + spinner + prompt LUKS
+  # vert), sur le moteur two-step PROUVÉ au diagnostic (le pipeline DRM rend bien ;
+  # l'ancien échec = le plugin `script`). `splash` SANS `quiet` (cf plymouth.nix)
+  # -> les logs noyau/init défilent (vibe dmesg voulue), le splash s'affiche sur
+  # le prompt de déchiffrement + le spinner. Repli = enable=false ; diag stock =
+  # theme = "spinner".
   humanix.aesthetic.plymouth.enable = true;
-  humanix.aesthetic.plymouth.theme = "spinner";
+  humanix.aesthetic.plymouth.theme = "humanix";
 
   # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
   # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,

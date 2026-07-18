@@ -1,8 +1,37 @@
 [Plymouth Theme]
 Name=Humanix
-Description=Humanix phosphor-green boot splash
-ModuleName=script
+Description=Humanix — splash de boot phosphore vert (logo HUMANIX + spinner).
+ModuleName=two-step
 
-[script]
+[two-step]
+Font=Cantarell 12
+TitleFont=Cantarell Light 28
 ImageDir=@THEMEDIR@
-ScriptFile=@THEMEDIR@/humanix.script
+
+# Logo HUMANIX (watermark.png) centré, en haut ; prompt passphrase au centre ;
+# spinner (animation-*.png) en dessous. Fond noir, barre de progression verte.
+WatermarkHorizontalAlignment=.5
+WatermarkVerticalAlignment=.32
+DialogHorizontalAlignment=.5
+DialogVerticalAlignment=.5
+TitleHorizontalAlignment=.5
+TitleVerticalAlignment=.5
+HorizontalAlignment=.5
+VerticalAlignment=.66
+
+Transition=none
+TransitionDuration=0.0
+BackgroundStartColor=0x000000
+BackgroundEndColor=0x000000
+ProgressBarBackgroundColor=0x1f4d1f
+ProgressBarForegroundColor=0x00ff41
+MessageBelowAnimation=true
+
+[boot-up]
+UseEndAnimation=false
+
+[shutdown]
+UseEndAnimation=false
+
+[reboot]
+UseEndAnimation=false
