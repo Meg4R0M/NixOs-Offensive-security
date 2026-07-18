@@ -298,7 +298,6 @@ in
         exec ${pkgs.chromium}/bin/chromium --app=${url} --class=humanix-${id} \
           --user-data-dir="$HOME/.local/share/humanix-webapps/${id}" "$@"
       '';
-      waWhatsapp = webApp "whatsapp" "https://web.whatsapp.com";
       waChatgpt  = webApp "chatgpt"  "https://chatgpt.com";
       waGemini   = webApp "gemini"   "https://gemini.google.com/app";
       waGrok     = webApp "grok"     "https://grok.com";
@@ -377,11 +376,11 @@ in
         # ---- Apps épinglées par workspace (Humanix) ----
         antigravity vscodium              # WS2 : IDE agentique Google + éditeur codium
         google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
-        discord teams-for-linux slack      # WS4 : chat pro/perso (+ WhatsApp web)
+        discord teams-for-linux ferdium    # WS4 : Discord/Teams NATIFS (appels/partage écran) + Ferdium (Slack/WhatsApp/… en 1 seul Chromium = léger)
         thunderbird                        # WS6 : mail
       ]) ++ [
         certFrNews veilleBlogs netmon
-        waWhatsapp waChatgpt waGemini waGrok   # web-apps (WS4/WS5)
+        waChatgpt waGemini waGrok          # web-apps LLM (WS5) — WhatsApp déplacé dans Ferdium
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
       programs.swaylock.enable = true;
 
@@ -476,10 +475,9 @@ in
         spawn-at-startup "codium"
         spawn-at-startup "firefox"
         spawn-at-startup "google-chrome-stable"
-        spawn-sh-at-startup "humanix-whatsapp"
         spawn-at-startup "Discord"
         spawn-at-startup "teams-for-linux"
-        spawn-at-startup "slack"
+        spawn-at-startup "ferdium"
         spawn-at-startup "claude-desktop"
         spawn-sh-at-startup "humanix-chatgpt"
         spawn-sh-at-startup "humanix-gemini"
@@ -526,10 +524,9 @@ in
         window-rule { match app-id="[Cc]odium"; open-on-workspace "ide"; }
         window-rule { match app-id="firefox"; open-on-workspace "web"; }
         window-rule { match app-id="google-chrome"; open-on-workspace "web"; }
-        window-rule { match app-id="whatsapp"; open-on-workspace "chat"; }
+        window-rule { match app-id="[Ff]erdium"; open-on-workspace "chat"; }
         window-rule { match app-id="[Dd]iscord"; open-on-workspace "chat"; }
         window-rule { match app-id="teams"; open-on-workspace "chat"; }
-        window-rule { match app-id="[Ss]lack"; open-on-workspace "chat"; }
         window-rule { match app-id="^electron$"; open-on-workspace "llm"; }
         window-rule { match app-id="chatgpt"; open-on-workspace "llm"; }
         window-rule { match app-id="gemini"; open-on-workspace "llm"; }
