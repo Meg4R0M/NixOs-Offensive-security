@@ -14,7 +14,9 @@ else
   colorize() {
     sed -e 's/\[/${color2}[${color}/g' \
         -e 's/\]/${color2}]${color}/g' \
-        -e 's/\(├\|└\|│\|─\|::\)/${color2}&${color}/g'
+        -e 's/\(├\|└\|│\|─\|::\)/${color2}&${color}/g' \
+        -e 's/[[:space:]]*$//' \
+        -e 's/^/${alignr}/'
   }
 fi
 
