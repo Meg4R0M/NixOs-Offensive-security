@@ -181,9 +181,9 @@ in
   humanix.ai.defectdojo.enable = false;
 
   # KittySploit : framework d'exploitation + serveur MCP (piloté par Claude, sans
-  # API). ACTIVÉ : après switch, lance une fois `kittysploit` (clone + venv au 1er
-  # run, réseau requis) puis `kittysploit-setup-claude` pour brancher le MCP.
-  # (cf modules/cyber/kittysploit.nix)
+  # API). ACTIVÉ + `autostart` (défaut) : au login, un service systemd user fait
+  # le bootstrap (clone + venv, réseau) PUIS enregistre le MCP auprès de Claude
+  # (Code + Desktop) -> prêt sans étape manuelle. (cf modules/cyber/kittysploit.nix)
   humanix.ai.kittysploit.enable = true;
 
   # Exegol : environnement pentest Docker (image free). Après switch :

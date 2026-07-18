@@ -55,6 +55,9 @@ let
       update)
         echo "[*] Mise à jour (git pull + deps)..."
         git pull --ff-only && .venv/bin/pip install -e . || true ;;
+      bootstrap)
+        # clone + venv déjà faits ci-dessus -> on sort (préchauffage au login).
+        echo "[*] KittySploit prêt (clone + venv OK)." ;;
       *)
         exec .venv/bin/python kittyconsole.py "$@" ;;
     esac
@@ -110,11 +113,47 @@ PY
     echo "→ Au 1er appel, KittySploit se clone + installe (réseau, ~1-2 min)."
     echo "→ Redémarre Claude Desktop (ou lance 'claude') pour le charger."
   '';
+
+  # Autostart au login (idempotent) : bootstrap (clone+venv, best-effort si pas de
+  # réseau) PUIS enregistrement du MCP auprès de Claude (Code + Desktop). Rend
+  # KittySploit « prêt par défaut » sans étape manuelle.
+  kittyAutostart = pkgs.writeShellScript "kittysploit-autostart" ''
+    KITTY_MODE=bootstrap ${kittyFHS}/bin/kittysploit >/dev/null 2>&1 || true
+    ${kittySetup}/bin/kittysploit-setup-claude >/dev/null 2>&1 || true
+  '';
 in {
-  options.humanix.ai.kittysploit.enable = mkEnableOption
-    "KittySploit — framework d'exploitation Python + serveur MCP (piloté par Claude, sans API). Jeune : opt-in";
+  options.humanix.ai.kittysploit = {
+    enable = mkEnableOption
+      "KittySploit — framework d'exploitation Python + serveur MCP (piloté par Claude, sans API). Jeune : opt-in";
+
+    autostart = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Au login (service systemd user oneshot) : bootstrap (clone + venv) PUIS
+        enregistrement du MCP auprès de Claude (Code + Desktop) -> KittySploit
+        prêt par défaut, sans étape manuelle. false = le faire à la main via
+        `kittysploit` (1er run) + `kittysploit-setup-claude`.
+      '';
+    };
+  };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ kittyFHS kittyMcp kittyUpdate kittySetup ];
+
+    # « Démarré par défaut » : au login, bootstrap + enregistrement MCP Claude.
+    # oneshot idempotent (le clone/venv se skippe une fois fait ; l'enregistrement
+    # gère « déjà présent »). Best-effort réseau (|| true dans le script).
+    systemd.user.services.kittysploit-setup = mkIf cfg.autostart {
+      description = "KittySploit — bootstrap + enregistrement du MCP auprès de Claude";
+      wantedBy = [ "default.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${kittyAutostart}";
+        # PATH pour que le script trouve `claude` (Claude Code CLI) s'il est là.
+        Environment = "PATH=/run/current-system/sw/bin:/run/wrappers/bin";
+      };
+    };
   };
 }
