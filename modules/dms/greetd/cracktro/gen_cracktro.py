@@ -3,13 +3,15 @@
 # La font 8x8 (domaine public, dhepper/font8x8) et le texte sont encodés en pur
 # contrôle de flux (if / ?:) -> aucun tableau, aucune indexation dynamique, aucun
 # opérateur bit-a-bit : 100% conforme GLSL ES 1.00 (contexte GLES2 de glpaper).
-import re, sys
+import re, sys, os
 
-FONT_H = "/tmp/font8x8_basic.h"
+HERE = os.path.dirname(os.path.abspath(__file__))
+FONT_H = os.path.join(HERE, "font8x8_basic.h")
 
 # ---- texte ----
 LOGO = "HUMANIX"
 MSG = ("HUMANIX CRACKTRO 2026 .... CODED BY MEG4R0M .... "
+       "MUSIC BY ERIC SKIFF - RESISTOR ANTHEMS - CC-BY .... "
        "WELCOME TO THE MACHINE .... GREETINGS TO THE WHOLE SCENE .... "
        "PARADOX .. RAZOR 1911 .. RELOADED .. FAIRLIGHT .... "
        "THE HACK IS BACK .... STAY PHOSPHOR .... WRAP     ")
@@ -215,7 +217,7 @@ def build(uniform_block, time_tok, res_tok, header=""):
 # glpaper : #version 100, uniforms time/resolution
 frag = build("uniform float time;\nuniform vec2 resolution;",
              "time", "resolution", header="#version 100\n")
-open("/tmp/cracktro.frag", "w").write(frag)
+open(os.path.join(HERE, "cracktro.frag"), "w").write(frag)
 
 # preview glslViewer : u_time/u_resolution
 prev = build("uniform float u_time;\nuniform vec2 u_resolution;",

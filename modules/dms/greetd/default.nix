@@ -78,12 +78,19 @@ let
     exec ${pkgs.glpaper}/bin/glpaper -f ${toString crack.fps} "$name" ${shaderFile}
   '';
 
-  # Chiptune : xmp en boucle sur le module Amiga. Best-effort — si pas de sortie
-  # audio (device occupé / absent), xmp sort et le visuel continue. Inerte si
-  # aucun module n'est défini.
+  # Chiptune en boucle. Lecteur auto-détecté : xmp pour les modules tracker
+  # (.mod/.xm/.it…), mpv pour le reste (.mp3/.ogg/.flac). Best-effort — si pas
+  # de sortie audio (device occupé/absent) le lecteur sort, le visuel continue.
+  # Inerte si aucun morceau n'est défini.
   crackMusic = pkgs.writeShellScript "cracktro-music" ''
-    ${lib.optionalString (crack.module != null) ''
-      exec ${pkgs.xmp}/bin/xmp --loop ${crack.module} >/dev/null 2>&1
+    ${lib.optionalString (crack.music != null) ''
+      case "${crack.music}" in
+        *.mod|*.MOD|*.xm|*.XM|*.it|*.IT|*.s3m|*.S3M|*.med|*.MED|*.mtm|*.669|*.far|*.stm|*.okt)
+          exec ${pkgs.xmp}/bin/xmp --loop ${crack.music} >/dev/null 2>&1 ;;
+        *)
+          exec ${pkgs.mpv}/bin/mpv --no-video --loop-file=inf --volume=75 \
+            --no-terminal ${crack.music} >/dev/null 2>&1 ;;
+      esac
     ''}
     exit 0
   '';
@@ -112,11 +119,16 @@ in
   options.humanix.login.cracktro = {
     enable = lib.mkEnableOption "Login cracktro demoscene (sway + glpaper + gtkgreet + chiptune MOD)";
 
-    module = lib.mkOption {
+    music = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
+      default = ./cracktro/a-night-of-dizzy-spells.mp3;
       example = lib.literalExpression "./assets/tune.mod";
-      description = "Module Amiga (.mod/.xm/.s3m...) joué en boucle au login via xmp. null = pas de musique.";
+      description = ''
+        Morceau joué en boucle au login. Lecteur auto-détecté : xmp pour un
+        module tracker (.mod/.xm/.it/.s3m…), mpv pour l'audio (.mp3/.ogg/.flac).
+        null = pas de musique. Défaut = « A Night Of Dizzy Spells » d'Eric Skiff
+        (Resistor Anthems, CC-BY, cf cracktro/MUSIC-NOTICE.md).
+      '';
     };
 
     fps = lib.mkOption {
@@ -146,7 +158,7 @@ in
     };
 
     environment.systemPackages = [ pkgs.tuigreet ]
-      ++ lib.optionals crack.enable [ pkgs.sway pkgs.glpaper pkgs.gtkgreet pkgs.xmp ];
+      ++ lib.optionals crack.enable [ pkgs.sway pkgs.glpaper pkgs.gtkgreet pkgs.xmp pkgs.mpv ];
 
     # L'user greeter a besoin du GPU (glpaper) et de l'audio (xmp) en mode cracktro.
     users.users.greeter.extraGroups = lib.mkIf crack.enable [ "video" "render" "audio" "input" ];

@@ -121,6 +121,13 @@ in
   # Stylix), fiable et sans ESC. Le graphique pourra être retenté plus tard.
   humanix.aesthetic.plymouth.enable = false;
 
+  # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
+  # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,
+  # plasma, starfield, logo + scroller sinus) + gtkgreet vert + chiptune 8-bit
+  # « A Night Of Dizzy Spells » (Eric Skiff, CC-BY). Repli = enable=false ;
+  # échappatoire si le login graphique casse : Ctrl+Alt+F2 -> TTY texte.
+  humanix.login.cracktro.enable = true;
+
   # Profil d'ambiance (cf modules/design/aesthetic.nix) : showtime | work | client.
   # showtime = wallpaper animé + bannière MOTD. Passe en "client" en clientèle.
   humanix.aesthetic.profile = "showtime";
