@@ -30,7 +30,13 @@ in {
         efiSupport = true;
         device = "nodev";          # EFI (pas de MBR/BIOS)
         configurationLimit = 5;
-        gfxmodeEfi = "auto";
+        # Résolution native de l'écran (eDP 2880x1800) : menu net ET, via
+        # gfxpayloadEfi="keep", framebuffer haute-déf transmis à l'initrd -> prompt
+        # passphrase LUKS / Plymouth nets (fin de la régression basse-déf héritée du
+        # passage systemd-boot -> GRUB). Repli 1920x1080 puis auto si le GOP refuse
+        # le mode natif. Menu trop petit à 2880 ? -> réduire à "1920x1080".
+        gfxmodeEfi = "2880x1800,1920x1080,auto";
+        gfxpayloadEfi = "keep";
         theme = grubTheme;         # la racine du repo contient theme.txt
       };
     };
