@@ -283,7 +283,8 @@ in
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-cal.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-cyber.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-veille2.conf"
-        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-netmon.conf"'';
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-netmon.conf"
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-keys.conf"'';
 
       # Terminal + rofi verts (confs dédiées ci-dessous).
       # wezterm est session-aware (vert CRT quand NIRI_SOCKET est défini).
@@ -390,6 +391,7 @@ in
       xdg.configFile."conky/haxos-cyber.conf".source = ./haxos-cyber.conf;
       xdg.configFile."conky/haxos-veille2.conf".source = ./haxos-veille2.conf;
       xdg.configFile."conky/haxos-netmon.conf".source = ./haxos-netmon.conf;
+      xdg.configFile."conky/haxos-keys.conf".source = ./haxos-keys.conf;
       xdg.configFile."waybar-niri/config".text = waybarNiriConfig;
       xdg.configFile."waybar-niri/style.css".text = waybarNiriCss;
 
