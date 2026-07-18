@@ -132,9 +132,14 @@ in
   # texte console devient vert. (console.colors pose aussi vt.default_* en
   # kernelParams -> vaut dès le boot précoce, fini le texte « fade ».)
   stylix.targets.console.enable = lib.mkForce false;
+  # Palette VIVE et VARIÉE : corps de texte vert phosphore (index 7), mais accents
+  # bien distincts -> les statuts systemd [OK]/[FAILED]/warn pètent, et toute sortie
+  # ANSI (TTY, logs colorés) sort en vraies couleurs. Le gras (15) = blanc-vert.
   console.colors = [
-    "0a0f0a" "ff2b2b" "00ff41" "ffb000" "00b32d" "00cc33" "00ff87" "00d33a"
-    "1f4d1f" "ff5c5c" "39ff14" "ffd257" "00e63a" "5cffb0" "8affc8" "d4ffd4"
+    "0a0f0a" "ff2b2b" "00ff41" "ffb000"  # 0-3  noir / rouge(FAIL) / vert(OK) / ambre(warn)
+    "2f81f7" "ff5cd6" "00e5d0" "00c83c"  # 4-7  bleu / magenta / cyan / VERT (fg défaut)
+    "1f4d1f" "ff6b6b" "39ff14" "ffd257"  # 8-11 brights
+    "6ba9ff" "ff8ce6" "5cffe8" "eafff0"  # 12-15 brights + blanc-vert
   ];
 
   # Menu systemd-boot : résolution max (texte net) + timeout court.
