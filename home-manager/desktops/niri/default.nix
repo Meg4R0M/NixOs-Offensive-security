@@ -377,7 +377,7 @@ in
         antigravity vscodium              # WS2 : IDE agentique Google + éditeur codium
         google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
         discord teams-for-linux ferdium    # WS4 : Discord/Teams NATIFS (appels/partage écran) + Ferdium (Slack/WhatsApp/… en 1 seul Chromium = léger)
-        thunderbird                        # WS6 : mail
+        keepassxc                          # WS6 : coffre KeePassXC (+ LocalSend système, transfert)
       ]) ++ [
         certFrNews veilleBlogs netmon
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
@@ -482,7 +482,8 @@ in
         spawn-sh-at-startup "humanix-chatgpt"
         spawn-sh-at-startup "humanix-gemini"
         spawn-sh-at-startup "humanix-grok"
-        spawn-at-startup "thunderbird"
+        spawn-at-startup "localsend_app"
+        spawn-at-startup "keepassxc"
 
         hotkey-overlay { skip-at-startup; }
 
@@ -530,7 +531,8 @@ in
         window-rule { match app-id="^electron$"; open-on-workspace "llm"; }
         // IA/chat -> Ferdium (WS chat). Claude Desktop (app-id "electron", règle
         // ci-dessus) est SEUL sur llm => il remplit l'écran.
-        window-rule { match app-id="thunderbird"; open-on-workspace "mail"; }
+        window-rule { match app-id="localsend"; open-on-workspace "mail"; }
+        window-rule { match app-id="[Kk]ee[Pp]ass"; open-on-workspace "mail"; }
 
         // ----- Raccourcis (Mod = Super) -----
         binds {
