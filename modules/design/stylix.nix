@@ -11,6 +11,21 @@ let
 
   # Couleur du jeu d'icônes Tela-circle (mapping Nix-Relic pour Cyberpunk).
   iconColour = "yellow";
+
+  # Curseurs Protozoa (animés, grynays/gnome-look) — pas dans nixpkgs, on les
+  # récupère depuis les zips ponce.cc (slackbuilds). Chaque zip = un <Thème>.tar.gz
+  # (+ aperçu jpg) -> on désarchive les 4 thèmes dans share/icons/. Variantes :
+  # Protozoa (défaut), Protozoa-Blu, Protozoa-grey, Protozoa-Red.
+  fetchZip = url: sha256: pkgs.fetchurl { inherit url sha256; };
+  protozoaCursors = pkgs.runCommand "protozoa-cursors"
+    { nativeBuildInputs = [ pkgs.unzip ]; } ''
+    mkdir -p $out/share/icons
+    w=$(mktemp -d); cd "$w"
+    unzip -qo ${fetchZip "http://ponce.cc/slackware/sources/repo/protozoa_by_grynays-d2n7qil.zip" "0ddjfgzzrb0rmpwz0d9zi0xwk7y5p7dgzx5fzr3qsanxja0v3k37"}
+    unzip -qo ${fetchZip "http://ponce.cc/slackware/sources/repo/protozoa_blu_and_grey_by_grynays-d2yy6sr.zip" "1kri1mcnsj5r5xw8jwma5i87wi77v2dr6yr6w87j47vx5glnvxjm"}
+    unzip -qo ${fetchZip "http://ponce.cc/slackware/sources/repo/protozoa_red_by_grynays-d4ma7em.zip" "0zpxaf8bq144ysicdss1ca2f8hch0lh8f1w3gw6clwaq0wrzb9va"}
+    for t in *.tar.gz; do ${pkgs.gnutar}/bin/tar -xzf "$t" -C $out/share/icons/; done
+  '';
 in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
@@ -51,9 +66,9 @@ in
       };
 
       cursor = {
-        package = pkgs.bibata-cursors;
-        name = "Bibata-Modern-Ice";
-        size = 24;
+        package = protozoaCursors;
+        name = "Protozoa";   # variantes : Protozoa-Blu | Protozoa-grey | Protozoa-red
+        size = 28;
       };
 
       fonts = {

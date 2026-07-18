@@ -301,6 +301,8 @@ in
       waChatgpt  = webApp "chatgpt"  "https://chatgpt.com";
       waGemini   = webApp "gemini"   "https://gemini.google.com/app";
       waGrok     = webApp "grok"     "https://grok.com";
+      waClaude   = webApp "claude"   "https://claude.ai";
+      waDeepseek = webApp "deepseek" "https://chat.deepseek.com";
 
       # ---- rofi : thème CRT vert ----
       rofiMrRobot = ''
@@ -380,7 +382,7 @@ in
         thunderbird                        # WS6 : mail
       ]) ++ [
         certFrNews veilleBlogs netmon
-        waChatgpt waGemini waGrok          # web-apps LLM (WS5) — WhatsApp déplacé dans Ferdium
+        waChatgpt waGemini waGrok waClaude waDeepseek   # web-apps LLM (WS5) : les 5 IA
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
       programs.swaylock.enable = true;
 
@@ -531,6 +533,8 @@ in
         window-rule { match app-id="chatgpt"; open-on-workspace "llm"; }
         window-rule { match app-id="gemini"; open-on-workspace "llm"; }
         window-rule { match app-id="grok"; open-on-workspace "llm"; }
+        window-rule { match app-id="humanix-claude"; open-on-workspace "llm"; }
+        window-rule { match app-id="humanix-deepseek"; open-on-workspace "llm"; }
         window-rule { match app-id="thunderbird"; open-on-workspace "mail"; }
 
         // ----- Raccourcis (Mod = Super) -----
