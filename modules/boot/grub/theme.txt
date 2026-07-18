@@ -1,0 +1,64 @@
+# Humanix — thème GRUB phosphore vert (Mr Robot)
+# Les .pf2 sont générés par le module (grub-mkfont -n "HumanixMono").
+
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#000000"
+terminal-font: "HumanixMono Regular 18"
+terminal-left: "8%"
+terminal-top: "8%"
+terminal-width: "84%"
+terminal-height: "84%"
+terminal-border: "0"
+
+# Titre HUMANIX
++ label {
+  top = 13%
+  left = 0
+  width = 100%
+  align = "center"
+  color = "#00ff41"
+  font = "HumanixMono Bold 32"
+  text = "HUMANIX"
+}
+
+# Sous-titre
++ label {
+  top = 21%
+  left = 0
+  width = 100%
+  align = "center"
+  color = "#00b32d"
+  font = "HumanixMono Regular 14"
+  text = "ACCES RESTREINT // la bidouille est reine"
+}
+
+# Menu de boot
++ boot_menu {
+  left = 25%
+  width = 50%
+  top = 33%
+  height = 44%
+  item_font = "HumanixMono Regular 18"
+  item_color = "#00b32d"
+  selected_item_color = "#39ff14"
+  item_height = 36
+  item_padding = 8
+  item_spacing = 6
+  scrollbar = false
+}
+
+# Barre de compte à rebours
++ progress_bar {
+  id = "__timeout__"
+  left = 25%
+  width = 50%
+  top = 84%
+  height = 20
+  font = "HumanixMono Regular 14"
+  text_color = "#d4ffd4"
+  fg_color = "#00ff41"
+  bg_color = "#0a1f0a"
+  border_color = "#1f4d1f"
+  text = "Boot dans @TIMEOUT@ s  //  ESC = menu"
+}
