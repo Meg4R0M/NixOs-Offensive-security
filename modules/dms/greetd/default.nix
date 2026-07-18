@@ -75,7 +75,21 @@ let
     done
     # Aucun output détecté -> ne PAS lancer glpaper avec un nom bidon.
     [ -z "$name" ] && exit 0
-    exec ${pkgs.glpaper}/bin/glpaper -f ${toString crack.fps} "$name" ${shaderFile}
+
+    # Résolution du MODE COURANT -> passée à glpaper (-W/-H) pour un rendu à la
+    # def native EXACTE (belt-and-suspenders avec `output * scale 1` côté sway ;
+    # évite tout flou/basse def si un scale se glissait). Repli = def par défaut
+    # de glpaper (mode natif) si le parse échoue.
+    json=$(${pkgs.sway}/bin/swaymsg -t get_outputs -r 2>/dev/null)
+    w=$(printf '%s' "$json" | ${pkgs.gnugrep}/bin/grep -A2 '"current_mode"' \
+      | ${pkgs.gnugrep}/bin/grep -oE '"width": *[0-9]+' | ${pkgs.gnugrep}/bin/grep -oE '[0-9]+' | ${pkgs.coreutils}/bin/head -1)
+    h=$(printf '%s' "$json" | ${pkgs.gnugrep}/bin/grep -A2 '"current_mode"' \
+      | ${pkgs.gnugrep}/bin/grep -oE '"height": *[0-9]+' | ${pkgs.gnugrep}/bin/grep -oE '[0-9]+' | ${pkgs.coreutils}/bin/head -1)
+    wh=""
+    if [ -n "$w" ] && [ -n "$h" ] && [ "$w" -gt 0 ] 2>/dev/null && [ "$h" -gt 0 ] 2>/dev/null; then
+      wh="-W $w -H $h"
+    fi
+    exec ${pkgs.glpaper}/bin/glpaper $wh -f ${toString crack.fps} "$name" ${shaderFile}
   '';
 
   # Chiptune en boucle. Lecteur auto-détecté : xmp pour les modules tracker
@@ -95,20 +109,39 @@ let
     exit 0
   '';
 
-  # Session sway du greeter : fond noir, cracktro en calque background, gtkgreet
-  # en layer-shell par-dessus. sway se ferme quand gtkgreet a fini (login validé).
-  swayCfg = pkgs.writeText "cracktro-sway.conf" ''
-    exec ${crackBg}
-    exec ${crackMusic}
-    exec "${pkgs.gtkgreet}/bin/gtkgreet -l -c niri-session -s ${cssFile}; ${pkgs.sway}/bin/swaymsg exit"
+  # Sortie propre du greeter : COUPE glpaper + le lecteur audio (sinon ils
+  # survivent à sway -> le son tourne en boucle dans niri après login), puis
+  # quitte sway. pkill -f <chemin> = précis (le chemin est dans l'argv) et
+  # robuste à un nom de process wrappé.
+  crackExit = pkgs.writeShellScript "cracktro-exit" ''
+    ${pkgs.procps}/bin/pkill -f ${shaderFile} 2>/dev/null || true
+    ${lib.optionalString (crack.music != null)
+      "${pkgs.procps}/bin/pkill -f ${crack.music} 2>/dev/null || true"}
+    ${pkgs.sway}/bin/swaymsg exit
+  '';
 
+  # Session sway du greeter : clavier FR, écran natif (scale 1 comme niri), fond
+  # noir, cracktro en calque background, gtkgreet en layer-shell par-dessus. À la
+  # fin de gtkgreet -> crackExit (coupe fond+son puis quitte sway = lance session).
+  swayCfg = pkgs.writeText "cracktro-sway.conf" ''
+    # Clavier FR (azerty, variant oss) = même dispo que niri / console.
+    input "type:keyboard" xkb_layout "fr"
+    input "type:keyboard" xkb_variant "oss"
+
+    # Scale 1.0 comme niri -> def native (pas de sur-échantillonnage/flou).
     output * bg #000000 solid_color
+    output * scale 1
+
     default_border none
     seat * hide_cursor 6000
     xwayland disable
 
+    exec ${crackBg}
+    exec ${crackMusic}
+    exec "${pkgs.gtkgreet}/bin/gtkgreet -l -c niri-session -s ${cssFile}; ${crackExit}"
+
     # Échappatoire clavier (au pire Ctrl+Alt+F2 -> TTY texte reste dispo).
-    bindsym Mod4+Shift+q exec "${pkgs.sway}/bin/swaymsg exit"
+    bindsym Mod4+Shift+q exec ${crackExit}
   '';
 
   # --unsupported-gpu : laisse sway démarrer sur llvmpipe (VM de test) ; no-op sur
