@@ -141,6 +141,12 @@ in
   boot.loader.systemd-boot.consoleMode = lib.mkForce "max";
   boot.loader.timeout = lib.mkForce 3;
 
+  # Boot plus court : NetworkManager-wait-online bloque multi-user.target ~10 s en
+  # attendant le réseau (inutile AVANT le login) -> greetd démarre plus tôt, moins
+  # d'écritures avant le login. Revert = enable = true. (systemd-analyze blame pour
+  # traquer d'autres lenteurs si besoin.)
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
   # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,
   # plasma, starfield, logo + scroller sinus) + gtkgreet vert + chiptune 8-bit
