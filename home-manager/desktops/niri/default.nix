@@ -298,11 +298,8 @@ in
         exec ${pkgs.chromium}/bin/chromium --app=${url} --class=humanix-${id} \
           --user-data-dir="$HOME/.local/share/humanix-webapps/${id}" "$@"
       '';
-      waChatgpt  = webApp "chatgpt"  "https://chatgpt.com";
-      waGemini   = webApp "gemini"   "https://gemini.google.com/app";
-      waGrok     = webApp "grok"     "https://grok.com";
-      waClaude   = webApp "claude"   "https://claude.ai";
-      waDeepseek = webApp "deepseek" "https://chat.deepseek.com";
+      # (IA/chat -> Ferdium ; Claude = Claude Desktop natif plein écran sur WS llm.
+      #  webApp reste dispo si un jour tu veux un service en chromium --app.)
 
       # ---- rofi : thème CRT vert ----
       rofiMrRobot = ''
@@ -382,7 +379,6 @@ in
         thunderbird                        # WS6 : mail
       ]) ++ [
         certFrNews veilleBlogs netmon
-        waChatgpt waGemini waGrok waClaude waDeepseek   # web-apps LLM (WS5) : les 5 IA
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
       programs.swaylock.enable = true;
 
@@ -530,11 +526,8 @@ in
         window-rule { match app-id="[Dd]iscord"; open-on-workspace "chat"; }
         window-rule { match app-id="teams"; open-on-workspace "chat"; }
         window-rule { match app-id="^electron$"; open-on-workspace "llm"; }
-        window-rule { match app-id="chatgpt"; open-on-workspace "llm"; }
-        window-rule { match app-id="gemini"; open-on-workspace "llm"; }
-        window-rule { match app-id="grok"; open-on-workspace "llm"; }
-        window-rule { match app-id="humanix-claude"; open-on-workspace "llm"; }
-        window-rule { match app-id="humanix-deepseek"; open-on-workspace "llm"; }
+        // IA/chat -> Ferdium (WS chat). Claude Desktop (app-id "electron", règle
+        // ci-dessus) est SEUL sur llm => il remplit l'écran.
         window-rule { match app-id="thunderbird"; open-on-workspace "mail"; }
 
         // ----- Raccourcis (Mod = Super) -----
