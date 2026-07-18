@@ -60,18 +60,21 @@ let
   # glpaper matche l'output par nom EXACT (strcmp) : pas de '*'. On interroge sway
   # pour récupérer le 1er output et on le lui passe (jq absent -> grep/cut).
   crackBg = pkgs.writeShellScript "cracktro-bg" ''
+    # glpaper matche l'output par nom EXACT (strcmp). swaymsg -t get_outputs
+    # renvoie du JSON PRETTY (espaces après ':' + retours ligne) MÊME avec -r ->
+    # un grep '"name":"..."' échoue. Parser sed tolérant aux espaces à la place.
     name=""
     i=0
-    while [ "$i" -lt 50 ]; do
+    while [ "$i" -lt 100 ]; do
       name=$(${pkgs.sway}/bin/swaymsg -t get_outputs -r 2>/dev/null \
-        | ${pkgs.gnugrep}/bin/grep -o '"name":"[^"]*"' \
-        | ${pkgs.coreutils}/bin/head -1 \
-        | ${pkgs.coreutils}/bin/cut -d'"' -f4)
+        | ${pkgs.gnused}/bin/sed -nE 's/.*"name"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/p' \
+        | ${pkgs.coreutils}/bin/head -1)
       [ -n "$name" ] && break
       ${pkgs.coreutils}/bin/sleep 0.1
       i=$((i + 1))
     done
-    [ -z "$name" ] && name="eDP-1"
+    # Aucun output détecté -> ne PAS lancer glpaper avec un nom bidon.
+    [ -z "$name" ] && exit 0
     exec ${pkgs.glpaper}/bin/glpaper -f ${toString crack.fps} "$name" ${shaderFile}
   '';
 
