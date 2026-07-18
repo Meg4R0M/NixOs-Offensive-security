@@ -1,14 +1,16 @@
 /* ─────────────────────────────────────────────────────────────────────────
- * Humanix · gtkgreet — overlay login cracktro (GTK3 CSS)
- * Fenêtre transparente -> le cracktro glpaper reste visible derrière ; la boîte
- * de login = panneau vert phosphore translucide, façon terminal armé.
+ * Humanix · gtkgreet — barre de login CRACKTRO : UNE seule ligne, compacte.
+ * gtkgreet est patché côté C (input_box horizontal, largeurs 384 réduites,
+ * horloge masquée) ; ici : hauteur ~50px, police 20px, vert phosphore, fond
+ * translucide (le cracktro glpaper reste visible derrière).
  * ───────────────────────────────────────────────────────────────────────── */
 
 * {
   font-family: "VictorMono Nerd Font Mono", "VictorMono Nerd Font", monospace;
-  font-size: 13pt;
+  font-size: 20px;
   color: #00ff41;
   border-radius: 0;
+  outline: none;
 }
 
 /* fenêtre + conteneurs transparents : le shader passe au travers */
@@ -16,52 +18,55 @@ window,
 .background,
 box,
 grid,
+revealer,
 scrolledwindow {
   background-color: transparent;
   background-image: none;
 }
 
-/* la boîte de login : cadre vert glossy sur fond quasi-noir translucide */
-box.horizontal,
-.window-box,
+/* la barre : panneau vert phosphore translucide, fin (~50px de haut) */
 #window {
-  background-color: rgba(0, 12, 4, 0.82);
-  border: 2px solid #00ff41;
-  padding: 18px 22px;
-  box-shadow: 0 0 18px rgba(0, 255, 65, 0.45);
+  background-color: rgba(0, 12, 4, 0.86);
+  border: 1px solid #00ff41;
+  padding: 5px 12px;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.45);
 }
 
 label {
   color: #00ff41;
-  text-shadow: 0 0 6px rgba(0, 179, 45, 0.9);
+  text-shadow: 0 0 5px rgba(0, 179, 45, 0.85);
+  padding: 0 6px;
 }
 
-/* champs (user / password / commande) */
+/* champs de saisie (login / mot de passe) */
 entry {
   background-color: rgba(0, 22, 7, 0.9);
   color: #d4ffd4;
-  border: 2px solid #00b32d;
-  padding: 8px 10px;
+  border: 1px solid #00b32d;
+  min-height: 38px;
+  padding: 0 8px;
   caret-color: #39ff14;
 }
 entry:focus {
   border-color: #39ff14;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.8);
 }
 entry selection {
   background-color: #00ff41;
   color: #000000;
 }
 
-/* boutons + sélecteur de session */
+/* boutons + sélecteur de session : même hauteur que les champs */
 button,
-combobox button,
 combobox,
-combobox * {
+combobox box,
+combobox button,
+combobox entry {
   background-color: rgba(0, 30, 9, 0.92);
   color: #00ff41;
-  border: 2px solid #00ff41;
-  padding: 6px 14px;
+  border: 1px solid #00ff41;
+  min-height: 38px;
+  padding: 0 12px;
 }
 button:hover,
 combobox button:hover {
@@ -72,13 +77,20 @@ button:active {
   background-color: #39ff14;
   color: #000000;
 }
+button.suggested-action {
+  background-color: rgba(0, 55, 16, 0.95);
+}
+button.suggested-action:hover {
+  background-color: #39ff14;
+  color: #000000;
+}
 
 /* menu déroulant des sessions */
 popover,
 popover.background,
 menu,
 .menu {
-  background-color: rgba(0, 14, 5, 0.96);
+  background-color: rgba(0, 14, 5, 0.97);
   border: 1px solid #00ff41;
   color: #00ff41;
 }

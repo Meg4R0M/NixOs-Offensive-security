@@ -57,6 +57,29 @@ let
   shaderFile = ./cracktro/cracktro.frag;
   cssFile    = ./cracktro/gtkgreet.css;
 
+  # gtkgreet patché : login sur UNE SEULE LIGNE. CSS ne peut PAS réorienter une
+  # box GTK ni annuler un size_request codé en dur -> patch C minimal :
+  #  - input_box VERTICAL -> HORIZONTAL (label+champ ET bouton sur la même ligne);
+  #  - largeurs figées 384px réduites (champ 240 / sélecteur session 170 / body
+  #    sans min) pour une barre compacte ;
+  #  - horloge masquée (no_show_all) -> tout tient sur une ligne.
+  # Le reste (hauteur 50px, police 20px, couleurs) est piloté par gtkgreet.css.
+  themedGtkgreet = pkgs.gtkgreet.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace gtkgreet/window.c \
+        --replace-fail 'ctx->input_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);' \
+                       'ctx->input_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);' \
+        --replace-fail 'gtk_widget_set_size_request(ctx->input_field, 384, -1);' \
+                       'gtk_widget_set_size_request(ctx->input_field, 240, -1);' \
+        --replace-fail 'gtk_widget_set_size_request(ctx->command_selector, 384, -1);' \
+                       'gtk_widget_set_size_request(ctx->command_selector, 170, -1);' \
+        --replace-fail 'gtk_widget_set_size_request(ctx->body, 384, -1);' \
+                       'gtk_widget_set_size_request(ctx->body, -1, -1);' \
+        --replace-fail 'gtk_widget_set_name(ctx->clock_label, "clock");' \
+                       'gtk_widget_set_name(ctx->clock_label, "clock"); gtk_widget_set_no_show_all(ctx->clock_label, TRUE);'
+    '';
+  });
+
   # glpaper matche l'output par nom EXACT (strcmp) : pas de '*'. On interroge sway
   # pour récupérer le 1er output et on le lui passe (jq absent -> grep/cut).
   crackBg = pkgs.writeShellScript "cracktro-bg" ''
@@ -138,7 +161,7 @@ let
 
     exec ${crackBg}
     exec ${crackMusic}
-    exec "${pkgs.gtkgreet}/bin/gtkgreet -l -c niri-session -s ${cssFile}; ${crackExit}"
+    exec "${themedGtkgreet}/bin/gtkgreet -l -c niri-session -s ${cssFile}; ${crackExit}"
 
     # Échappatoire clavier (au pire Ctrl+Alt+F2 -> TTY texte reste dispo).
     bindsym Mod4+Shift+q exec ${crackExit}
@@ -191,7 +214,7 @@ in
     };
 
     environment.systemPackages = [ pkgs.tuigreet ]
-      ++ lib.optionals crack.enable [ pkgs.sway pkgs.glpaper pkgs.gtkgreet pkgs.xmp pkgs.mpv ];
+      ++ lib.optionals crack.enable [ pkgs.sway pkgs.glpaper themedGtkgreet pkgs.xmp pkgs.mpv ];
 
     # L'user greeter a besoin du GPU (glpaper) et de l'audio (xmp) en mode cracktro.
     users.users.greeter.extraGroups = lib.mkIf crack.enable [ "video" "render" "audio" "input" ];
