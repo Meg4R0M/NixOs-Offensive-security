@@ -116,10 +116,15 @@ in
     convertible.enable = true;
   };
 
-  # Splash Plymouth DÉSACTIVÉ : sur ce combo AMD+LUKS il n'affichait pas le prompt
-  # de passphrase (ESC requis). Sans splash => prompt LUKS en texte vert (vconsole
-  # Stylix), fiable et sans ESC. Le graphique pourra être retenté plus tard.
-  humanix.aesthetic.plymouth.enable = false;
+  # Splash Plymouth — DIAGNOSTIC (2026-07-18) : thème STOCK "spinner" (plugin
+  # two-step C + assets de prompt password) pour ISOLER thème custom vs pipeline
+  # DRM sur ce combo AMD+LUKS+simpledrm. `splash` SANS `quiet` (cf plymouth.nix)
+  # -> si le spinner ne rend pas, le prompt LUKS reste VISIBLE en texte (safe).
+  # Résultats attendus : spinner tourne -> le pipeline est bon, c'était le thème
+  # custom ; toujours du texte -> pipeline DRM (angle suivant : amdgpu en initrd).
+  # Repli immédiat : remettre enable = false. Custom vert = theme = "humanix".
+  humanix.aesthetic.plymouth.enable = true;
+  humanix.aesthetic.plymouth.theme = "spinner";
 
   # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
   # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,

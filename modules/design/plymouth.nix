@@ -10,7 +10,7 @@
 let
   cfg = config.humanix.aesthetic.plymouth;
 
-  theme = pkgs.runCommand "humanix-plymouth" { } ''
+  humanixThemePkg = pkgs.runCommand "humanix-plymouth" { } ''
     d=$out/share/plymouth/themes/humanix
     mkdir -p $d
     cp ${./plymouth/humanix.script} $d/humanix.script
@@ -18,8 +18,21 @@ let
     substituteInPlace $d/humanix.plymouth --replace '@THEMEDIR@' "$d"
   '';
 in {
-  options.humanix.aesthetic.plymouth.enable = lib.mkEnableOption
-    "le splash de boot Plymouth Humanix (phosphore vert). Échec = boot texte, jamais bloquant.";
+  options.humanix.aesthetic.plymouth = {
+    enable = lib.mkEnableOption
+      "le splash de boot Plymouth Humanix (phosphore vert). Échec = boot texte, jamais bloquant.";
+
+    # Sélecteur de thème = levier de DIAGNOSTIC (isole thème custom vs pipeline
+    # DRM). "humanix" = custom vert (plugin script). Un thème STOCK ("spinner",
+    # "bgrt", "fade-in", "glow"…) vient du paquet plymouth (plugin two-step C) :
+    # s'il rend alors que "humanix" ne rendait pas -> c'était le thème custom.
+    theme = lib.mkOption {
+      type = lib.types.str;
+      default = "humanix";
+      example = "spinner";
+      description = "Thème plymouth : \"humanix\" (custom vert) ou un thème stock pour diagnostiquer le rendu.";
+    };
+  };
 
   config = lib.mkMerge [
     # Humanix pilote la politique plymouth : JAMAIS celui de Stylix. (Sinon,
@@ -29,8 +42,9 @@ in {
     (lib.mkIf cfg.enable {
     boot.plymouth = {
       enable = true;
-      theme = "humanix";
-      themePackages = [ theme ];
+      theme = cfg.theme;
+      # themePackages seulement pour le thème custom ; les stock sont dans plymouth.
+      themePackages = lib.optionals (cfg.theme == "humanix") [ humanixThemePkg ];
     };
 
     # CRITIQUE (disque LUKS) : sans initrd systemd, Plymouth ne tourne pas en
