@@ -15,11 +15,12 @@ let
   mainShell = "zsh";
   terminal = "wezterm";
   browser = "firefox";
-  # ⚠️ En éval flake PURE, builtins.pathExists "/sys/firmware/efi" renvoie false
-  # (accès hors-flake interdit) => la détection basculait à tort sur GRUB-BIOS,
-  # qui échoue sur ce disque GPT-EFI (« refus de continuer avec les listes de
-  # blocs »). Cette machine est EFI et boote systemd-boot (ESP /efi) => on fige.
-  bootloader = "systemd";
+  # GRUB-EFI (menu thémé Mr Robot, cf modules/boot/grub). ⚠️ mode EFI (efiSupport
+  # + device="nodev"), PAS le BIOS (device="/dev/nvme0n1" + cryptodisk = l'ancien
+  # piège « refus … listes de blocs » sur GPT-EFI). Machine EFI (ESP /efi, kernels
+  # sur /boot non chiffré, LUKS déchiffré par l'initrd). Validé en VM avant bascule.
+  # Repli 1 ligne : "systemd" (revert : F9 firmware ou live-USB, cf historique).
+  bootloader = "grub";
   # home-manager n'est plus fetchTarball ici : il vient du flake
   # (inputs.home-manager.nixosModules.home-manager, cf flake.nix).
 in
