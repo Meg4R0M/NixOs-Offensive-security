@@ -125,6 +125,22 @@ in
   humanix.aesthetic.plymouth.enable = true;
   humanix.aesthetic.plymouth.theme = "humanix";
 
+  # ── Boot « logs hacker » : console en palette PHOSPHORE VERT ────────────────
+  # Au lieu du cyberpunk Stylix, les logs noyau/init/systemd qui défilent au boot
+  # (et les TTY) ressortent en vert vif, avec les statuts systemd colorés (OK vert
+  # / FAILED rouge / warn ambre). Index 7/15 (fg par défaut) = vert -> tout le
+  # texte console devient vert. (console.colors pose aussi vt.default_* en
+  # kernelParams -> vaut dès le boot précoce, fini le texte « fade ».)
+  stylix.targets.console.enable = lib.mkForce false;
+  console.colors = [
+    "0a0f0a" "ff2b2b" "00ff41" "ffb000" "00b32d" "00cc33" "00ff87" "00d33a"
+    "1f4d1f" "ff5c5c" "39ff14" "ffd257" "00e63a" "5cffb0" "8affc8" "d4ffd4"
+  ];
+
+  # Menu systemd-boot : résolution max (texte net) + timeout court.
+  boot.loader.systemd-boot.consoleMode = lib.mkForce "max";
+  boot.loader.timeout = lib.mkForce 3;
+
   # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
   # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,
   # plasma, starfield, logo + scroller sinus) + gtkgreet vert + chiptune 8-bit
