@@ -6,6 +6,7 @@
     ./plymouth.nix
     ./aesthetic.nix
     ./noctalia.nix
+    ./tte.nix
     ./cyborg
     ./frost
     ./graphite
