@@ -147,6 +147,12 @@ in
   # traquer d'autres lenteurs si besoin.)
   systemd.services.NetworkManager-wait-online.enable = false;
 
+  # IBus (méthode de saisie, hérité d'Athena) : inutile en AZERTY sans saisie CJK,
+  # et sous niri/Wayland il n'est pas géré par la session -> notif « IBus devrait
+  # être appelé par la session de bureau » à chaque login. Désactivé. (Besoin de
+  # CJK/emoji IBus un jour ? -> on le recâble proprement dans le spawn niri.)
+  i18n.inputMethod.enable = lib.mkForce false;
+
   # Login CRACKTRO demoscene (cf modules/dms/greetd/default.nix) : remplace
   # tuigreet par une session sway — shader GLSL Amiga (glpaper : copper bars,
   # plasma, starfield, logo + scroller sinus) + gtkgreet vert + chiptune 8-bit
