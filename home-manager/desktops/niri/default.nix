@@ -372,7 +372,7 @@ in
       ];
 
       home.packages = (with pkgs; [
-        waybar rofi wezterm conky
+        waybar rofi wezterm conky playerctl
         # ---- Apps épinglées par workspace (Humanix) ----
         antigravity vscodium              # WS2 : IDE agentique Google + éditeur codium
         google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
@@ -544,6 +544,15 @@ in
             Super+Shift+L { spawn "swaylock" "-fF"; }
             Mod+Shift+E { quit; }
 
+            // Vue d'ensemble (expose) + aide native niri (overlay des raccourcis)
+            Mod+W { toggle-overview; }
+            Mod+Shift+Slash { show-hotkey-overlay; }
+
+            // Colonnes : plein largeur / centrer / affichage en onglets
+            Mod+Shift+F { maximize-column; }
+            Mod+C { center-column; }
+            Mod+T { toggle-column-tabbed-display; }
+
             // Focus (modèle colonnes/fenêtres de Niri)
             Mod+Left  { focus-column-left; }
             Mod+Right { focus-column-right; }
@@ -555,6 +564,10 @@ in
             Mod+Shift+Right { move-column-right; }
             Mod+Shift+Up    { move-window-up; }
             Mod+Shift+Down  { move-window-down; }
+
+            // Aspirer / éjecter la fenêtre de la colonne (fusion/éjection entre colonnes)
+            Mod+Ctrl+Left  { consume-or-expel-window-left; }
+            Mod+Ctrl+Right { consume-or-expel-window-right; }
 
             // Largeur de colonne (cycle entre les presets 33/50/66 %)
             Mod+R { switch-preset-column-width; }
@@ -579,6 +592,9 @@ in
             Mod+Shift+apostrophe  { move-column-to-workspace 4; }
             Mod+Shift+parenleft   { move-column-to-workspace 5; }
 
+            // Bascule vers le dernier workspace utilisé (aller-retour rapide)
+            Mod+Tab { focus-workspace-previous; }
+
             // Captures d'écran (intégré à Niri)
             Print { screenshot; }
             Mod+Print { screenshot-window; }
@@ -592,6 +608,12 @@ in
             XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
             XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
             XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+
+            // Lecture média (MPRIS via playerctl) + coupe-micro
+            XF86AudioPlay    allow-when-locked=true { spawn "playerctl" "play-pause"; }
+            XF86AudioNext    allow-when-locked=true { spawn "playerctl" "next"; }
+            XF86AudioPrev    allow-when-locked=true { spawn "playerctl" "previous"; }
+            XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
         }
       '';
     };
