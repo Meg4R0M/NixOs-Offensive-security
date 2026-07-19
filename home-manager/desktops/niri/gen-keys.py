@@ -51,32 +51,36 @@ WIDTH = len(LM) + CELLW * 3 + len(GAP) * 2   # 2 + 84 + 8 = 94
 def datarow(c1, c2, c3):
     return LM + c1 + GAP + c2 + GAP + c3
 
-lines = []
-# Titre sur sa PROPRE ligne (texte centré, PAS dans une barre) : ainsi les 3 barres
-# restent des ═ PURS -> largeur strictement identique. Avant, le titre inséré dans
-# la barre du haut mélangeait box-drawing + texte et faussait sa largeur.
+# Barres = ${hr} (règle horizontale NATIVE conky) : tracée sur toute la largeur de
+# la fenêtre, donc les 3 font PILE la même longueur (celle du tableau), sans souci
+# de chasse des box-drawing (═ est plus étroit qu'un caractère normal dans cette
+# police). Titre sur sa propre ligne. Séparateur du milieu en VERT (bloc cyber).
+HR_RED   = "${color2}${hr 2}${color}"
+HR_GREEN = "${color 00ff41}${hr 2}${color}"
+
 ttxt = "${color2}[ ${color1}RACCOURCIS NIRI${color2} ]${color}"
 padL = (WIDTH - vis(ttxt)) // 2
 padR = WIDTH - vis(ttxt) - padL
-lines.append(" " * padL + ttxt + " " * padR)
-lines.append("${color2}" + "═" * WIDTH + "${color}")             # barre haute (rouge)
-lines.append(datarow(*[pad("${color1}" + c[0] + "${color}", CELLW) for c in cols]))
-lines.append("${color ffffff}" + "═" * WIDTH + "${color}")       # séparateur BLANC, solide (═)
-nrows = max(len(c[1]) for c in cols)
-for r in range(nrows):
+titleline = " " * padL + ttxt + " " * padR
+hdr = datarow(*[pad("${color1}" + c[0] + "${color}", CELLW) for c in cols])
+data = []
+for r in range(max(len(c[1]) for c in cols)):
     cells = [cell(*c[1][r]) if r < len(c[1]) else EMPTY for c in cols]
-    lines.append(datarow(*cells))
-lines.append("${color2}" + "═" * WIDTH + "${color}")             # barre de fermeture (rouge)
+    data.append(datarow(*cells))
 
-# auto-vérif : toutes les lignes ont la même largeur visible
-widths = {vis(l) for l in lines}
+# vérif largeur sur les lignes de TEXTE (les ${hr} sont des règles pleine largeur
+# tracées par conky -> pas de largeur en caractères à contrôler).
+textlines = [titleline, hdr] + data
+widths = {vis(l) for l in textlines}
 assert widths == {WIDTH}, f"largeurs incohérentes: {sorted(widths)} (attendu {WIDTH})"
+
+lines = [titleline, HR_RED, hdr, HR_GREEN] + data + [HR_RED]
 
 conf = """-- haxOS — cheatsheet des raccourcis niri (tableau, fenêtre bas-centre). Contenu
 -- STATIQUE généré par gen-keys.py (même dossier ; padding au codepoint) : miroir
 -- de la section binds de home-manager/desktops/niri/default.nix — régénérer via
--- `python3 gen-keys.py` si tu changes les binds. Colonnes alignées + règles
--- horizontales (traits verticaux évités : conky les rend en pointillés).
+-- `python3 gen-keys.py` si tu changes les binds. Colonnes alignées + barres via
+-- hr natif conky (pleine largeur ; verticaux évités = pointillés dans conky).
 conky.config = {
     out_to_wayland = true,
     out_to_x = false,
