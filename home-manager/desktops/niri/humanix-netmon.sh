@@ -8,15 +8,37 @@ MAXCONN=16
 LANMAX=16
 AWKTR='function tr(s,n){return length(s)>n?substr(s,1,n-1)"~":s}'
 
+# Reconstruit l'arbre à DROITE (comme haxos-monitor) : en-tête de section -─┐,
+# lignes -─┤, dernière ligne de section -─┘. Empilés, les coins ┐┤┘ forment la
+# colonne verticale de droite (branches vers la gauche). Lookahead = place le ┘.
+treeify() {
+  awk '
+    { lines[NR] = $0 }
+    END {
+      for (i = 1; i <= NR; i++) {
+        l = lines[i]
+        if (l ~ /^[[:space:]]*$/) { print ""; continue }
+        sub(/[[:space:]]+$/, "", l)
+        if (l ~ /^\[/) { print l " -─┐"; continue }        # en-tête de section
+        sub(/^├─ /, "", l); sub(/^[[:space:]]+/, "", l)    # ôte le connecteur gauche
+        last = (i == NR)
+        if (!last) { nl = lines[i+1]; if (nl ~ /^[[:space:]]*$/ || nl ~ /^\[/) last = 1 }
+        if (last) print l " -─┘"; else print l " -─┤"
+      }
+    }'
+}
+
 if [ "$1" = "plain" ]; then
-  colorize() { cat; }
+  render() { treeify; }
 else
-  colorize() {
-    sed -e 's/\[/${color2}[${color}/g' \
-        -e 's/\]/${color2}]${color}/g' \
-        -e 's/\(├\|└\|│\|─\|::\)/${color2}&${color}/g' \
-        -e 's/[[:space:]]*$//' \
-        -e 's/^/${alignr}/'
+  render() {
+    treeify | sed -e 's/\[/${color2}[${color}/g' \
+                  -e 's/\]/${color2}]${color}/g' \
+                  -e 's/ -─┐/ ${color2}-─┐${color}/g' \
+                  -e 's/ -─┤/ ${color2}-─┤${color}/g' \
+                  -e 's/ -─┘/ ${color2}-─┘${color}/g' \
+                  -e 's/::/${color2}::${color}/g' \
+                  -e 's/^/${alignr}/'
   }
 fi
 
@@ -96,4 +118,4 @@ lan_scan() {
   echo "[LAN_DISCOVERY] :: [$dev] [$cidr]"
   printf "   %-15s %-17s %s\n" "IP Address" "MAC Address" "Vendor"
   lan_scan | awk -F'\t' '{ printf "├─ [%-15s] [%-17s] [%s]\n", $1, $2, $3 }'
-} | colorize
+} | render
