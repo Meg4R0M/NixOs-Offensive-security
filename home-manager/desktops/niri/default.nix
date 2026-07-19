@@ -198,6 +198,13 @@ import qs.popups' \
     export PATH="${pkgs.lib.makeBinPath [ pkgs.iproute2 pkgs.gnugrep pkgs.gnused pkgs.gawk pkgs.coreutils pkgs.arp-scan ]}:$PATH"
     ${builtins.readFile ./humanix-netmon.sh}
   '';
+
+  # Bloc "exposition publique" (conky haut-gauche, sous l'horloge) : IP publique +
+  # géoloc (ifconfig.co, cache 5 min) + statut VPN/Tor + IP locale. Conscience OPSEC.
+  exposureMon = pkgs.writeShellScriptBin "humanix-exposure" ''
+    export PATH="${pkgs.lib.makeBinPath [ pkgs.curl pkgs.jq pkgs.iproute2 pkgs.gawk pkgs.gnugrep pkgs.coreutils ]}:$PATH"
+    ${builtins.readFile ./humanix-exposure.sh}
+  '';
 in
 {
   options.humanix.enableNiri =
@@ -284,7 +291,8 @@ in
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-cyber.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-veille2.conf"
         spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-netmon.conf"
-        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-keys.conf"'';
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-keys.conf"
+        spawn-sh-at-startup "${pkgs.conky}/bin/conky -c ${home}/.config/conky/haxos-exposure.conf"'';
 
       # Terminal + rofi verts (confs dédiées ci-dessous).
       # wezterm est session-aware (vert CRT quand NIRI_SOCKET est défini).
@@ -379,7 +387,7 @@ in
         discord teams-for-linux ferdium    # WS4 : Discord/Teams NATIFS (appels/partage écran) + Ferdium (Slack/WhatsApp/… en 1 seul Chromium = léger)
         keepassxc                          # WS6 : coffre KeePassXC (+ LocalSend système, transfert)
       ]) ++ [
-        certFrNews veilleBlogs netmon
+        certFrNews veilleBlogs netmon exposureMon
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
       programs.swaylock.enable = true;
 
@@ -392,6 +400,7 @@ in
       xdg.configFile."conky/haxos-veille2.conf".source = ./haxos-veille2.conf;
       xdg.configFile."conky/haxos-netmon.conf".source = ./haxos-netmon.conf;
       xdg.configFile."conky/haxos-keys.conf".source = ./haxos-keys.conf;
+      xdg.configFile."conky/haxos-exposure.conf".source = ./haxos-exposure.conf;
       xdg.configFile."waybar-niri/config".text = waybarNiriConfig;
       xdg.configFile."waybar-niri/style.css".text = waybarNiriCss;
 
