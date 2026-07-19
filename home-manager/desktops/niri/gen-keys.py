@@ -41,40 +41,38 @@ def cell(key, desc):
     return pad("${color1}" + key + "${color}", KEYW) + " " + pad("${color}" + desc, DESCW)
 EMPTY = " " * CELLW
 
-def datarow(c1, c2, c3):
-    return ("${color2}║${color} " + c1 + " ${color2}│${color} " + c2
-            + " ${color2}│${color} " + c3 + " ${color2}║${color}")
+# Séparation des colonnes par ESPACEMENT (pas de trait vertical : conky rend les
+# box-drawing verticaux empilés en pointillés à cause de l'interligne). Structure
+# = règles HORIZONTALES (elles se raccordent) + colonnes alignées.
+LM  = "  "                                   # marge gauche
+GAP = "    "                                 # espace inter-colonnes
+WIDTH = len(LM) + CELLW * 3 + len(GAP) * 2   # 2 + 84 + 8 = 94
 
-def border(left, fill, tick, right):
-    row = [fill] * INNER
-    row[BAR1] = tick; row[BAR2] = tick
-    return "${color2}" + left + "".join(row) + right + "${color}"
+def datarow(c1, c2, c3):
+    return LM + c1 + GAP + c2 + GAP + c3
 
 lines = []
-lines.append("${color2}╔" + "═" * INNER + "╗${color}")
-title = "${color2}[ ${color1}RACCOURCIS NIRI${color2} ]${color}"
-padL = (INNER - vis(title)) // 2
-padR = INNER - vis(title) - padL
-lines.append("${color2}║${color}" + " " * padL + title + " " * padR + "${color2}║${color}")
-lines.append(border("╠", "═", "╦", "╣"))
+tcore = " [ ${color1}RACCOURCIS NIRI${color2} ] "      # titre inséré dans la règle
+padL = (WIDTH - vis(tcore)) // 2
+padR = WIDTH - vis(tcore) - padL
+lines.append("${color2}" + "═" * padL + tcore + "═" * padR + "${color}")
 lines.append(datarow(*[pad("${color1}" + c[0] + "${color}", CELLW) for c in cols]))
-lines.append(border("╟", "─", "┼", "╢"))
+lines.append("${color3}" + "─" * WIDTH + "${color}")
 nrows = max(len(c[1]) for c in cols)
 for r in range(nrows):
-    cells = []
-    for _, entries in cols:
-        cells.append(cell(*entries[r]) if r < len(entries) else EMPTY)
+    cells = [cell(*c[1][r]) if r < len(c[1]) else EMPTY for c in cols]
     lines.append(datarow(*cells))
-lines.append(border("╚", "═", "╩", "╝"))
+lines.append("${color2}" + "═" * WIDTH + "${color}")
 
 # auto-vérif : toutes les lignes ont la même largeur visible
 widths = {vis(l) for l in lines}
-assert widths == {INNER + 2}, f"largeurs incohérentes: {sorted(widths)} (attendu {INNER+2})"
+assert widths == {WIDTH}, f"largeurs incohérentes: {sorted(widths)} (attendu {WIDTH})"
 
 conf = """-- haxOS — cheatsheet des raccourcis niri (tableau, fenêtre bas-centre). Contenu
 -- STATIQUE généré par gen-keys.py (même dossier ; padding au codepoint) : miroir
 -- de la section binds de home-manager/desktops/niri/default.nix — régénérer via
--- `python3 gen-keys.py` si tu changes les binds. Bordures box-drawing rouge.
+-- `python3 gen-keys.py` si tu changes les binds. Colonnes alignées + règles
+-- horizontales (traits verticaux évités : conky les rend en pointillés).
 conky.config = {
     out_to_wayland = true,
     out_to_x = false,
