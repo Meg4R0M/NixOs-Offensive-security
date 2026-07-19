@@ -52,17 +52,21 @@ def datarow(c1, c2, c3):
     return LM + c1 + GAP + c2 + GAP + c3
 
 lines = []
-tcore = " [ ${color1}RACCOURCIS NIRI${color2} ] "      # titre inséré dans la règle
-padL = (WIDTH - vis(tcore)) // 2
-padR = WIDTH - vis(tcore) - padL
-lines.append("${color2}" + "═" * padL + tcore + "═" * padR + "${color}")
+# Titre sur sa PROPRE ligne (texte centré, PAS dans une barre) : ainsi les 3 barres
+# restent des ═ PURS -> largeur strictement identique. Avant, le titre inséré dans
+# la barre du haut mélangeait box-drawing + texte et faussait sa largeur.
+ttxt = "${color2}[ ${color1}RACCOURCIS NIRI${color2} ]${color}"
+padL = (WIDTH - vis(ttxt)) // 2
+padR = WIDTH - vis(ttxt) - padL
+lines.append(" " * padL + ttxt + " " * padR)
+lines.append("${color2}" + "═" * WIDTH + "${color}")             # barre haute (rouge)
 lines.append(datarow(*[pad("${color1}" + c[0] + "${color}", CELLW) for c in cols]))
-lines.append("${color3}" + "─" * WIDTH + "${color}")
+lines.append("${color ffffff}" + "═" * WIDTH + "${color}")       # séparateur BLANC, solide (═)
 nrows = max(len(c[1]) for c in cols)
 for r in range(nrows):
     cells = [cell(*c[1][r]) if r < len(c[1]) else EMPTY for c in cols]
     lines.append(datarow(*cells))
-lines.append("${color2}" + "═" * WIDTH + "${color}")
+lines.append("${color2}" + "═" * WIDTH + "${color}")             # barre de fermeture (rouge)
 
 # auto-vérif : toutes les lignes ont la même largeur visible
 widths = {vis(l) for l in lines}
