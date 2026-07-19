@@ -89,7 +89,10 @@ conky.config = {
     total_run_times = 0,
 
     use_xft = true,
-    font = 'VictorMono Nerd Font Mono:pixelsize=12',
+    -- JetBrains Mono (pas Victor Mono) : ses box-drawing ═║│╔╣ se RACCORDENT
+    -- (traits continus) ; Victor Mono les rend en pointillés. Reste monospace
+    -- strict -> l'alignement au codepoint tient.
+    font = 'JetBrainsMono Nerd Font Mono:pixelsize=12',
     override_utf8_locale = true,
     draw_shades = false,
     draw_outline = false,
