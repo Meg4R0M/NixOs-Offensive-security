@@ -107,7 +107,7 @@ conky.config = {
     -- alignc (les colonnes s'alignent car chaque ligne part du bord gauche).
     alignment = 'bottom_middle',
     gap_x = 0,
-    gap_y = 124,                -- descendu de 50px (174 -> 124)
+    gap_y = 74,                 -- descendu encore de 50px (124 -> 74)
 
     default_color = '00b32d',   -- descriptions (vert moyen)
     color1 = '39ff14',          -- touches (vert néon)
