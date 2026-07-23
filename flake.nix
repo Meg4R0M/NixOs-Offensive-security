@@ -22,8 +22,9 @@
     # rester compatible avec le cache (sinon on recompile le kernel).
     cachyos.url = "github:xddxdd/nix-cachyos-kernel/4673c8f6d48baf2ec3f14b6a9f8c4ecfb0810d6f";
 
-    # Claude Desktop.
-    claude.url = "github:Reginleif88/claude-cowork-nix/5018f7912405c1559314f56bc587ee6318d60132";
+    # Claude Desktop. Bump 2026-07-23 : df943e84 ajoute requestSingleInstanceLock +
+    # second-instance → corrige la boucle de login OAuth (claude:// non forwardé).
+    claude.url = "github:Reginleif88/claude-cowork-nix/df943e84313977fdca5751023a13b6de5157c035";
 
     # agenix — secrets chiffrés versionnables (clés API OSINT, profils WireGuard).
     agenix = {

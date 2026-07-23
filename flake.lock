@@ -173,17 +173,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1781817281,
-        "narHash": "sha256-QFLdHh1b3chdpQb+kro3UjOoKosc9/86xh9uLx+PwKI=",
+        "lastModified": 1783929147,
+        "narHash": "sha256-3l8ozffctiD/OaFnEDzVL55Dpk3bua6gO45NvAIFHM0=",
         "owner": "Reginleif88",
         "repo": "claude-cowork-nix",
-        "rev": "5018f7912405c1559314f56bc587ee6318d60132",
+        "rev": "df943e84313977fdca5751023a13b6de5157c035",
         "type": "github"
       },
       "original": {
         "owner": "Reginleif88",
         "repo": "claude-cowork-nix",
-        "rev": "5018f7912405c1559314f56bc587ee6318d60132",
+        "rev": "df943e84313977fdca5751023a13b6de5157c035",
         "type": "github"
       }
     },
