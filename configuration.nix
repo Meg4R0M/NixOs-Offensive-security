@@ -191,6 +191,11 @@ in
   # (cf modules/cyber/exegol.nix)
   humanix.exegol.enable = true;
 
+  # Durcissement système (cf modules/security/hardening.nix) : sudo wheel-only,
+  # auditd (execve), nix @wheel, firewall assumé + sysctl noyau/réseau CHOISIS pour
+  # ne pas brider l'offensif (rp_filter/ptrace/BPF/userns laissés intacts).
+  humanix.hardening.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";
