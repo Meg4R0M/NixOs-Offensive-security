@@ -108,6 +108,10 @@ in
         rofi.enable = false;
         waybar.enable = false;
         hyprland.enable = false;
+        # Noctalia : thémé par NOTRE module (modules/design/noctalia.nix, palette
+        # depuis le wallpaper). Le Stylix bumpé (07-21) a AJOUTÉ ce target -> il
+        # posait settings.theme/wallpaper en conflit avec le nôtre. On le coupe.
+        noctalia.enable = false;
         # vscode/vscodium est déjà configuré par Athena (modules/dev/vscodium).
         vscode.enable = false;
         vscodium.enable = false;

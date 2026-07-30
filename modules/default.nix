@@ -14,5 +14,6 @@
     ./hardware
     ./misc
     ./security
+    ./nixpkgs-fixes.nix
   ];
 }

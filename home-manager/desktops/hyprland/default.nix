@@ -124,8 +124,8 @@ in {
         ###################
         ###  PLUGINS    ###
         ###################
-        # HyprGlass — effet liquid glass (chargement natif du .so packagé)
-        plugin = ${hyprglass}/lib/libhyprglass.so
+        # HyprGlass RETIRÉ (TEMP 2026-07-30) : incompat C++ avec le hyprland récent
+        # (CMonitor*/m_windows). Réactiver quand hyprglass suit la nouvelle API.
 
         ###################
         ###  MONITEURS  ###

@@ -2,18 +2,20 @@
   description = "Humanix — distro offensive (fork Athena OS · NixOS · compositor niri)";
 
   inputs = {
-    # nixpkgs PINNÉ sur le rev actuel du système => aucun rebuild massif au passage
-    # en flake. `nix flake update nixpkgs` pour mettre à jour volontairement.
-    nixpkgs.url = "github:NixOS/nixpkgs/0bb7ec54c8483066ec9d7720e780a5caa71f8612";
+    # nixpkgs sur la branche nixos-unstable (DÉPINGLÉ le 2026-07-30 pour la màj
+    # sécu). `nix flake update nixpkgs` met à jour ; re-pin sur une rev si besoin de
+    # figer. (L'ancien pin 0bb7ec5 servait à éviter le rebuild massif — plus le but.)
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Stylix (theming) — rev compatible nixpkgs 26.11 (déjà utilisé auparavant).
+    # Stylix (theming) — DÉPINGLÉ (suit nixpkgs) : sa rev doit rester compatible
+    # avec nixpkgs, donc on la bump en même temps (branche master de stylix).
     stylix = {
-      url = "github:nix-community/stylix/a378e4c09031fb15a4d65da88aa628f71fc52f6b";
+      url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -94,7 +96,7 @@
       # Sous-arsenaux à la demande : nix develop /home/fdurano/nixos#<catégorie>
       devShells.${system} = {
         cloud = shell "cloud" (with pkgs; [ pacu cloudfox trivy grype kubescape kdigger prowler noseyparker ]);
-        ad    = shell "ad"    (with pkgs; [ netexec certipy kerbrute ldeep bloodhound-py responder ]);
+        ad    = shell "ad"    (with pkgs; [ certipy kerbrute ldeep responder ]);   # netexec+bloodhound-py retirés (TEMP: cassés nixpkgs 07-29)
         web   = shell "web"   (with pkgs; [ nuclei httpx katana ffuf feroxbuster dalfox subfinder gowitness ]);
         rf    = shell "rf"    (with pkgs; [ rtl-sdr hackrf gnuradio killerbee ubertooth gallia can-utils ]);
         osint = shell "osint" (with pkgs; [ sn0int maigret holehe h8mail theharvester amass ]);

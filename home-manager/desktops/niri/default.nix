@@ -382,7 +382,7 @@ in
       home.packages = (with pkgs; [
         waybar rofi wezterm conky playerctl
         # ---- Apps épinglées par workspace (Humanix) ----
-        antigravity vscodium              # WS2 : IDE agentique Google + éditeur codium
+        antigravity-ide vscodium          # WS2 : IDE agentique Google (renommé) + éditeur codium
         google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
         discord teams-for-linux ferdium    # WS4 : Discord/Teams NATIFS (appels/partage écran) + Ferdium (Slack/WhatsApp/… en 1 seul Chromium = léger)
         keepassxc                          # WS6 : coffre KeePassXC (+ LocalSend système, transfert)

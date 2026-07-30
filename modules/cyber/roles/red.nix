@@ -10,7 +10,7 @@ with pkgs;
   arp-scan
   bettercap
   bloodhound
-  bloodhound-py
+  # bloodhound-py  # TEMP retiré : cassé sur nixpkgs 07-29 (metadata dist introuvable)
   # https://github.com/NixOS/nixpkgs/issues/425333
   # boofuzz
   brutespray
@@ -117,7 +117,7 @@ with pkgs;
   # https://github.com/NixOS/nixpkgs/issues/425354
   # ncrack
   netdiscover
-  netexec
+  # netexec  # TEMP retiré : dépend de bloodhound-py (cassé nixpkgs 07-29)
   nfdump
   ngrep
   nikto
