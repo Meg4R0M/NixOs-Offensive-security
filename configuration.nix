@@ -196,6 +196,12 @@ in
   # ne pas brider l'offensif (rp_filter/ptrace/BPF/userns laissés intacts).
   humanix.hardening.enable = true;
 
+  # iCloud Drive monté en ~/iCloud via rclone (cf modules/cloud/icloud.nix). Le
+  # service user attend d'être configuré. Auth interactive UNE fois :
+  #   rclone config        -> remote "icloud", type iclouddrive, Apple ID + 2FA
+  #   systemctl --user start rclone-icloud
+  humanix.cloud.icloud.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";

@@ -15,5 +15,6 @@
     ./misc
     ./security
     ./nixpkgs-fixes.nix
+    ./cloud/icloud.nix
   ];
 }
