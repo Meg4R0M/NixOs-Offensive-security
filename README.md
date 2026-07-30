@@ -48,9 +48,11 @@ nixos/
 └── docs/                  # arsenal.md, boot-login.md
 ```
 
-**Flake — pourquoi ce pinning ?** `nixpkgs` est épinglé sur le rev exact du
-système (`0bb7ec5…`) : passer en flake n'a donc déclenché **aucun rebuild massif**.
-Mettre à jour se fait volontairement (`nix flake update`).
+**Flake — nixpkgs.** Suit désormais la branche `nixos-unstable` (dépinglé le
+2026-07-30 pour la mise à jour sécu ; l'ancien pin-rev servait à éviter le rebuild
+massif au passage en flake). Mise à jour volontaire via `nix flake update`. Un
+overlay daté (`modules/nixpkgs-fixes.nix`) corrige quelques paquets transitoirement
+cassés sur unstable.
 
 ---
 
@@ -163,10 +165,12 @@ Détails : [`docs/boot-login.md`](docs/boot-login.md).
 
 ## 8. Secrets
 
-Les hashes de mot de passe sont **hors du repo** (`secrets/` gitignoré) et lus à
-l'activation via `hashedPasswordFile` (chemin absolu, invisible pour le flake qui
-ne voit que le tracké). **Ne jamais committer `secrets/` ni `secrets.nix`.**
-Piste future : `sops-nix` / `agenix`.
+Les mots de passe **ne sont pas gérés en déclaratif** : `mutableUsers = true` +
+gestion manuelle (`passwd`). Un `hashedPassword`/`hashedPasswordFile` avait par le
+passé provoqué un **lockout** (récupération via live-USB) → à proscrire ici.
+`secrets.nix` est **gitignoré** (voir `secrets.nix.example`). Les secrets
+applicatifs (clés API OSINT, profils WireGuard) passent par **agenix** (chiffrés,
+donc versionnables). **Ne jamais committer `secrets.nix`.**
 
 ---
 
