@@ -96,7 +96,7 @@
       # Sous-arsenaux à la demande : nix develop /home/fdurano/nixos#<catégorie>
       devShells.${system} = {
         cloud = shell "cloud" (with pkgs; [ pacu cloudfox trivy grype kubescape kdigger prowler noseyparker ]);
-        ad    = shell "ad"    (with pkgs; [ certipy kerbrute ldeep responder ]);   # netexec+bloodhound-py retirés (TEMP: cassés nixpkgs 07-29)
+        ad    = shell "ad"    (with pkgs; [ netexec certipy kerbrute ldeep bloodhound-py responder ]);
         web   = shell "web"   (with pkgs; [ nuclei httpx katana ffuf feroxbuster dalfox subfinder gowitness ]);
         rf    = shell "rf"    (with pkgs; [ rtl-sdr hackrf gnuradio killerbee ubertooth gallia can-utils ]);
         osint = shell "osint" (with pkgs; [ sn0int maigret holehe h8mail theharvester amass ]);

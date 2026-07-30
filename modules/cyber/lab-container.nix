@@ -24,7 +24,7 @@ in {
       ];
       config = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-          nmap ffuf nuclei feroxbuster gobuster seclists tmux
+          nmap netexec ffuf nuclei feroxbuster gobuster seclists tmux
         ];
         # Remonte les GUI (burp, wireshark…) vers le serveur X de l'hôte.
         environment.sessionVariables.DISPLAY = "10.66.0.1:0";

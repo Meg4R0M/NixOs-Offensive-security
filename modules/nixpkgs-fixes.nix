@@ -26,8 +26,13 @@
           myjwt = pyprev.myjwt.overridePythonAttrs (o: {
             nativeBuildInputs = (o.nativeBuildInputs or [ ]) ++ [ pyprev.pyprojectVersionPatchHook ];
           });
-          # NB : bloodhound-py 1.9.0 est cassé (metadata dist) plus profondément ->
-          # RETIRÉ des rôles (pas patché ici), avec netexec qui en dépend.
+
+          # bloodhound-py 1.9.0 : pythonMetadataCheckPhase fait version("bloodhound-py")
+          # alors que la distribution s'appelle "bloodhound" -> on saute ce check.
+          # (Débloque aussi netexec, qui dépend de bloodhound-py.)
+          bloodhound-py = pyprev.bloodhound-py.overridePythonAttrs (o: {
+            dontCheckPythonMetadata = true;
+          });
         })
       ];
     })

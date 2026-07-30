@@ -10,7 +10,7 @@ with pkgs;
   assetfinder
   bind
   bloodhound
-  # bloodhound-py  # TEMP retiré : cassé sur nixpkgs 07-29 (metadata dist introuvable)
+  bloodhound-py
   cantoolz
   certgraph
   chaos

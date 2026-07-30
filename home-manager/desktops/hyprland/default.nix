@@ -7,16 +7,17 @@ let
   wallpaperExec = "exec-once = ${pkgs.swaybg}/bin/swaybg -i ${config.stylix.image} -m fill";
 
   # Plugin HyprGlass (effet "liquid glass"), packagé depuis la source.
-  # Commit épinglé pour Hyprland 0.55.4 (cf. hyprpm.toml upstream).
+  # v0.7.0 (5bc835d, 2026-07-20) : compat Hyprland 0.56 (MONITORID au lieu de
+  # Monitor::CMonitor). Bump depuis 7ff4064 (0.55.4) au passage nixpkgs 0.56.1.
   hyprglass = pkgs.hyprlandPlugins.mkHyprlandPlugin {
     pluginName = "hyprglass";
-    version = "0-unstable-2026-06-19";
+    version = "0.7.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "hyprnux";
       repo = "hyprglass";
-      rev = "7ff4064cbed1ef6e6f703139fca4ec20ba0cbb5b";
-      hash = "sha256-e60+3KjFJOIi4DqcpxkeADsdApV+Cso2mwRA9t1Fs3U=";
+      rev = "5bc835dcc909cef6980291688143048cf16942b5";
+      hash = "sha256-x/584kY+XXlU/OWKtZAFo89VtowjLXs1DiP9PC0o0Os=";
     };
 
     dontUseCmakeConfigure = true; # build via Makefile
@@ -124,8 +125,8 @@ in {
         ###################
         ###  PLUGINS    ###
         ###################
-        # HyprGlass RETIRÉ (TEMP 2026-07-30) : incompat C++ avec le hyprland récent
-        # (CMonitor*/m_windows). Réactiver quand hyprglass suit la nouvelle API.
+        # HyprGlass — effet liquid glass (chargement natif du .so packagé, v0.7.0)
+        plugin = ${hyprglass}/lib/libhyprglass.so
 
         ###################
         ###  MONITEURS  ###
