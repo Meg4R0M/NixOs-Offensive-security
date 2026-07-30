@@ -5,6 +5,8 @@
 > **niri**, esthétique *Mr Robot* phosphore-vert CRT. Un poste de pilotage unique
 > pour le pentest, la RF et la bidouille embarquée — sans jamais sacrifier le boot.
 
+![Bureau Humanix sous niri — dashboards conky (système, réseau, veille cyber FR), bloc « exposition » OPSEC et cheatsheet des raccourcis, esthétique Mr Robot phosphore-vert](docs/desktop.png)
+
 ---
 
 ## 1. Ce que c'est
@@ -30,19 +32,18 @@ disque **chiffré LUKS** (btrfs).
 
 ```
 nixos/
-├── flake.nix              # inputs pinnés (nixpkgs, home-manager, stylix, cachyos, claude)
+├── flake.nix              # inputs (nixpkgs unstable, home-manager, stylix, cachyos, claude…)
 ├── flake.lock             # verrou de versions (committé)
 ├── configuration.nix      # point d'entrée : toggles humanix.*, users, réseau, cyber
 ├── default.nix            # module racine : déclare les options humanix.{enable,theme,…}
 ├── hardware-configuration.nix
-├── secrets/               # hashes mot de passe (GITIGNORÉ — hors flake)
-│   ├── user.hash
-│   └── root.hash
+├── secrets.nix.example    # gabarit (le vrai secrets.nix est GITIGNORÉ ; agenix pour les clés)
 ├── modules/
 │   ├── design/            # stylix, plymouth, aesthetic (profil), thèmes
 │   ├── hardware/          # arsenal.nix (RF/embarqué), kernel-cachyos.nix
 │   ├── cyber/             # rôles pentest (web, red, osint, forensic…)
-│   ├── dms/greetd/        # login tuigreet CRT
+│   ├── dms/greetd/        # login cracktro (shader GLSL + gtkgreet + chiptune)
+│   ├── security/          # durcissement (hardening.nix) + nixpkgs-fixes.nix
 │   └── claude-desktop.nix
 ├── home-manager/desktops/ # niri, hyprland (options humanix.niriShader, …)
 └── docs/                  # arsenal.md, boot-login.md
@@ -135,9 +136,9 @@ Workspaces nommés, apps lancées et rangées automatiquement (`open-on-workspac
 | 1 | `term` | Terminal (wezterm, plein largeur) |
 | 2 | `ide` | Antigravity + VSCodium |
 | 3 | `web` | Firefox + Chrome |
-| 4 | `chat` | WhatsApp · Discord · Teams · Slack |
-| 5 | `llm` | Claude · ChatGPT · Gemini · Grok |
-| 6 | `mail` | Thunderbird |
+| 4 | `chat` | Discord · Teams (natifs) + **Ferdium** (Slack, WhatsApp, IA web… — 1 seul Chromium) |
+| 5 | `llm` | **Claude Desktop** (plein écran) |
+| 6 | `mail` | **LocalSend** (transfert LAN) + **KeePassXC** (coffre) |
 
 **Arsenal cyber** : `cyber.role` (rôle principal) + `cyber.roles` (liste, union
 dédupliquée). Humanix active les **12 rôles** (`blue, bugbounty, dos, forensic,
@@ -147,17 +148,21 @@ malware, mobile, network, osint, red, student, web` + `cracker`), soit ~430 outi
 
 ## 7. Boot, login & kernel
 
-- **Disque LUKS** : prompt de passphrase en **texte vert** (vconsole Stylix),
-  fiable et **sans ESC**. Le splash **Plymouth est désactivé** : sur ce combo
-  AMD+LUKS+simpledrm il n'a jamais rendu le prompt (amdgpu bascule la console).
-  Le module et le toggle `humanix.aesthetic.plymouth.enable` restent prêts — pour
-  un nouvel essai, tester d'abord un **thème stock** (`bgrt`/`spinner`) afin
-  d'isoler thème vs hardware, et **garder une génération de repli**.
-- **Login** : `greetd` + `tuigreet` (thème vert CRT). Repli `sddm` en une ligne
-  (`dmanager = "sddm"`).
+- **Bootloader** : **GRUB-EFI** thémé *Mr Robot* en résolution native **2880×1800**
+  (menu net + prompt LUKS/Plymouth nets). Machine EFI (ESP `/efi`, kernels sur
+  `/boot` non chiffré, LUKS déchiffré par l'initrd) → GRUB en mode EFI (`efiSupport`
+  + `device="nodev"`), **pas** en BIOS+cryptodisk.
+- **Splash** : **Plymouth** vert (thème HUMANIX), `splash` sans `quiet` → les logs
+  noyau/init défilent (vibe dmesg) et le splash s'affiche sur le prompt de
+  déchiffrement + le spinner. Console en palette **phosphore vert** dès le boot.
+- **Login** : **cracktro** façon démo Amiga — `greetd` lance une session sway avec
+  un **shader GLSL** (copper bars, plasma, starfield, logo + scroller sinus, via
+  glpaper), **gtkgreet** vert monoligne et une **chiptune 8-bit** (Eric Skiff,
+  CC-BY). Clavier **AZERTY**. Échappatoire si le login graphique casse :
+  Ctrl+Alt+F2 → TTY. Repli une ligne : `humanix.login.cracktro.enable = false`.
 - **Kernel** : CachyOS **BORE** (7.1.3) — boote nickel. La variante **`hardened`
-  bleeding-edge (7.0.12) paniquait** sur cet APU → repli `lts` (6.18) si besoin.
-  Cache binaire Attic (lantian) pour éviter la compilation locale.
+  bleeding-edge paniquait** sur cet APU → repli `lts` si besoin. Cache binaire
+  Attic (lantian) pour éviter la compilation locale.
 
 Détails : [`docs/boot-login.md`](docs/boot-login.md).
 
@@ -186,8 +191,13 @@ radio/RF) de sa juridiction.
 
 ## 10. État & suite
 
-- ✅ Flake + namespace `humanix.*` unifié · hashes `hashedPasswordFile`
-- ✅ Arsenal RF/embarqué · login greetd · kernel BORE · 12 rôles cyber
-- ✅ Profils d'ambiance (`showtime`/`work`/`client`)
-- ⏭️ Unifier les 3 palettes (Stylix/CRT/hackthebox) · compléter l'arsenal
-  (proxmark3, jackit, firmwares) · MOTD/tuigreet scénarisés · sops-nix
+- ✅ Flake + namespace `humanix.*` unifié · mots de passe `mutableUsers` (manuel)
+- ✅ Arsenal RF/embarqué · kernel BORE · 12 rôles cyber (~430 outils)
+- ✅ **Login cracktro** (shader GLSL + chiptune) · **GRUB-EFI Mr Robot** 2880×1800
+  · Plymouth vert · console phosphore
+- ✅ **Rice conky** : monitor système, dashboard réseau (netmon), veille cyber FR
+  (CERT-FR + blogs), bloc « exposition » OPSEC, cheatsheet des raccourcis niri
+- ✅ **Durcissement** `humanix.hardening` (sudo wheel-only, auditd, sysctl offensif-safe)
+- ✅ nixpkgs sur **unstable** + overlay correctifs · secrets applicatifs **agenix**
+- ⏭️ Unifier les palettes (Stylix/CRT/hackthebox) · compléter l'arsenal (proxmark3,
+  jackit, firmwares) · retirer l'overlay `nixpkgs-fixes` quand upstream corrige
