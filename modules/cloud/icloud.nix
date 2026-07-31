@@ -4,6 +4,13 @@
 # Apple ne fournit pas de client Linux ; on monte iCloud Drive comme un dossier
 # via le backend `iclouddrive` de rclone (officiel depuis rclone 1.69).
 #
+# ⚠️ BLOQUÉ (2026-07) : le backend iclouddrive de rclone 1.74.x a un bug d'auth 2FA
+#    (HTTP 409 — le code, pourtant valide, est vérifié sur une mauvaise session SRP ;
+#    rclone/rclone#9324). AUCUN contournement de config, et le patch communautaire
+#    ne s'applique PAS à 1.74.4 (code divergé depuis la beta 9591). Le module reste
+#    prêt (rclone + service), mais le montage ne s'authentifiera qu'une fois rclone
+#    corrigé upstream. Repli en attendant : iCloud web (icloud.com dans Ferdium).
+#
 # ⚠️ Auth INTERACTIVE, une fois (elle n'est PAS déclarative — le token vit dans
 #    ~/.config/rclone/rclone.conf, hors git) :
 #      rclone config       # créer un remote nommé "icloud", type iclouddrive
