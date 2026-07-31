@@ -196,11 +196,10 @@ in
   # ne pas brider l'offensif (rp_filter/ptrace/BPF/userns laissés intacts).
   humanix.hardening.enable = true;
 
-  # iCloud Drive via rclone (cf modules/cloud/icloud.nix). ⚠️ Actuellement BLOQUÉ
-  # par un bug d'auth 2FA de rclone 1.74.x (HTTP 409, rclone/rclone#9324) : le module
-  # + rclone sont prêts mais le montage ne s'authentifiera qu'après le fix upstream.
-  # Repli : iCloud web (Ferdium). Config quand corrigé : `rclone config` (remote
-  # "icloud" iclouddrive) puis `systemctl --user start rclone-icloud`.
+  # iCloud Drive via rclone (cf modules/cloud/icloud.nix). Le bug d'auth 2FA de
+  # rclone 1.74.4 (HTTP 409, rclone/rclone#9324) est CORRIGÉ par un patch local.
+  # Config une fois : `rclone config` (remote "icloud", iclouddrive, Apple ID + 2FA)
+  # puis `systemctl --user start rclone-icloud`.
   humanix.cloud.icloud.enable = true;
 
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
