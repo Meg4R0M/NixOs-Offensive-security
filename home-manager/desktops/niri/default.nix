@@ -338,9 +338,11 @@ in
       # ---- waybar (Niri) : config + style CRT vert (avec glow) ----
       waybarNiriConfig = builtins.toJSON {
         layer = "top"; position = "top"; height = 28; spacing = 6;
-        modules-left = [ "niri/workspaces" "niri/window" ];
+        modules-left = [ "custom/osk" "niri/workspaces" "niri/window" ];
         modules-center = [ "clock" ];
         modules-right = [ "cpu" "memory" "temperature" "battery" "pulseaudio" "network" "tray" ];
+        # Bouton TACTILE clavier écran (2-en-1 : Mod+K inutilisable clavier replié).
+        "custom/osk" = { format = "⌨"; tooltip = false; on-click = "humanix-osk-toggle"; };
         "niri/workspaces" = { format = "{index}"; };
         "niri/window" = { format = "{}"; max-length = 60; };
         clock = { format = "[ {:%H:%M:%S} ]"; interval = 1; format-alt = "[ {:%Y-%m-%d} ]"; };
@@ -370,6 +372,7 @@ in
         #clock { color: #${g.bright}; text-shadow: 0 0 6px #${g.bright}; }
         #battery.warning { color: #${g.warn}; text-shadow: 0 0 4px #${g.warn}; }
         #battery.critical, #temperature.critical { color: #${g.crit}; text-shadow: 0 0 5px #${g.crit}; }
+        #custom-osk { color: #${g.bright}; padding: 0 16px; font-size: 18px; text-shadow: 0 0 6px #${g.bright}; }
       '';
     in
     {
