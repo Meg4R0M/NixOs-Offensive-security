@@ -48,6 +48,19 @@ let
       ${pkgs.libnotify}/bin/notify-send -t 1500 "󰑵 Rotation auto : ON" 2>/dev/null || true
     fi
   '';
+
+  # Lanceur .desktop du clavier écran -> visible dans le launcher Noctalia (tactile)
+  # et épinglable au dock. Indispensable en mode tablette : le raccourci Mod+K est
+  # inutilisable clavier replié (ce modèle n'a pas de SW_TABLET_MODE, cf. plus haut).
+  oskDesktop = pkgs.makeDesktopItem {
+    name = "humanix-osk";
+    desktopName = "Clavier écran";
+    comment = "Afficher / masquer le clavier tactile";
+    exec = "humanix-osk-toggle";
+    icon = "input-keyboard";
+    categories = [ "Utility" "Accessibility" ];
+    terminal = false;
+  };
 in {
   options.humanix.hardware.convertible = {
     enable = mkEnableOption "support 2-en-1 (accéléromètre, rotation auto niri, clavier écran, stylet)";
@@ -66,7 +79,7 @@ in {
       wvkbd                 # clavier à l'écran (layer-shell)
       iio-sensor-proxy      # monitor-sensor (accéléromètre)
       libwacom              # identification/calibration stylet
-      autorotate oskToggle rotateToggle
+      autorotate oskToggle rotateToggle oskDesktop
     ] ++ optionals cfg.stylusApps [ rnote xournalpp ];
 
     # Exposé pour la config niri (spawn + binds), cf home-manager/desktops/niri.
