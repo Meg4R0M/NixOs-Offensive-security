@@ -385,7 +385,7 @@ in
         antigravity-ide vscodium          # WS2 : IDE agentique Google (renommé) + éditeur codium
         google-chrome chromium            # WS3 : navigateurs (firefox déjà fourni ; safari -> chrome)
         discord teams-for-linux ferdium    # WS4 : Discord/Teams NATIFS (appels/partage écran) + Ferdium (Slack/WhatsApp/… en 1 seul Chromium = léger)
-        keepassxc                          # WS6 : coffre KeePassXC (+ LocalSend système, transfert)
+        keepassxc evolution                # WS6 : coffre KeePassXC + Evolution (PIM iCloud : mail/agenda/contacts/tâches) + LocalSend
       ]) ++ [
         certFrNews veilleBlogs netmon exposureMon
       ] ++ lib.optional cshellOn themedCshell;  # commande `cshell` (barre thémée vert)
@@ -542,6 +542,7 @@ in
         // ci-dessus) est SEUL sur llm => il remplit l'écran.
         window-rule { match app-id="localsend"; open-on-workspace "mail"; }
         window-rule { match app-id="[Kk]ee[Pp]ass"; open-on-workspace "mail"; }
+        window-rule { match app-id="[Ee]volution"; open-on-workspace "mail"; }
 
         // ----- Raccourcis (Mod = Super) -----
         binds {

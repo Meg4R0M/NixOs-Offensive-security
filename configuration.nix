@@ -202,6 +202,11 @@ in
   # puis `systemctl --user start rclone-icloud`.
   humanix.cloud.icloud.enable = true;
 
+  # Trousseau (Secret Service) pour Evolution : stocke le mot de passe d'application
+  # iCloud (CalDAV/CardDAV/IMAP) au lieu de le redemander à chaque fois. D-Bus-activé
+  # sous niri, se déverrouille au 1er usage. (KeePassXC reste le coffre perso, séparé.)
+  services.gnome.gnome-keyring.enable = true;
+
   # Shader d'animation ouverture/fermeture des fenêtres niri (liixini/shaders).
   # Ambiance Mr Robot -> "glitch" (artefacts numériques). Autres : voir README/§shaders.
   humanix.niriShader = "glitch";
